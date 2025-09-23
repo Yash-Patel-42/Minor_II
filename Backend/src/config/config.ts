@@ -3,6 +3,7 @@ config();
 const _envConfig = {
   port: process.env.PORT,
   mongoConnectionUri: process.env.MONGO_CONNECTION_URI,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
+  jwtSecret: process.env.JWT_SECRET,
 };
 export const envConfig = Object.freeze(_envConfig);
