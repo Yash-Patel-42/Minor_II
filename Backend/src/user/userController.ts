@@ -2,14 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import userModel from "./userModel";
 import { sign } from "jsonwebtoken";
 import { envConfig } from "../config/config";
-import { User } from "./userTypes";
+import { newUser } from "./userTypes";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+
+// options for cookies
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 //Register Handler
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
-  let newUser: User;
+  let newUser: newUser;
   //Validation
   if (!name || !email || !password) {
     return next(createHttpError(400, "All fields are required."));
@@ -38,12 +44,30 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
   }
   //Token Generation
   try {
-    const accessToken = sign({ sub: newUser._id }, envConfig.jwtSecret as string, {
-      expiresIn: "7d",
-      algorithm: "HS256",
-    });
+    const accessToken = sign(
+      { _id: newUser._id, email: newUser.email },
+      envConfig.accessTokenSecret as string,
+      {
+        expiresIn: "1d",
+        algorithm: "HS256",
+      }
+    );
+    const refreshToken = sign(
+      { _id: newUser._id, email: newUser.email },
+      envConfig.refreshTokenSecret as string,
+      {
+        expiresIn: "7d",
+        algorithm: "HS256",
+      }
+    );
+    newUser.refreshToken = refreshToken;
+    await newUser.save({ validateBeforeSave: false });
     //Response
-    res.status(201).json({ accessToken: accessToken });
+    res
+      .status(201)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (error) {
     return next(createHttpError(500, `Error Creating accessToken: ${error}`));
   }
@@ -72,14 +96,71 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
   //Token Generation
   try {
-    const accessToken = sign({ sub: user._id }, envConfig.jwtSecret as string, {
-      expiresIn: "7d",
-      algorithm: "HS256",
-    });
+    const accessToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.accessTokenSecret as string,
+      {
+        expiresIn: "1d",
+        algorithm: "HS256",
+      }
+    );
+    const refreshToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.refreshTokenSecret as string,
+      {
+        expiresIn: "7d",
+        algorithm: "HS256",
+      }
+    );
+    //Update DB with Refresh Token
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
     //Response
-    res.json({ accessToken: accessToken });
+    res
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (error) {
     return next(createHttpError(500, `Error generating access token: ${error}`));
   }
 };
-export { registerUser, loginUser };
+
+//Logout Handler
+const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    //Get Cookies
+    const cookies = req.cookies;
+    //Check Cookies
+    if (!cookies?.refreshToken) {
+      return next(createHttpError(400, "Invalid or none cookies received"));
+    }
+    const refreshToken = cookies.refreshToken;
+    let user;
+    try {
+      user = await userModel.findOne({ refreshToken });
+    } catch (error) {
+      return next(createHttpError(500, `Error fetching user: ${error}`));
+    }
+    //Clear Cookies even if user is not there
+    if (!user) {
+      res.clearCookie("accessToken", options);
+      res.clearCookie("accessToken", options);
+      return res.status(204).json({ message: "User logged out." });
+    }
+    //Update DB
+    try {
+      user.refreshToken = "";
+      await user.save();
+    } catch (error) {
+      return next(createHttpError(500, `Error clearing refresh token: ${error}`));
+    }
+    // Clear Cookies
+    res.clearCookie("accessToken", { httpOnly: true, secure: true });
+    res.clearCookie("refreshToken", { httpOnly: true, secure: true });
+    // Response
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    return next(createHttpError(500, `Unexpected error during logout: ${error}`));
+  }
+};
+export { registerUser, loginUser, logoutUser };
