@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import userModel from "./userModel";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { envConfig } from "../config/config";
-import { newUser } from "./userTypes";
+import { decodedUser, newUser } from "./userTypes";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 
@@ -155,12 +155,70 @@ const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
       return next(createHttpError(500, `Error clearing refresh token: ${error}`));
     }
     // Clear Cookies
-    res.clearCookie("accessToken", { httpOnly: true, secure: true });
-    res.clearCookie("refreshToken", { httpOnly: true, secure: true });
+    res.clearCookie("accessToken", options);
+    res.clearCookie("refreshToken", options);
     // Response
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     return next(createHttpError(500, `Unexpected error during logout: ${error}`));
   }
 };
-export { registerUser, loginUser, logoutUser };
+
+//Refresh Access Token Handler
+const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    //Get Refresh Token
+    const incomingRefreshToken = req.cookies.accessToken;
+    //Validate Refresh Token
+    if (!incomingRefreshToken) {
+      return next(createHttpError(400, "No refresh token received"));
+    }
+    //Decode Token
+    let decodedToken: decodedUser;
+    try {
+      decodedToken = verify(
+        incomingRefreshToken,
+        envConfig.refreshTokenSecret as string
+      ) as decodedUser;
+    } catch (error) {
+      return next(createHttpError(500, `Error decoding the incoming refresh token: ${error}`));
+    }
+    //DB Calls to Validate User
+    const user = await userModel.findById(decodedToken?._id).select("-password -name");
+    if (!user) {
+      return next(createHttpError(500, "No user found for this refresh token."));
+    }
+    if (incomingRefreshToken !== user?.refreshToken) {
+      return next(createHttpError(400, "Refresh token expired or used or invalid."));
+    }
+    //Generate New Access Token and Refresh Token
+    const accessToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.accessTokenSecret as string,
+      {
+        expiresIn: "1d",
+        algorithm: "HS256",
+      }
+    );
+    const refreshToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.refreshTokenSecret as string,
+      {
+        expiresIn: "7d",
+        algorithm: "HS256",
+      }
+    );
+    //Update DB with Refresh Token
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    // Response
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({ accessToken: accessToken, refreshToken: refreshToken });
+  } catch (error) {
+    return next(createHttpError(500, `Unexpected error during token refresh: ${error}`));
+  }
+};
+export { registerUser, loginUser, logoutUser, refreshAccessToken };
