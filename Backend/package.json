@@ -13,13 +13,14 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.3",
     "@types/http-errors": "^2.0.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^24.5.2",
-    "@types/cookie-parser": "^1.4.9",
     "eslint": "^9.36.0",
     "globals": "^16.4.0",
     "jiti": "^2.5.1",
@@ -31,6 +32,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",

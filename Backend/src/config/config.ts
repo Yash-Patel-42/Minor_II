@@ -6,5 +6,6 @@ const _envConfig = {
   environment: process.env.NODE_ENV,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  frontendUrl: process.env.FRONTEND_URI
 };
 export const envConfig = Object.freeze(_envConfig);
