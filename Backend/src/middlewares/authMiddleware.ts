@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { verify } from "jsonwebtoken";
 import { envConfig } from "../config/config";
-import { decodedUser } from "../user/userTypes";
+import { decodedUser, User } from "../user/userTypes";
 import userModel from "../user/userModel";
 import { error } from "console";
 
@@ -27,7 +27,7 @@ export const verifyUser = async function (req: Request, res: Response, next: Nex
       return next(createHttpError(401, `Invalid or expired access token: ${error}`));
     }
     //DB Call
-    const user = await userModel.findById(decodedToken._id).select("-password -refreshToken");
+    const user:User = await userModel.findById(decodedToken._id).select("-password -refreshToken");
     if (!user) {
       return next(createHttpError(401, `Invalid access token: no user found: ${error}`));
     }
