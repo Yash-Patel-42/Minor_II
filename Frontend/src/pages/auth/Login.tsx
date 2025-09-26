@@ -6,24 +6,21 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-    const { login } = useAuth();
+  const { login } = useAuth();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await api
-        .post('/users/login', { email, password })
-        // .then((result) => console.log("Result:",result))
-        // .catch((error) => console.log("Error:",error));
+      const response = await api.post('/users/login', { email, password });
       const user = response.data.user;
-      login(user)
+      login(user);
       navigate('/home');
     } catch (error) {
       console.log(error);
     }
   };
   const navigateToRegister = () => {
-    navigate("/register")
-  }
+    navigate('/register');
+  };
   return (
     <div className="h-screen w-full flex items-center justify-center bg-gray-50">
       {/* Card */}
@@ -76,7 +73,9 @@ export default function Login() {
         </div>
 
         {/* Secondary option */}
-        <button className="text-red-600 font-medium hover:underline" onClick={navigateToRegister}>Create an account</button>
+        <button className="text-red-600 font-medium hover:underline" onClick={navigateToRegister}>
+          Create an account
+        </button>
       </div>
     </div>
   );

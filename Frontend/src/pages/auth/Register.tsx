@@ -7,15 +7,13 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await api.post('/api/users/register', { email, password, name });
-      // .then((result) => console.log(result))
-      // .catch((error) => console.log(error));
+      const response = await api.post('/users/register', { email, password, name });
       const user = response.data.user;
-      login(user);
+      register(user);
       navigate('/home');
     } catch (error) {
       console.log(error);

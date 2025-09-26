@@ -28,6 +28,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
+  const register = (userData: User) => {
+    setUser(userData)
+    localStorage.setItem("hasLoggedIn", "true")
+  }
+
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("hasLoggedIn", "true")
@@ -39,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, register,  login, logout }}>{children}</AuthContext.Provider>
   );
 };
 // eslint-disable-next-line react-refresh/only-export-components
