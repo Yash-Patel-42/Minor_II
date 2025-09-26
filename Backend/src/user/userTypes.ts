@@ -8,6 +8,11 @@ export interface newUser extends Document {
   password: string;
   refreshToken?: string;
 }
+export interface User extends Document {
+  _id: string;
+  name: string;
+  email: string;
+}
 export interface decodedUser extends JwtPayload {
   _id: string;
   _email: string;

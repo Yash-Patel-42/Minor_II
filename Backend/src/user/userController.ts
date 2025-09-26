@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import userModel from "./userModel";
 import { sign, verify } from "jsonwebtoken";
 import { envConfig } from "../config/config";
-import { decodedUser, newUser } from "./userTypes";
+import { decodedUser, newUser, User } from "./userTypes";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 
 // options for cookies
 const options = {
   httpOnly: true,
-  secure: true,
+  secure: envConfig.environment === "production",
 };
 
 //Register Handler
@@ -67,7 +67,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
       .status(201)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ accessToken: accessToken, refreshToken: refreshToken });
+      .json({ user: { _id: newUser._id, name: newUser.name, email: newUser.email } });
   } catch (error) {
     return next(createHttpError(500, `Error Creating accessToken: ${error}`));
   }
@@ -119,7 +119,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     res
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ accessToken: accessToken, refreshToken: refreshToken });
+      .json({ user: { _id: user._id, name: user.name, email: user.email } });
   } catch (error) {
     return next(createHttpError(500, `Error generating access token: ${error}`));
   }
@@ -168,10 +168,10 @@ const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
 const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     //Get Refresh Token
-    const incomingRefreshToken = req.cookies.accessToken;
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
     //Validate Refresh Token
     if (!incomingRefreshToken) {
-      return next(createHttpError(400, "No refresh token received"));
+      return next(createHttpError(401, "No refresh token received"));
     }
     //Decode Token
     let decodedToken: decodedUser;
@@ -184,7 +184,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
       return next(createHttpError(500, `Error decoding the incoming refresh token: ${error}`));
     }
     //DB Calls to Validate User
-    const user = await userModel.findById(decodedToken?._id).select("-password -name");
+    const user = await userModel.findById(decodedToken?._id).select("-password");
     if (!user) {
       return next(createHttpError(500, "No user found for this refresh token."));
     }
@@ -212,13 +212,27 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     // Response
+    // console.log("Done:Access = ", accessToken, "Done:Refresh = ", refreshToken);
     return res
       .status(200)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ accessToken: accessToken, refreshToken: refreshToken });
+      .json({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        user: { _id: user._id, name: user.name, email: user.email },
+      });
   } catch (error) {
     return next(createHttpError(500, `Unexpected error during token refresh: ${error}`));
   }
 };
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+
+//Home Page for user
+const userHome = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, email } = req.user as User;
+  if (!name && !email) {
+    return next(createHttpError(404, "No such user exist try login again."));
+  }
+  res.status(200).json({ name: name, email: email });
+};
+export { registerUser, loginUser, logoutUser, refreshAccessToken, userHome };
