@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const register = (userData: User) => {
+  const registerUser = (userData: User) => {
     setUser(userData);
     // localStorage.setItem("hasLoggedIn", "true")
   };
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, registerUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

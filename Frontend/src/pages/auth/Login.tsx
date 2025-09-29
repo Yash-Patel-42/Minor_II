@@ -54,7 +54,7 @@ export default function Login() {
                   message: 'Please enter a valid email.',
                 },
               })}
-              // type="email"
+              type="email"
               placeholder="Enter your email"
               className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
             />
