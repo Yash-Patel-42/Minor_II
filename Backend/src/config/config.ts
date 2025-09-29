@@ -6,6 +6,8 @@ const _envConfig = {
   environment: process.env.NODE_ENV,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
-  frontendUrl: process.env.FRONTEND_URI
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  frontendUrl: process.env.FRONTEND_URI,
 };
 export const envConfig = Object.freeze(_envConfig);
