@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../../utils/axoisInstance';
+import api from '../../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthProvider';
 export default function Register() {
@@ -19,6 +19,12 @@ export default function Register() {
       console.log(error);
     }
   };
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:3000/api/users/auth/google';
+  };
+  const navigateToLogin = () => {
+    navigate("/login")
+  }
   return (
     <div className="h-screen w-full flex items-center justify-center bg-gray-50">
       {/* Card */}
@@ -75,14 +81,17 @@ export default function Register() {
         </form>
 
         {/* Divider */}
-        {/* <div className="flex items-center w-full gap-3">
+        <div className="flex items-center w-full gap-3">
           <div className="h-px bg-gray-300 flex-1"></div>
           <span className="text-gray-400 text-sm">or</span>
           <div className="h-px bg-gray-300 flex-1"></div>
-        </div> */}
+        </div>
 
         {/* Secondary option */}
-        {/* <button className="text-red-600 font-medium hover:underline">Create an account</button> */}
+        <button onClick={handleGoogleLogin}>Sign in with Google</button>
+        <button className="text-red-600 font-medium hover:underline" onClick={navigateToLogin}>
+          Log In
+        </button>
       </div>
     </div>
   );

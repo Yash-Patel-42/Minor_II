@@ -21,8 +21,14 @@ const userSchema = new mongoose.Schema<newUser>(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
+    },
+    googleId:{
+      type: String,
+    },
+    avatar: {
+      type: String,
     },
     refreshToken: {
       type: String,

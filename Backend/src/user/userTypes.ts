@@ -6,6 +6,8 @@ export interface newUser extends Document {
   name: string;
   email: string;
   password: string;
+  googleId: string;
+  avatar: string;
   refreshToken?: string;
 }
 export interface User extends Document {
