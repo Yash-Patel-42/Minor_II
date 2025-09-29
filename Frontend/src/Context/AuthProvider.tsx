@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { AuthContextType, User } from '../types/AuthContextType';
-import api from '../utils/axoisInstance';
+import api from '../utils/axiosInstance';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -9,11 +9,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const hasLoggedIn = localStorage.getItem('hasLoggedIn');
-    if (!hasLoggedIn) {
-      setLoading(false);
-      return;
-    }
+    // const hasLoggedIn = localStorage.getItem('hasLoggedIn');
+    // if (!hasLoggedIn) {
+    //   setLoading(false);
+    //   return;
+    // }
     const checkAuth = async () => {
       try {
         const res = await api.post('/users/refresh-token', { withCredentials: true });
@@ -28,23 +28,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const register = (userData: User) => {
-    setUser(userData)
-    localStorage.setItem("hasLoggedIn", "true")
-  }
+  const registerUser = (userData: User) => {
+    setUser(userData);
+    // localStorage.setItem("hasLoggedIn", "true")
+  };
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem("hasLoggedIn", "true")
+    // localStorage.setItem("hasLoggedIn", "true")
   };
   const logout = async () => {
     await api.post('/users/logout');
     setUser(null);
-    localStorage.removeItem("hasLoggedIn")
+    // localStorage.removeItem("hasLoggedIn")
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, register,  login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, registerUser, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 // eslint-disable-next-line react-refresh/only-export-components

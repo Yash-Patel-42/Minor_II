@@ -8,12 +8,17 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(
-  cors({
-    origin: envConfig.frontendUrl,
+  cors({  
+    origin: envConfig.frontendUrl as string,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups")
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp")
+  next()
+})
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Welcome to Minor-II" });
