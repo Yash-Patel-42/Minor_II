@@ -1,8 +1,10 @@
 import api from '../../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthProvider';
-import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { LoginFormFields } from '../../types/FormType';
+
+import { useNavigate } from 'react-router-dom';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+
 export default function Login() {
   const {
     register,
@@ -10,8 +12,6 @@ export default function Login() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormFields>({ mode: 'onChange' });
-  const navigate = useNavigate();
-  const { login } = useAuth();
   const onSubmit: SubmitHandler<LoginFormFields> = async (inputData) => {
     try {
       const response = await api.post('/users/login', {
@@ -22,12 +22,14 @@ export default function Login() {
       login(user);
       navigate('/home');
     } catch (error) {
-      setError("root", {message:`Error Occurred: ${error}`})
+      setError('root', { message: `Error Occurred: ${error}` });
     }
   };
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:3000/api/users/auth/google';
   };
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const navigateToRegister = () => {
     navigate('/register');
   };

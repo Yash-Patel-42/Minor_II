@@ -1,7 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
 import { Document } from "mongoose";
 
-export interface newUser extends Document {
+export interface IUser extends Document {
   _id: string;
   name: string;
   email: string;
@@ -10,12 +10,8 @@ export interface newUser extends Document {
   avatar: string;
   refreshToken?: string;
 }
-export interface User extends Document {
-  _id: string;
-  name: string;
-  email: string;
-}
-export interface decodedUser extends JwtPayload {
+
+export interface IDecodedUser extends JwtPayload {
   _id: string;
   _email: string;
 }
