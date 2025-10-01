@@ -7,6 +7,12 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 
 export default function Home() {
+  const [showForm, setShowForm] = useState(false);
+  const [showYoutubeAuthButton, setShowYoutubeAuthButton] = useState(false)
+  const { user } = useAuth();
+  const toggleFormVisibility = () => {
+    setShowForm(!showForm);
+  };
   const { register, handleSubmit } = useForm<CreateWorkspaceFormFields>();
   const createWorkspace: SubmitHandler<CreateWorkspaceFormFields> = async (inputData) => {
     const response = await api.post('/workspace', {
@@ -15,13 +21,14 @@ export default function Home() {
       ownerID: user?._id,
     });
     const workspace = response.data.workspace;
+    if(response.status == 201){
+      setShowYoutubeAuthButton(true)
+    }
     console.log(workspace);
   };
-  const [showForm, setShowForm] = useState(false);
-  const { user } = useAuth();
-  const toggleFormVisibility = () => {
-    setShowForm(!showForm);
-  };
+  const handleChannelAuth = () => {
+    window.location.href = 'http://localhost:3000/api/workspace/auth/google';
+  }
   return (
     <>
       <Navbar />
@@ -40,6 +47,9 @@ export default function Home() {
           <input {...register('workspaceDescription', { required: true })} type="text" />
           <button type="submit">Create Workspace</button>
         </form>
+      )}
+      {showYoutubeAuthButton && (
+        <button onClick={handleChannelAuth} className='text-xl border-1 border-gray-400 p-2'>Authenticate Your Channel</button>
       )}
     </>
   );

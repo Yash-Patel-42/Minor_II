@@ -18,6 +18,15 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       required: true,
       trim: true,
     },
+    channelID:{
+      type: String,
+    },
+    channelEmail:{
+      type:String
+    },
+    channelName:{
+      type:String
+    },
   },
   { timestamps: true }
 );

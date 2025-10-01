@@ -231,7 +231,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
 const oAuth2Client = new OAuth2Client({
   clientId: envConfig.googleClientId,
   clientSecret: envConfig.googleClientSecret,
-  redirectUri: envConfig.googleRedirectUri,
+  redirectUri: envConfig.googleLoginRedirectUri,
 });
 
 //Frontend will make request on this route.
