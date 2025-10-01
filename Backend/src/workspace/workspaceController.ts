@@ -5,6 +5,7 @@ import { Workspace } from "./workspaceModel";
 import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
+import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
 
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   const { workspaceName, workspaceDescription, ownerID } = req.body;
@@ -35,6 +36,10 @@ const oAuth2Client = new OAuth2Client({
 
 //Frontend will make request on this route.
 const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) => {
+  const { workspaceId } = req.query;
+  if (!workspaceId) {
+    return next(createHttpError(400, "Workspace ID is required."));
+  }
   const redirectURL = oAuth2Client.generateAuthUrl({
     assess_type: "offline",
     prompt: "consent",
@@ -46,6 +51,7 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
       "https://www.googleapis.com/auth/youtube.readonly",
       "https://www.googleapis.com/auth/youtube.upload",
     ],
+    state: workspaceId as string,
   });
   if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
   // we will redirect to this generated route.
@@ -54,6 +60,7 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
 //Google will provide a callback on the generated route, so we can listen that here.
 const channelAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
   // 1. Get Code and Validate
+  const { state: workspaceId } = req.query;
   const code = req.query.code as string;
   if (!code) {
     throw createHttpError(500, "No code, Invalid google code");
@@ -80,7 +87,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
   if (!payload) {
     throw createHttpError(500, "No payload, Invalid google token");
   }
-  const { email: channelEmail } = payload;
+  const { email: channelEmail, sub: googleId } = payload;
   const youtube = google.youtube({ version: "v3", auth: oAuth2Client });
   const channelResponse = await youtube.channels.list({
     part: ["snippet"],
@@ -91,9 +98,18 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
   const channelName = channel.snippet?.title;
   const channelID = channel.id;
 
-  console.log("Channel Email: ", channelEmail);
-  console.log("Channel Name: ", channelName);
-  console.log("Channel Id: ", channelID);
+  await YoutubeChannel.findOneAndUpdate(
+    { workspaceID: workspaceId },
+    {
+      workspaceID: workspaceId,
+      googleAccountID: googleId,
+      channelID: channelID,
+      channelName: channelName,
+      channelEmail: channelEmail,
+      refreshToken: tokens.refresh_token as string,
+    },
+    { upsert: true, new: true }
+  );
 
   res.status(201).json({ message: "Channel auth successfully done." });
 };

@@ -8,7 +8,8 @@ import { useState } from 'react';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
-  const [showYoutubeAuthButton, setShowYoutubeAuthButton] = useState(false)
+  const [showYoutubeAuthButton, setShowYoutubeAuthButton] = useState(false);
+  const [newWorkspaceId, setNewWorkspaceId] = useState<string | null>(null);
   const { user } = useAuth();
   const toggleFormVisibility = () => {
     setShowForm(!showForm);
@@ -21,14 +22,15 @@ export default function Home() {
       ownerID: user?._id,
     });
     const workspace = response.data.workspace;
-    if(response.status == 201){
-      setShowYoutubeAuthButton(true)
+    if (response.status == 201) {
+      setNewWorkspaceId(workspace._id);
+      setShowYoutubeAuthButton(true);
     }
     console.log(workspace);
   };
   const handleChannelAuth = () => {
-    window.location.href = 'http://localhost:3000/api/workspace/auth/google';
-  }
+    window.location.href = `http://localhost:3000/api/workspace/auth/google?workspaceId=${newWorkspaceId}`;
+  };
   return (
     <>
       <Navbar />
@@ -49,7 +51,9 @@ export default function Home() {
         </form>
       )}
       {showYoutubeAuthButton && (
-        <button onClick={handleChannelAuth} className='text-xl border-1 border-gray-400 p-2'>Authenticate Your Channel</button>
+        <button onClick={handleChannelAuth} className="text-xl border-1 border-gray-400 p-2">
+          Authenticate Your Channel
+        </button>
       )}
     </>
   );
