@@ -5,9 +5,7 @@ export interface IWorkspace extends Document {
   workspaceName: string;
   workspaceDescription: string;
   ownerID: ObjectId;
-  channelID: string;
-  channelEmail: string;
-  channelName: string;
+  youtubeChannelID: ObjectId
   createdAt: Date;
   updatedAt: Date;
 }

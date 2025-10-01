@@ -18,15 +18,10 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       required: true,
       trim: true,
     },
-    channelID:{
-      type: String,
-    },
-    channelEmail:{
-      type:String
-    },
-    channelName:{
-      type:String
-    },
+    youtubeChannelID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "YoutubeChannel"
+    }
   },
   { timestamps: true }
 );

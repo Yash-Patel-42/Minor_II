@@ -1,30 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { IWorkspace } from "./workspaceTypes";
 import { Workspace } from "./workspaceModel";
 import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
 
+//Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   const { workspaceName, workspaceDescription, ownerID } = req.body;
   if (!workspaceName || !workspaceDescription || !ownerID) {
     return next(createHttpError(400, "UserID, name and email is required to create a workspace."));
   }
-  let workspace: IWorkspace;
-  let populatedWorkspace;
   try {
-    workspace = await Workspace.create({
+    const newWorkspace = await Workspace.create({
       workspaceName: workspaceName,
       workspaceDescription: workspaceDescription,
       ownerID: ownerID,
     });
-    populatedWorkspace = await workspace.populate("ownerID", "name email");
+    res.status(201).json({ workspace: newWorkspace });
   } catch (error) {
     return next(createHttpError(500, `Error creation workspace: ${error}`));
   }
-  res.status(201).json({ workspace: populatedWorkspace });
 };
 
 //Google Auth
@@ -57,10 +54,12 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
   // we will redirect to this generated route.
   res.redirect(redirectURL);
 };
+
 //Google will provide a callback on the generated route, so we can listen that here.
 const channelAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
   // 1. Get Code and Validate
   const { state: workspaceId } = req.query;
+  console.log(workspaceId);
   const code = req.query.code as string;
   if (!code) {
     throw createHttpError(500, "No code, Invalid google code");
@@ -98,7 +97,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
   const channelName = channel.snippet?.title;
   const channelID = channel.id;
 
-  await YoutubeChannel.findOneAndUpdate(
+  const YoutubeChannelDoc = await YoutubeChannel.findOneAndUpdate(
     { workspaceID: workspaceId },
     {
       workspaceID: workspaceId,
@@ -111,7 +110,31 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     { upsert: true, new: true }
   );
 
-  res.status(201).json({ message: "Channel auth successfully done." });
+  if (YoutubeChannelDoc) {
+    await Workspace.findByIdAndUpdate(
+      workspaceId,
+      { youtubeChannelID: YoutubeChannelDoc._id },
+      { new: true }
+    );
+  }
+
+  res
+    .status(201)
+    .redirect("http://localhost:5173/home");
 };
 
-export { createWorkspace, channelAuthInitiator, channelAuthCallback };
+//Fetch workspaces from DB
+const fetchWorkspacesDetail = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user._id;
+    const workspaces = await Workspace.find({ ownerID: userId })
+      .populate("ownerID", "name email")
+      .populate("youtubeChannelID", "channelID channelEmail channelName")
+      .exec();
+    res.status(201).json({ workspaces: workspaces });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching workspaces: ${error}`));
+  }
+};
+
+export { createWorkspace, channelAuthInitiator, channelAuthCallback, fetchWorkspacesDetail };

@@ -4,12 +4,15 @@ import api from '../../utils/axiosInstance';
 import type { CreateWorkspaceFormFields } from '../../types/FormType';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { IWorkspace } from '../../types/WrokspaceType';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
   const [showYoutubeAuthButton, setShowYoutubeAuthButton] = useState(false);
   const [newWorkspaceId, setNewWorkspaceId] = useState<string | null>(null);
+  const [workspaces, setWorkspaces] = useState<IWorkspace[]>([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const toggleFormVisibility = () => {
     setShowForm(!showForm);
@@ -31,6 +34,28 @@ export default function Home() {
   const handleChannelAuth = () => {
     window.location.href = `http://localhost:3000/api/workspace/auth/google?workspaceId=${newWorkspaceId}`;
   };
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const response = await api.get('/workspaces');
+        setWorkspaces(response.data.workspaces);
+        console.log('hmm this is it', response.data.workspaces);
+      } catch (error) {
+        console.log('Failed to fetch workspaces: ', error);
+        setWorkspaces([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWorkspaces();
+  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
   return (
     <>
       <Navbar />
@@ -54,6 +79,46 @@ export default function Home() {
         <button onClick={handleChannelAuth} className="text-xl border-1 border-gray-400 p-2">
           Authenticate Your Channel
         </button>
+      )}
+      {workspaces.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {workspaces.map((workspace) => (
+            <div key={workspace._id} className="bg-white rounded-lg shadow-lg p-6 border-3 border-white">
+              <h2 className="text-xl font-semibold text-gray-900">{workspace.workspaceName}</h2>
+              <p className="mt-2 text-gray-600">{workspace.workspaceDescription}</p>
+              <p className="mt-2 text-sm text-gray-500">
+                Owner: {workspace.ownerID.name} ({workspace.ownerID.email})
+              </p>
+
+              {/* Conditionally render channel details or a connect button */}
+              {workspace.youtubeChannelID ? (
+                <div className="mt-4">
+                  <p className="text-green-600 font-semibold">Channel Connected</p>
+                  <p className="text-base text-white font-semibold">
+                    Channel Email:{' '}
+                    <span className="text-gray-400">
+                      {workspace.youtubeChannelID.channelEmail}
+                    </span>
+                  </p>
+                  <p className="text-base text-white font-semibold">
+                    Channel Name:{' '}
+                    <span className="text-gray-400">{workspace.youtubeChannelID.channelName}</span>
+                  </p>
+                  <p className="text-base text-white font-semibold">
+                    Channel ID:{' '}
+                    <span className="text-gray-400">{workspace.youtubeChannelID.channelID}</span>
+                  </p>
+                </div>
+              ) : (
+                <button
+                // onClick handler to navigate to connect channel page
+                >
+                  Connect YouTube Channel
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       )}
     </>
   );
