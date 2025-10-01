@@ -7,3 +7,10 @@ export type RegisterFormFields = {
   email: string;
   password: string;
 };
+export type CreateWorkspaceFormFields = {
+  workspaceName: string;
+  workspaceDescription: string;
+  ownerID: string;
+  ownerName: string;
+  ownerEmail: string;
+};

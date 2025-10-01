@@ -4,7 +4,10 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
 import cors from "cors";
 import { envConfig } from "./config/config";
+import workspaceRouter from "./workspace/workspaceRouter";
+
 const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -24,7 +27,8 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Welcome to Minor-II" });
 });
 app.use("/api/users", userRouter);
-
+app.use("/api", workspaceRouter)
 // Global error handler
 app.use(globalErrorHandler);
+
 export default app;

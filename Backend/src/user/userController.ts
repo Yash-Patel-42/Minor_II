@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import userModel from "./userModel";
 import { sign, verify } from "jsonwebtoken";
 import { envConfig } from "../config/config";
-import { decodedUser, newUser, User } from "./userTypes";
+import { IDecodedUser, IUser } from "./userTypes";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
+import { User } from "./userModel";
 
 // options for cookies
 const options = {
@@ -16,14 +16,14 @@ const options = {
 //Register Handler
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
-  let newUser: newUser;
+  let newUser: IUser;
   //Validation
   if (!name || !email || !password) {
     return next(createHttpError(400, "All fields are required."));
   }
   // Database Checking Calls
   try {
-    const user = await userModel.findOne({ email: email });
+    const user = await User.findOne({ email: email });
     if (user) {
       return next(createHttpError(409, "User already exist with this email."));
     }
@@ -35,7 +35,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
 
   //Database Save User
   try {
-    newUser = await userModel.create({
+    newUser = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -70,7 +70,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
       .cookie("refreshToken", refreshToken, options)
       .json({ user: { _id: newUser._id, name: newUser.name, email: newUser.email } });
   } catch (error) {
-    return next(createHttpError(500, `Error Creating accessToken: ${error}`));
+    return next(createHttpError(500, `Error Creating accessToken or refreshToken : ${error}`));
   }
 };
 
@@ -84,13 +84,13 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
   //Database Calls
   try {
-    user = await userModel.findOne({ email });
+    user = (await User.findOne({ email })) as IUser;
     if (!user) {
       return next(createHttpError(404, "User not found."));
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return next(createHttpError(400, "Username or password incorrect."));
+      return next(createHttpError(401, "Username or password incorrect."));
     }
   } catch (error) {
     return next(createHttpError(500, `Error fetching user data: ${error}`));
@@ -122,7 +122,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
       .cookie("refreshToken", refreshToken, options)
       .json({ user: { _id: user._id, name: user.name, email: user.email } });
   } catch (error) {
-    return next(createHttpError(500, `Error generating access token: ${error}`));
+    return next(createHttpError(500, `Error generating accessToken or refreshToken : ${error}`));
   }
 };
 
@@ -138,7 +138,7 @@ const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = cookies.refreshToken;
     let user;
     try {
-      user = await userModel.findOne({ refreshToken });
+      user = await User.findOne({ refreshToken });
     } catch (error) {
       return next(createHttpError(500, `Error fetching user: ${error}`));
     }
@@ -175,17 +175,17 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
       return next(createHttpError(401, "No refresh token received"));
     }
     //Decode Token
-    let decodedToken: decodedUser;
+    let decodedToken: IDecodedUser;
     try {
       decodedToken = verify(
         incomingRefreshToken,
         envConfig.refreshTokenSecret as string
-      ) as decodedUser;
+      ) as IDecodedUser;
     } catch (error) {
       return next(createHttpError(500, `Error decoding the incoming refresh token: ${error}`));
     }
     //DB Calls to Validate User
-    const user = await userModel.findById(decodedToken?._id).select("-password");
+    const user = await User.findById(decodedToken?._id).select("-password");
     if (!user) {
       return next(createHttpError(500, "No user found for this refresh token."));
     }
@@ -213,7 +213,6 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     // Response
-    // console.log("Done:Access = ", accessToken, "Done:Refresh = ", refreshToken);
     return res
       .status(200)
       .cookie("accessToken", accessToken, options)
@@ -232,8 +231,9 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
 const oAuth2Client = new OAuth2Client({
   clientId: envConfig.googleClientId,
   clientSecret: envConfig.googleClientSecret,
-  redirectUri: envConfig.googleRedirectUri,
+  redirectUri: envConfig.googleLoginRedirectUri,
 });
+
 //Frontend will make request on this route.
 const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) => {
   const redirectURL = oAuth2Client.generateAuthUrl({
@@ -241,65 +241,96 @@ const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) =
     prompt: "consent",
     scope: ["openid", "profile", "email"],
   });
-  if (!redirectURL) return next(createHttpError(500, "Error generating redirectURL"));
+  if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
   // we will redirect to this generated route.
   res.redirect(redirectURL);
 };
+
 //Google will provide a callback on the generated route, so we can listen that here.
 const googleLoginCallback = async (req: Request, res: Response, next: NextFunction) => {
-  const code = req.query.code as string;
-  const { tokens } = await oAuth2Client.getToken(code);
-  oAuth2Client.setCredentials(tokens);
+  try {
+    // 1. Get Code and Validate
+    const code = req.query.code as string;
+    if (!code) {
+      throw createHttpError(500, "No code, Invalid google code");
+    }
 
-  const ticket = await oAuth2Client.verifyIdToken({
-    idToken: tokens.id_token!,
-    audience: envConfig.googleClientId,
-  });
-  const payload = ticket.getPayload();
-  if (!payload) return next(createHttpError(500, "No payload, Invalid google token"));
-  const { email, name, sub: googleId, picture } = payload;
+    // 2. Get Tokens from Google
+    const { tokens } = await oAuth2Client.getToken(code);
+    if (!tokens) {
+      throw createHttpError(500, "No tokens, Invalid google tokens");
+    }
+    oAuth2Client.setCredentials(tokens);
 
-  let user = await userModel.findOne({ email });
-  if (!user) {
-    user = await userModel.create({
-      email,
-      name,
-      googleId,
-      avatar: picture,
+    // 3. Verify the ID Token
+    const ticket = await oAuth2Client.verifyIdToken({
+      idToken: tokens.id_token!,
+      audience: envConfig.googleClientId,
     });
-  }
-  console.log("Code: ", code);
-  console.log("Token: ", tokens);
-  console.log("Ticket: ", ticket);
-  console.log("Payload: ", payload);
-  const accessToken = sign(
-    { _id: user._id, email: user.email },
-    envConfig.accessTokenSecret as string,
-    {
-      expiresIn: "1d",
-      algorithm: "HS256",
+    if (!ticket) {
+      throw createHttpError(500, "No ticket, Invalid google ticket");
     }
-  );
-  const refreshToken = sign(
-    { _id: user._id, email: user.email },
-    envConfig.refreshTokenSecret as string,
-    {
-      expiresIn: "7d",
-      algorithm: "HS256",
-    }
-  );
-  user.refreshToken = refreshToken;
-  await user.save({ validateBeforeSave: false });
 
-  res
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .redirect("http://localhost:5173/home");
+    // 4. Get User Payload
+    const payload = ticket.getPayload();
+    if (!payload) {
+      throw createHttpError(500, "No payload, Invalid google token");
+    }
+    const { email, name, sub: googleId, picture } = payload;
+
+    // 5. Find or Create User
+    let user = await User.findOne({ email });
+
+    // Handle existing user without Google login
+    if (user && !user.googleId) {
+      return res.status(409).json({
+        message:
+          "User already exists with this email but without a Google login. Try manual login.",
+      });
+    }
+
+    // Create a new user if one doesn't exist
+    if (!user) {
+      user = await User.create({
+        email,
+        name,
+        googleId,
+        avatar: picture,
+      });
+    }
+
+    // A final safety check to ensure user is not null
+    if (!user) {
+      throw createHttpError(500, "User object could not be found or created.");
+    }
+
+    // Generate and Save refreshTokens and accessTokens
+    const accessToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.accessTokenSecret as string,
+      { expiresIn: "1d", algorithm: "HS256" }
+    );
+    const refreshToken = sign(
+      { _id: user._id, email: user.email },
+      envConfig.refreshTokenSecret as string,
+      { expiresIn: "7d", algorithm: "HS256" }
+    );
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    // 7. Send Response and Redirect
+    res
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .redirect("http://localhost:5173/home");
+  } catch (error) {
+    next(createHttpError(500, `An error occurred during Google authentication: ${error}`));
+  }
 };
 
 //Home Page for user
 const userHome = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email } = req.user as User;
+  const { name, email } = req.user as IUser;
   if (!name && !email) {
     return next(createHttpError(404, "No such user exist try login again."));
   }

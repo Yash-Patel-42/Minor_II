@@ -1,19 +1,14 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import type { AuthContextType, User } from '../types/AuthContextType';
+import type { IAuthContextType, IUser } from '../types/AuthContextType';
 import api from '../utils/axiosInstance';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<IAuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // const hasLoggedIn = localStorage.getItem('hasLoggedIn');
-    // if (!hasLoggedIn) {
-    //   setLoading(false);
-    //   return;
-    // }
     const checkAuth = async () => {
       try {
         const res = await api.post('/users/refresh-token', { withCredentials: true });
@@ -28,19 +23,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const registerUser = (userData: User) => {
+  const registerUser = (userData: IUser) => {
     setUser(userData);
-    // localStorage.setItem("hasLoggedIn", "true")
   };
 
-  const login = (userData: User) => {
+  const login = (userData: IUser) => {
     setUser(userData);
-    // localStorage.setItem("hasLoggedIn", "true")
   };
   const logout = async () => {
     await api.post('/users/logout');
     setUser(null);
-    // localStorage.removeItem("hasLoggedIn")
   };
 
   return (
