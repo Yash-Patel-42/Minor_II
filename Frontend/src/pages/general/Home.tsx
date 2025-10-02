@@ -5,7 +5,7 @@ import type { CreateWorkspaceFormFields } from '../../types/FormType';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import type { IWorkspace } from '../../types/WrokspaceType';
+import type { IWorkspace } from '../../types/WorkspaceType';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -29,7 +29,6 @@ export default function Home() {
       setNewWorkspaceId(workspace._id);
       setShowYoutubeAuthButton(true);
     }
-    console.log(workspace);
   };
   const handleChannelAuth = () => {
     window.location.href = `http://localhost:3000/api/workspace/auth/google?workspaceId=${newWorkspaceId}`;
@@ -39,7 +38,6 @@ export default function Home() {
       try {
         const response = await api.get('/workspaces');
         setWorkspaces(response.data.workspaces);
-        console.log('hmm this is it', response.data.workspaces);
       } catch (error) {
         console.log('Failed to fetch workspaces: ', error);
         setWorkspaces([]);
