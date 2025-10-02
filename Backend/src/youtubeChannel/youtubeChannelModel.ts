@@ -8,7 +8,7 @@ const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
       required: true,
       unique: true,
     },
-    googleAccountID: {
+    googleChannelAccountID: {
       type: String,
       required: true,
       unique: true,
@@ -16,6 +16,7 @@ const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
     channelID: {
       type: String,
       required: true,
+      unique: true,
     },
     channelName: {
       type: String,
@@ -25,7 +26,7 @@ const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
       type: String,
       required: true,
     },
-    refreshToken: {
+    channelRefreshToken: {
       type: String,
       required: true,
     },

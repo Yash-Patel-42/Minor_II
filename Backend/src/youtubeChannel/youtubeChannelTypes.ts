@@ -3,11 +3,11 @@ import { Date, Document, ObjectId } from "mongoose";
 export interface IYoutubeChannel extends Document {
   _id: ObjectId;
   workspaceID: ObjectId;
-  googleAccountID: string;
+  googleChannelAccountID: string;
   channelID: string;
   channelName: string;
   channelEmail: string;
-  refreshToken: string
+  channelRefreshToken: string
   createdAt: Date;
   updatedAt: Date;
 }

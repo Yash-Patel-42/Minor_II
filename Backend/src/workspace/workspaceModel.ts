@@ -16,11 +16,13 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      trim: true,
+      trim: true, 
+      unique: true,
     },
     youtubeChannelID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "YoutubeChannel"
+      ref: "YoutubeChannel",
+      required: false,
     }
   },
   { timestamps: true }

@@ -59,7 +59,7 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
 const channelAuthCallback = async (req: Request, res: Response, next: NextFunction) => {
   // 1. Get Code and Validate
   const { state: workspaceId } = req.query;
-  console.log(workspaceId);
+
   const code = req.query.code as string;
   if (!code) {
     throw createHttpError(500, "No code, Invalid google code");
@@ -86,7 +86,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
   if (!payload) {
     throw createHttpError(500, "No payload, Invalid google token");
   }
-  const { email: channelEmail, sub: googleId } = payload;
+  const { email: channelEmail, sub: googleChannelAccountID } = payload;
   const youtube = google.youtube({ version: "v3", auth: oAuth2Client });
   const channelResponse = await youtube.channels.list({
     part: ["snippet"],
@@ -101,11 +101,11 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     { workspaceID: workspaceId },
     {
       workspaceID: workspaceId,
-      googleAccountID: googleId,
+      googleChannelAccountID: googleChannelAccountID,
       channelID: channelID,
       channelName: channelName,
       channelEmail: channelEmail,
-      refreshToken: tokens.refresh_token as string,
+      channelRefreshToken: tokens.refresh_token as string,
     },
     { upsert: true, new: true }
   );

@@ -68,7 +68,14 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
       .status(201)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ user: { _id: newUser._id, name: newUser.name, email: newUser.email } });
+      .json({
+        user: {
+          _id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          avatar: newUser.avatar,
+        },
+      });
   } catch (error) {
     return next(createHttpError(500, `Error Creating accessToken or refreshToken : ${error}`));
   }
@@ -120,7 +127,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     res
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .json({ user: { _id: user._id, name: user.name, email: user.email } });
+      .json({ user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar } });
   } catch (error) {
     return next(createHttpError(500, `Error generating accessToken or refreshToken : ${error}`));
   }
@@ -276,13 +283,13 @@ const googleLoginCallback = async (req: Request, res: Response, next: NextFuncti
     if (!payload) {
       throw createHttpError(500, "No payload, Invalid google token");
     }
-    const { email, name, sub: googleId, picture } = payload;
+    const { email, name, sub: googleAccountID, picture } = payload;
 
     // 5. Find or Create User
     let user = await User.findOne({ email });
 
     // Handle existing user without Google login
-    if (user && !user.googleId) {
+    if (user && !user.googleAccountID) {
       return res.status(409).json({
         message:
           "User already exists with this email but without a Google login. Try manual login.",
@@ -294,7 +301,7 @@ const googleLoginCallback = async (req: Request, res: Response, next: NextFuncti
       user = await User.create({
         email,
         name,
-        googleId,
+        googleAccountID,
         avatar: picture,
       });
     }
