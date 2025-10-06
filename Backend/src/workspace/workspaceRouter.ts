@@ -16,6 +16,6 @@ workspaceRouter.get("/workspace/auth/google", verifyUser, channelAuthInitiator);
 workspaceRouter.get("/workspace/auth/google/callback", verifyUser, channelAuthCallback);
 workspaceRouter.get("/workspaces", verifyUser, fetchAllWorkSpacesDetailForUser);
 workspaceRouter.get("/workspace/:workspaceId", verifyUser, fetchSpecificWorkspaceBasedOnId);
-workspaceRouter.post("/workspace/:workspaceId/add/user", addUserToWorkspace);
+workspaceRouter.post("/workspace/:workspaceId/add/user", verifyUser, addUserToWorkspace);
 
 export default workspaceRouter;

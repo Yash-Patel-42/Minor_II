@@ -29,7 +29,7 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
         userID: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         role: { type: String, enum: ["admin", "manager", "editor", "viewer"], default: "viewer" },
         status: { type: String, enum: ["active", "pending"], default: "active" },
-        invitedBy: {type: mongoose.Schema.Types.ObjectId}
+        invitedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
     ],
   },

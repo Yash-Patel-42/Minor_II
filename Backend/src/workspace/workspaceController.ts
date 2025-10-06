@@ -159,16 +159,24 @@ const addUserToWorkspace = async (req: Request, res: Response, next: NextFunctio
     return next(createHttpError(404, "No workspaceID or email or role received, Invalid request."));
 
   //Check if newMemberEmail exist in system
-  const newMember = await User.findById({ email: newMemberEmail });
+  const newMember = await User.findOne({ email: newMemberEmail });
   if (!newMember) return next(createHttpError(404, "No such user exist in database."));
 
   const updatedWorkspace = await Workspace.findByIdAndUpdate(
-    { workspaceId: workspaceId },
+    { _id: workspaceId },
     {
-      members: [
-        { userID: newMember._id, role: newMemberRole, status: "active", invitedBy: req.user.email },
-      ],
-    }
+      $push: {
+        members: [
+          {
+            userID: newMember._id,
+            role: newMemberRole,
+            status: "active",
+            invitedBy: req.user._id,
+          },
+        ],
+      },
+    },
+    { new: true }
   );
   res.status(201).json({ workspace: updatedWorkspace });
 };

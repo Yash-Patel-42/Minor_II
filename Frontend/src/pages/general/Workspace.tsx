@@ -20,7 +20,7 @@ function Workspace() {
     fetchWorkspace();
   }, [workspaceId]);
 
-  const addUserToWorkspace = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const addUserToWorkspace = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await api.post(`/workspace/${workspaceId}/add/user`, {
       newMemberEmail: email,
@@ -48,9 +48,9 @@ function Workspace() {
       <form onSubmit={addUserToWorkspace}>
         <div>
           <label>Email</label>
-          <input type="text" onChange={(e) => setEmail(e.target.value)} />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           <label>Role</label>
-          <input type="text" onChange={(e) => setRole(e.target.value)} />
+          <input type="text" value={role} onChange={(e) => setRole(e.target.value)} />
         </div>
         <button>Send Invite</button>
       </form>
