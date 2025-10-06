@@ -5,6 +5,7 @@ import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
+import { User } from "../user/userModel";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -118,13 +119,11 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     );
   }
 
-  res
-    .status(201)
-    .redirect("http://localhost:5173/home");
+  res.status(201).redirect("http://localhost:5173/home");
 };
 
 //Fetch workspaces from DB
-const fetchWorkspacesDetail = async (req: Request, res: Response, next: NextFunction) => {
+const fetchAllWorkSpacesDetailForUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user._id;
     const workspaces = await Workspace.find({ ownerID: userId })
@@ -137,4 +136,47 @@ const fetchWorkspacesDetail = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-export { createWorkspace, channelAuthInitiator, channelAuthCallback, fetchWorkspacesDetail };
+//Fetch specific workspace based on ID
+const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const workspace = await Workspace.findById(req.params.workspaceId)
+      .populate("ownerID", "name, email")
+      .populate("youtubeChannelID", "channelID channelEmail channelName")
+      .exec();
+    res.status(201).json({ workspace: workspace });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
+  }
+};
+
+const addUserToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
+  //Get data from params, body and request
+  const workspaceId = req.params.workspaceId;
+  const { newMemberEmail, newMemberRole } = req.body;
+
+  //Validate incoming data
+  if (!workspaceId || !newMemberEmail || !newMemberRole)
+    return next(createHttpError(404, "No workspaceID or email or role received, Invalid request."));
+
+  //Check if newMemberEmail exist in system
+  const newMember = await User.findById({ email: newMemberEmail });
+  if (!newMember) return next(createHttpError(404, "No such user exist in database."));
+
+  const updatedWorkspace = await Workspace.findByIdAndUpdate(
+    { workspaceId: workspaceId },
+    {
+      members: [
+        { userID: newMember._id, role: newMemberRole, status: "active", invitedBy: req.user.email },
+      ],
+    }
+  );
+  res.status(201).json({ workspace: updatedWorkspace });
+};
+export {
+  createWorkspace,
+  channelAuthInitiator,
+  channelAuthCallback,
+  fetchAllWorkSpacesDetailForUser,
+  fetchSpecificWorkspaceBasedOnId,
+  addUserToWorkspace,
+};
