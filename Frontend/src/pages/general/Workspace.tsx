@@ -13,6 +13,7 @@ function Workspace() {
       try {
         const response = await api.get(`/workspace/${workspaceId}`, { withCredentials: true });
         setWorkspace(response.data.workspace);
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
