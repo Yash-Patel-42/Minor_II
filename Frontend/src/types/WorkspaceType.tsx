@@ -13,4 +13,12 @@ export interface IWorkspace {
     channelName: string;
     channelEmail: string;
   };
+  members?: [
+    {
+      invitedBy: { email: string };
+      role: string;
+      status: string;
+      userID: { email: string; name: string; _id: string };
+    }
+  ];
 }

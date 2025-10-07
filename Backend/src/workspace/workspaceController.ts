@@ -5,6 +5,10 @@ import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
+import { User } from "../user/userModel";
+import { Member } from "./workspaceMemberModel";
+import { IWorkspace } from "./workspaceTypes";
+import mongoose from "mongoose";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -118,13 +122,11 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     );
   }
 
-  res
-    .status(201)
-    .redirect("http://localhost:5173/home");
+  res.status(201).redirect("http://localhost:5173/home");
 };
 
 //Fetch workspaces from DB
-const fetchWorkspacesDetail = async (req: Request, res: Response, next: NextFunction) => {
+const fetchAllWorkSpacesDetailForUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user._id;
     const workspaces = await Workspace.find({ ownerID: userId })
@@ -137,4 +139,104 @@ const fetchWorkspacesDetail = async (req: Request, res: Response, next: NextFunc
   }
 };
 
-export { createWorkspace, channelAuthInitiator, channelAuthCallback, fetchWorkspacesDetail };
+//Fetch specific workspace based on ID
+const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const workspace = await Workspace.findById(req.params.workspaceId)
+      .populate("ownerID", "name, email")
+      .populate("youtubeChannelID", "channelID channelEmail channelName")
+      .populate({
+        path: "members",
+        populate: [
+          { path: "userID", select: "name email _id" },
+          { path: "invitedBy", select: "email" },
+        ],
+      })
+      .lean()
+      .exec();
+    if (!workspace) return next(createHttpError(404, "Workspace not found"));
+    res.status(201).json({ workspace: workspace });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
+  }
+};
+
+const addUserToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
+  //Create a session for atomicity
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  //Get data from params, body and request
+  const workspaceId = req.params.workspaceId;
+  const { newMemberEmail, newMemberRole } = req.body;
+
+  //Validate incoming data
+  if (!workspaceId || !newMemberEmail || !newMemberRole) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(createHttpError(404, "No workspaceID or email or role received, Invalid request."));
+  }
+
+  //Check if newMemberEmail exist in system
+  const newMember = await User.findOne({ email: newMemberEmail });
+  if (!newMember) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(createHttpError(404, "No such user exist in database."));
+  }
+
+  //Check if workspace exist
+  const workspace = (await Workspace.findById({ _id: workspaceId })) as IWorkspace;
+  if (!workspace) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(createHttpError(404, "Workspace not found."));
+  }
+
+  //Check if already a member
+  const existingMember = await Member.findOne({
+    userID: newMember._id,
+    workspaceId: workspace._id,
+  }).session(session);
+  if (existingMember) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(createHttpError(400, "User is already a member of this workspace"));
+  }
+
+  //Add Member to workspace
+  const [member] = await Member.create(
+    [
+      {
+        userID: newMember._id,
+        role: newMemberRole,
+        invitedBy: req.user._id,
+        status: "active",
+        workspaceID: workspace._id,
+      },
+    ],
+    { session }
+  );
+
+  //Update reference in workspace model for the new created member
+  await Workspace.findByIdAndUpdate(
+    workspace._id,
+    { $addToSet: { members: member._id } },
+    { session }
+  );
+
+  //Terminate session
+  await session.commitTransaction();
+  session.endSession();
+
+  //Send Response
+  res.status(201).json({ member: member });
+};
+export {
+  createWorkspace,
+  channelAuthInitiator,
+  channelAuthCallback,
+  fetchAllWorkSpacesDetailForUser,
+  fetchSpecificWorkspaceBasedOnId,
+  addUserToWorkspace,
+};

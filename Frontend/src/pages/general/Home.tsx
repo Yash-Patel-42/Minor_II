@@ -1,11 +1,12 @@
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../Context/AuthProvider';
 import api from '../../utils/axiosInstance';
-import type { CreateWorkspaceFormFields } from '../../types/FormType';
+import { useNavigate } from 'react-router-dom';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import type { IWorkspace } from '../../types/WorkspaceType';
+import type { CreateWorkspaceFormFields } from '../../types/FormType';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -18,6 +19,7 @@ export default function Home() {
     setShowForm(!showForm);
   };
   const { register, handleSubmit } = useForm<CreateWorkspaceFormFields>();
+  const navigate = useNavigate();
   const createWorkspace: SubmitHandler<CreateWorkspaceFormFields> = async (inputData) => {
     const response = await api.post('/workspace', {
       workspaceName: inputData.workspaceName,
@@ -81,7 +83,13 @@ export default function Home() {
       {workspaces.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {workspaces.map((workspace) => (
-            <div key={workspace._id} className="bg-white rounded-lg shadow-lg p-6 border-3 border-white">
+            <div
+              key={workspace._id}
+              onClick={() => {
+                navigate(`/workspace/${workspace._id}`);
+              }}
+              className="bg-white rounded-lg shadow-lg p-6 border-3 border-white cursor-pointer"
+            >
               <h2 className="text-xl font-semibold text-gray-900">{workspace.workspaceName}</h2>
               <p className="mt-2 text-gray-600">{workspace.workspaceDescription}</p>
               <p className="mt-2 text-sm text-gray-500">
@@ -94,9 +102,7 @@ export default function Home() {
                   <p className="text-green-600 font-semibold">Channel Connected</p>
                   <p className="text-base text-white font-semibold">
                     Channel Email:{' '}
-                    <span className="text-gray-400">
-                      {workspace.youtubeChannelID.channelEmail}
-                    </span>
+                    <span className="text-gray-400">{workspace.youtubeChannelID.channelEmail}</span>
                   </p>
                   <p className="text-base text-white font-semibold">
                     Channel Name:{' '}
@@ -108,11 +114,7 @@ export default function Home() {
                   </p>
                 </div>
               ) : (
-                <button
-                // onClick handler to navigate to connect channel page
-                >
-                  Connect YouTube Channel
-                </button>
+                <button>Connect YouTube Channel</button>
               )}
             </div>
           ))}
