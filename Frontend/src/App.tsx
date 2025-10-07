@@ -6,6 +6,7 @@ import Home from './pages/general/Home.tsx';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
+import Workspace from './pages/general/Workspace.tsx';
 function App() {
   return (
     <Routes>
@@ -21,6 +22,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/workspace/:workspaceId"
+        element={
+          <ProtectedRoute>
+            <Workspace />
+          </ProtectedRoute>
+        }
+      ></Route>
     </Routes>
   );
 }

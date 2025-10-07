@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema<IUser>(
       required: false,
       trim: true,
     },
-    googleId:{
+    googleAccountID: {
       type: String,
     },
     avatar: {
@@ -36,4 +36,4 @@ const userSchema = new mongoose.Schema<IUser>(
   },
   { timestamps: true }
 );
-export const User =  mongoose.model<IUser>("User", userSchema);
+export const User = mongoose.model<IUser>("User", userSchema);
