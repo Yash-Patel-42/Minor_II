@@ -5,10 +5,6 @@ import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
-import { User } from "../user/userModel";
-import { Member } from "./workspaceMemberModel";
-import { IWorkspace } from "./workspaceTypes";
-import mongoose from "mongoose";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -160,84 +156,10 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
     next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
   }
 };
-
-//Add a user to workspace as member
-const addUserToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
-  //Create a session for atomicity
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  //Get data from params, body and request
-  const workspaceId = req.params.workspaceId;
-  const { newMemberEmail, newMemberRole } = req.body;
-
-  //Validate incoming data
-  if (!workspaceId || !newMemberEmail || !newMemberRole) {
-    await session.abortTransaction();
-    session.endSession();
-    return next(createHttpError(404, "No workspaceID or email or role received, Invalid request."));
-  }
-
-  //Check if newMemberEmail exist in system
-  const newMember = await User.findOne({ email: newMemberEmail });
-  if (!newMember) {
-    await session.abortTransaction();
-    session.endSession();
-    return next(createHttpError(404, "No such user exist in database."));
-  }
-
-  //Check if workspace exist
-  const workspace = (await Workspace.findById({ _id: workspaceId })) as IWorkspace;
-  if (!workspace) {
-    await session.abortTransaction();
-    session.endSession();
-    return next(createHttpError(404, "Workspace not found."));
-  }
-
-  //Check if already a member
-  const existingMember = await Member.findOne({
-    userID: newMember._id,
-    workspaceId: workspace._id,
-  }).session(session);
-  if (existingMember) {
-    await session.abortTransaction();
-    session.endSession();
-    return next(createHttpError(400, "User is already a member of this workspace"));
-  }
-
-  //Add Member to workspace
-  const [member] = await Member.create(
-    [
-      {
-        userID: newMember._id,
-        role: newMemberRole,
-        invitedBy: req.user._id,
-        status: "pending",
-        workspaceID: workspace._id,
-      },
-    ],
-    { session }
-  );
-
-  //Update reference in workspace model for the new created member
-  await Workspace.findByIdAndUpdate(
-    workspace._id,
-    { $addToSet: { members: member._id } },
-    { session }
-  );
-
-  //Terminate session
-  await session.commitTransaction();
-  session.endSession();
-
-  //Send Response
-  res.status(201).json({ member: member });
-};
 export {
   createWorkspace,
   channelAuthInitiator,
   channelAuthCallback,
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
-  addUserToWorkspace,
 };

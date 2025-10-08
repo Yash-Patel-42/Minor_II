@@ -9,6 +9,7 @@ import { Member } from "../workspace/workspaceMemberModel";
 import { envConfig } from "../config/config";
 import { Inbox } from "./inboxModel";
 
+//Handle Invite user to workspace, send invite to user inbox
 const handleUserInvite = async (req: Request, res: Response, next: NextFunction) => {
   //Create a session for atomicity
   const session = await mongoose.startSession();
@@ -77,6 +78,8 @@ const handleUserInvite = async (req: Request, res: Response, next: NextFunction)
           payload: {
             role: newMemberRole,
             workspaceId: workspaceId,
+            workspaceName: workspace.workspaceName,
+            workspaceDescription: workspace.workspaceDescription,
             receiverEmail: newMember.email,
           },
           isRead: false,
@@ -94,15 +97,48 @@ const handleUserInvite = async (req: Request, res: Response, next: NextFunction)
   res.status(201).json({ sentToEmail: newMember.email, message: "Invite sent" });
 };
 
-//Fetch data from Inbox
+//Fetch all notifications/invites from inbox
 const fetchInbox = async (req: Request, res: Response, next: NextFunction) => {
   const userID = req.user._id;
   if (!userID) return next(createHttpError(404, "No user ID found. Try logging in again."));
 
-  const inbox = await Inbox.findById({ receiver: userID }).populate("sender", "email name");
+  const inbox = await Inbox.find({ receiver: userID }).populate("sender", "email name");
 
-  if (!inbox) return next(createHttpError(404, "No inbox found in the database."));
+  if (!inbox) return next(createHttpError(404, "Inbox is empty!"));
 
   res.status(200).json({ inbox: inbox });
 };
-export { handleUserInvite, fetchInbox };
+
+//Handle user accepting invite for a workspace
+const handleAcceptInvite = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    //Get data from request
+    const { invite } = req.body;
+
+    // //Add Member to workspace
+    const member = await Member.create({
+      userID: invite.receiver,
+      role: invite.payload.role,
+      invitedBy: invite.sender._id,
+      status: "active",
+      workspaceID: invite.payload.workspaceId,
+    });
+
+    //Update reference in workspace model for the new created member
+    await Workspace.findByIdAndUpdate({ _id: invite.payload.workspaceId }, { members: member._id });
+
+    // //Send Response
+    res.status(201).json({ member: member });
+  } catch (error) {
+    next(createHttpError(500, `Error Accepting invite: ${error}`));
+  }
+};
+
+//Handle user declining invite for a workspace
+const handleDeclineInvite = async (req: Request, res: Response, next: NextFunction) => {
+  const { response } = req.body;
+  res.json(response);
+  next();
+};
+
+export { handleUserInvite, fetchInbox, handleAcceptInvite, handleDeclineInvite };

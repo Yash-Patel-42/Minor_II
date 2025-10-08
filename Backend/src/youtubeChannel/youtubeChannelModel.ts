@@ -11,12 +11,10 @@ const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
     googleChannelAccountID: {
       type: String,
       required: true,
-      unique: true,
     },
     channelID: {
       type: String,
       required: true,
-      unique: true,
     },
     channelName: {
       type: String,

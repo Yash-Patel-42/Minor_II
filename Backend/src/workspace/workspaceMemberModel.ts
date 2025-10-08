@@ -13,5 +13,5 @@ const memberSchema = new mongoose.Schema<IMember>(
   },
   { timestamps: true }
 );
-memberSchema.index({userID:1, workspaceID:1}, {unique: true})
+memberSchema.index({ userID: 1, workspaceID: 1 }, { unique: true });
 export const Member: Model<IMember> = mongoose.model<IMember>("Member", memberSchema);

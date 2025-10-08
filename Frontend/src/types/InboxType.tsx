@@ -3,6 +3,12 @@ export interface IInbox {
   sender: { email: string; name: string };
   receiver?: string;
   type: string;
-  payload: { role: string; workspaceId: string; receiverEmail: string };
+  payload: {
+    role: string;
+    workspaceId: string;
+    receiverEmail: string;
+    workspaceName: string;
+    workspaceDescription: string;
+  };
   isRead: boolean;
 }

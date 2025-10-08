@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
 import Workspace from './pages/general/Workspace.tsx';
+import Inbox from './pages/general/Inbox.tsx';
 function App() {
   return (
     <Routes>
@@ -29,7 +30,15 @@ function App() {
             <Workspace />
           </ProtectedRoute>
         }
-      ></Route>
+      />
+      <Route
+        path="/invites"
+        element={
+          <ProtectedRoute>
+            <Inbox />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

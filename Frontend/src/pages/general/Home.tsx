@@ -21,7 +21,7 @@ export default function Home() {
   const { register, handleSubmit } = useForm<CreateWorkspaceFormFields>();
   const navigate = useNavigate();
   const createWorkspace: SubmitHandler<CreateWorkspaceFormFields> = async (inputData) => {
-    const response = await api.post('/workspace', {
+    const response = await api.post('/workspace/create', {
       workspaceName: inputData.workspaceName,
       workspaceDescription: inputData.workspaceDescription,
       ownerID: user?._id,
