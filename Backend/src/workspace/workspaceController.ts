@@ -161,6 +161,7 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
   }
 };
 
+//Add a user to workspace as member
 const addUserToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   //Create a session for atomicity
   const session = await mongoose.startSession();
@@ -211,7 +212,7 @@ const addUserToWorkspace = async (req: Request, res: Response, next: NextFunctio
         userID: newMember._id,
         role: newMemberRole,
         invitedBy: req.user._id,
-        status: "active",
+        status: "pending",
         workspaceID: workspace._id,
       },
     ],

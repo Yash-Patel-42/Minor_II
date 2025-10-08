@@ -23,7 +23,11 @@ function Workspace() {
 
   const addUserToWorkspace = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await api.post(`/workspace/${workspaceId}/add/user`, {
+    // const response = await api.post(`/workspace/${workspaceId}/add/user`, {
+    //   newMemberEmail: email,
+    //   newMemberRole: role,
+    // });
+    const response = await api.post(`/workspace/${workspaceId}/invite/user`, {
       newMemberEmail: email,
       newMemberRole: role,
     });
