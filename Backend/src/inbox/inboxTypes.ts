@@ -7,4 +7,5 @@ export interface IInbox extends Document {
   payload: object;
   message: string;
   isRead: boolean;
+  response: "accepted" | "declined" | "pending";
 }

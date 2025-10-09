@@ -5,6 +5,7 @@ import { envConfig } from "../config/config";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
+import { Member } from "./workspaceMemberModel";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -124,12 +125,31 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
 //Fetch workspaces from DB
 const fetchAllWorkSpacesDetailForUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    //Get user from req
     const userId = req.user._id;
-    const workspaces = await Workspace.find({ ownerID: userId })
+
+    //Find members part of a workspace
+    const userMembership = await Member.find({ userID: userId }).select("workspaceID");
+
+    //Map workspaceIds to array
+    const membersOfWorkspaceArray = userMembership.map((membership) => membership.workspaceID);
+
+    //Find and populate workspace (owner OR member) check using the array and userId
+    const workspaces = await Workspace.find({
+      $or: [{ ownerID: userId }, { _id: { $in: membersOfWorkspaceArray } }],
+    })
       .populate("ownerID", "name email")
       .populate("youtubeChannelID", "channelID channelEmail channelName")
+      .populate({
+        path: "members",
+        populate: [
+          { path: "userID", select: "name email _id" },
+          { path: "invitedBy", select: "email" },
+        ],
+      })
+      .lean()
       .exec();
-    res.status(201).json({ workspaces: workspaces });
+    res.status(200).json({ workspaces: workspaces });
   } catch (error) {
     next(createHttpError(500, `Error fetching workspaces: ${error}`));
   }

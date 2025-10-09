@@ -22,6 +22,11 @@ const inboxSchema = new mongoose.Schema<IInbox>(
       type: Boolean,
       default: false,
     },
+    response: {
+      type: String,
+      enum: ["accepted", "declined", "pending"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

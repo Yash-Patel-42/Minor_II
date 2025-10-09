@@ -40,6 +40,7 @@ export default function Home() {
       try {
         const response = await api.get('/workspaces');
         setWorkspaces(response.data.workspaces);
+        console.log('HomeHome :', response);
       } catch (error) {
         console.log('Failed to fetch workspaces: ', error);
         setWorkspaces([]);
@@ -111,6 +112,15 @@ export default function Home() {
                   <p className="text-base text-white font-semibold">
                     Channel ID:{' '}
                     <span className="text-gray-400">{workspace.youtubeChannelID.channelID}</span>
+                  </p>
+                  <p className="text-base text-white font-semibold">
+                    Your Role:{' '}
+                    <span className="text-gray-400 capitalize">
+                      {user?._id === workspace.ownerID._id
+                        ? 'Owner'
+                        : workspace.members?.find((member) => member.userID._id === user?._id)
+                            ?.role || 'Not a member'}
+                    </span>
                   </p>
                 </div>
               ) : (

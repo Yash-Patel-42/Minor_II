@@ -1,6 +1,5 @@
 import mongoose, { Model } from "mongoose";
 import { IWorkspace } from "./workspaceTypes";
-// import { Member } from "./workspaceMemberModel";
 const workspaceSchema = new mongoose.Schema<IWorkspace>(
   {
     workspaceName: {
@@ -25,8 +24,11 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       ref: "YoutubeChannel",
       required: false,
     },
-    members: [{type: mongoose.Schema.Types.ObjectId, ref:"Member"}],
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: "Member" }],
   },
   { timestamps: true }
 );
-export const Workspace:Model<IWorkspace> = mongoose.model<IWorkspace>("Workspace", workspaceSchema);
+export const Workspace: Model<IWorkspace> = mongoose.model<IWorkspace>(
+  "Workspace",
+  workspaceSchema
+);

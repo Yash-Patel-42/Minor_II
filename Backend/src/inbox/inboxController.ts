@@ -120,15 +120,14 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
       userID: invite.receiver,
       role: invite.payload.role,
       invitedBy: invite.sender._id,
-      status: "active",
-      workspaceID: invite.payload.workspaceId,
+      workspaceID: invite.payload .workspaceId,
     });
 
     //Update reference in workspace model for the new created member
     await Workspace.findByIdAndUpdate({ _id: invite.payload.workspaceId }, { members: member._id });
 
     // //Send Response
-    res.status(201).json({ member: member });
+    res.status(201).json({ message: "Done Member Added." });
   } catch (error) {
     next(createHttpError(500, `Error Accepting invite: ${error}`));
   }
@@ -136,9 +135,7 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
 
 //Handle user declining invite for a workspace
 const handleDeclineInvite = async (req: Request, res: Response, next: NextFunction) => {
-  const { response } = req.body;
-  res.json(response);
-  next();
+  const { invite } = req.body;
 };
 
 export { handleUserInvite, fetchInbox, handleAcceptInvite, handleDeclineInvite };

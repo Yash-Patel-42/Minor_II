@@ -3,8 +3,11 @@ import { IMember } from "./workspaceTypes";
 const memberSchema = new mongoose.Schema<IMember>(
   {
     userID: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    role: { type: String, enum: ["admin", "manager", "editor", "viewer"], default: "viewer" },
-    status: { type: String, enum: ["active", "pending"], default: "pending" },
+    role: {
+      type: String,
+      enum: ["owner", "admin", "manager", "editor", "viewer"],
+      default: "viewer",
+    },
     invitedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     workspaceID: {
       type: mongoose.Schema.Types.ObjectId,

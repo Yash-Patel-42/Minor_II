@@ -13,8 +13,7 @@ export interface IWorkspace extends Document {
 export interface IMember extends Document {
   _id: ObjectId;
   userID: ObjectId;
-  role: "admin" | "manager" | "editor" | "viewer";
-  status: "active" | "pending";
+  role: "owner" | "admin" | "manager" | "editor" | "viewer";
   invitedBy: ObjectId;
   workspaceID: ObjectId;
   updatedAt?: Date;
