@@ -136,6 +136,8 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
 //Handle user declining invite for a workspace
 const handleDeclineInvite = async (req: Request, res: Response, next: NextFunction) => {
   const { invite } = req.body;
+  res.json({invite})
+  next()
 };
 
 export { handleUserInvite, fetchInbox, handleAcceptInvite, handleDeclineInvite };

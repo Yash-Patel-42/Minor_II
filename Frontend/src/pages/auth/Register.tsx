@@ -1,5 +1,5 @@
 import api from '../../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../../Context/AuthProvider';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { RegisterFormFields } from '../../types/FormType';

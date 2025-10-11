@@ -2,7 +2,7 @@ import api from '../../utils/axiosInstance';
 import { useAuth } from '../../Context/AuthProvider';
 import type { LoginFormFields } from '../../types/FormType';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 
 export default function Login() {

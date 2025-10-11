@@ -1,5 +1,5 @@
 import { useAuth } from '../Context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();

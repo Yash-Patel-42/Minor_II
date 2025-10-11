@@ -1,7 +1,7 @@
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../Context/AuthProvider';
 import api from '../../utils/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useEffect, useState } from 'react';
