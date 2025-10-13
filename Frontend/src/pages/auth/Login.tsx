@@ -1,9 +1,9 @@
-import api from '../../utils/axiosInstance';
 import { useAuth } from '../../Context/AuthProvider';
 import type { LoginFormFields } from '../../types/FormType';
+import api from '../../utils/axiosInstance';
 
-import { useNavigate } from 'react-router';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 export default function Login() {
   const {
@@ -34,19 +34,19 @@ export default function Login() {
     navigate('/register');
   };
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-gray-50">
+    <div className="flex h-screen w-full items-center justify-center bg-gray-50">
       {/* Card */}
-      <div className="w-[480px] rounded-xl shadow-xl border border-gray-200 bg-white flex flex-col items-center p-10 gap-6">
+      <div className="flex w-[480px] flex-col items-center gap-6 rounded-xl border border-gray-200 bg-white p-10 shadow-xl">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-2"></div>
-          <p className="text-gray-500 text-lg">Log in to continue</p>
+          <p className="text-lg text-gray-500">Log in to continue</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
           <div className="flex flex-col gap-1">
-            {errors.root && <p className="text-red-500 text-sm">{errors.root.message}</p>}
+            {errors.root && <p className="text-sm text-red-500">{errors.root.message}</p>}
             <label className="text-sm text-gray-700">Email</label>
             <input
               {...register('email', {
@@ -58,9 +58,9 @@ export default function Login() {
               })}
               type="email"
               placeholder="Enter your email"
-              className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-sm text-gray-700">Password</label>
@@ -83,30 +83,30 @@ export default function Login() {
               })}
               type="password"
               placeholder="Enter your password"
-              className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           </div>
           {/* Login button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
+            className="rounded-md bg-red-600 py-2 text-white transition hover:bg-red-700"
           >
             {isSubmitting ? 'Logging you in...' : 'Login'}
           </button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center w-full gap-3">
-          <div className="h-px bg-gray-300 flex-1"></div>
-          <span className="text-gray-400 text-sm">or</span>
-          <div className="h-px bg-gray-300 flex-1"></div>
+        <div className="flex w-full items-center gap-3">
+          <div className="h-px flex-1 bg-gray-300"></div>
+          <span className="text-sm text-gray-400">or</span>
+          <div className="h-px flex-1 bg-gray-300"></div>
         </div>
 
         {/* Secondary option */}
         <button onClick={handleGoogleLogin}>Log in with Google</button>
-        <button className="text-red-600 font-medium hover:underline" onClick={navigateToRegister}>
+        <button className="font-medium text-red-600 hover:underline" onClick={navigateToRegister}>
           Create an account
         </button>
       </div>

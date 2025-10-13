@@ -1,12 +1,11 @@
+import { useEffect, useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import Navbar from '../../components/Navbar';
 import { useAuth } from '../../Context/AuthProvider';
-import api from '../../utils/axiosInstance';
-import { useNavigate } from 'react-router';
-
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import type { IWorkspace } from '../../types/WorkspaceType';
 import type { CreateWorkspaceFormFields } from '../../types/FormType';
+import type { IWorkspace } from '../../types/WorkspaceType';
+import api from '../../utils/axiosInstance';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -52,8 +51,8 @@ export default function Home() {
   }, []);
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
       </div>
     );
   }
@@ -63,7 +62,7 @@ export default function Home() {
       <div>Home</div>
       <button
         onClick={toggleFormVisibility}
-        className="text-xl border-1 border-gray-400 p-2 hover:bg-green-200 hover:text-black"
+        className="border-1 border-gray-400 p-2 text-xl hover:bg-green-200 hover:text-black"
       >
         Create Workspace
       </button>
@@ -77,19 +76,19 @@ export default function Home() {
         </form>
       )}
       {showYoutubeAuthButton && (
-        <button onClick={handleChannelAuth} className="text-xl border-1 border-gray-400 p-2">
+        <button onClick={handleChannelAuth} className="border-1 border-gray-400 p-2 text-xl">
           Authenticate Your Channel
         </button>
       )}
       {workspaces.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workspaces.map((workspace) => (
             <div
               key={workspace._id}
               onClick={() => {
                 navigate(`/workspace/${workspace._id}`);
               }}
-              className="bg-white rounded-lg shadow-lg p-6 border-3 border-white cursor-pointer"
+              className="cursor-pointer rounded-lg border-3 border-white bg-white p-6 shadow-lg"
             >
               <h2 className="text-xl font-semibold text-gray-900">{workspace.workspaceName}</h2>
               <p className="mt-2 text-gray-600">{workspace.workspaceDescription}</p>
@@ -100,32 +99,30 @@ export default function Home() {
               {/* Conditionally render channel details or a connect button */}
               {workspace.youtubeChannelID ? (
                 <div className="mt-4">
-                  <p className="text-green-600 font-semibold">Channel Connected</p>
-                  <p className="text-base text-white font-semibold">
+                  <p className="font-semibold text-green-600">Channel Connected</p>
+                  <p className="text-base font-semibold text-white">
                     Channel Email:{' '}
                     <span className="text-gray-400">{workspace.youtubeChannelID.channelEmail}</span>
                   </p>
-                  <p className="text-base text-white font-semibold">
+                  <p className="text-base font-semibold text-white">
                     Channel Name:{' '}
                     <span className="text-gray-400">{workspace.youtubeChannelID.channelName}</span>
                   </p>
-                  <p className="text-base text-white font-semibold">
+                  <p className="text-base font-semibold text-white">
                     Channel ID:{' '}
                     <span className="text-gray-400">{workspace.youtubeChannelID.channelID}</span>
-                  </p>
-                  <p className="text-base text-white font-semibold">
-                    Your Role:{' '}
-                    <span className="text-gray-400 capitalize">
-                      {user?._id === workspace.ownerID._id
-                        ? 'Owner'
-                        : workspace.members?.find((member) => member.userID._id === user?._id)
-                            ?.role || 'Not a member'}
-                    </span>
                   </p>
                 </div>
               ) : (
                 <button>Connect YouTube Channel</button>
               )}
+              <p className="text-base font-semibold text-white">
+                Your Role:{' '}
+                <span className="text-gray-400 capitalize">
+                  {workspace.members?.find((member) => member.userID._id === user?._id)?.role ||
+                    'Not a member'}
+                </span>
+              </p>
             </div>
           ))}
         </div>

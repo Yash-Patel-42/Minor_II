@@ -20,6 +20,6 @@ export interface IWorkspace {
       role: string;
       status: string;
       userID: { email: string; name: string; _id: string };
-    }
+    },
   ];
 }

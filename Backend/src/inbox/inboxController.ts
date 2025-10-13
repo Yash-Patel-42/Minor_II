@@ -99,14 +99,20 @@ const handleUserInvite = async (req: Request, res: Response, next: NextFunction)
 
 //Fetch all notifications/invites from inbox
 const fetchInbox = async (req: Request, res: Response, next: NextFunction) => {
-  const userID = req.user._id;
-  if (!userID) return next(createHttpError(404, "No user ID found. Try logging in again."));
+  try {
+    const userID = req.user._id;
+    if (!userID) return next(createHttpError(404, "No user ID found. Try logging in again."));
 
-  const inbox = await Inbox.find({ receiver: userID }).populate("sender", "email name");
+    const inbox = await Inbox.find({ receiver: userID })
+      .populate("sender", "email name")
+      .sort({ createdAt: -1 });
 
-  if (!inbox) return next(createHttpError(404, "Inbox is empty!"));
+    if (!inbox) return next(createHttpError(404, "Inbox is empty!"));
 
-  res.status(200).json({ inbox: inbox });
+    res.status(200).json({ inbox: inbox });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching inbox: ${error}`));
+  }
 };
 
 //Handle user accepting invite for a workspace
@@ -120,11 +126,14 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
       userID: invite.receiver,
       role: invite.payload.role,
       invitedBy: invite.sender._id,
-      workspaceID: invite.payload .workspaceId,
+      workspaceID: invite.payload.workspaceId,
     });
 
     //Update reference in workspace model for the new created member
     await Workspace.findByIdAndUpdate({ _id: invite.payload.workspaceId }, { members: member._id });
+
+    //Update the reference in Inbox model for the accepted response
+    await Inbox.findByIdAndUpdate({ _id: invite._id }, { response: "accepted", isRead: true });
 
     // //Send Response
     res.status(201).json({ message: "Done Member Added." });
@@ -135,9 +144,13 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
 
 //Handle user declining invite for a workspace
 const handleDeclineInvite = async (req: Request, res: Response, next: NextFunction) => {
-  const { invite } = req.body;
-  res.json({invite})
-  next()
+  try {
+    const { invite } = req.body;
+    await Inbox.findByIdAndUpdate({ _id: invite._id }, { response: "declined", isRead: true });
+    res.status(201).json({ message: "Ok, Declined" });
+  } catch (error) {
+    next(createHttpError(500, `Error Declining invite: ${error}`));
+  }
 };
 
 export { handleUserInvite, fetchInbox, handleAcceptInvite, handleDeclineInvite };

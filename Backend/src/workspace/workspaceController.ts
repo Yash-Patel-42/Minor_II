@@ -19,6 +19,13 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
       workspaceDescription: workspaceDescription,
       ownerID: ownerID,
     });
+    const member = await Member.create({
+      userID: ownerID,
+      role: "owner",
+      invitedBy: ownerID,
+      workspaceID: newWorkspace._id,
+    });
+    await Workspace.findByIdAndUpdate({ _id: newWorkspace._id }, { members: member._id });
     res.status(201).json({ workspace: newWorkspace });
   } catch (error) {
     return next(createHttpError(500, `Error creation workspace: ${error}`));

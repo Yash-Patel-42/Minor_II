@@ -17,7 +17,6 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       ref: "User",
       required: true,
       trim: true,
-      unique: true,
     },
     youtubeChannelID: {
       type: mongoose.Schema.Types.ObjectId,

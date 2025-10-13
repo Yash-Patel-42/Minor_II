@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import api from '../../utils/axiosInstance';
 import type { IInbox } from '../../types/InboxType';
+import api from '../../utils/axiosInstance';
 
 function Inbox() {
   const [inbox, setInbox] = useState<IInbox[]>([]);
@@ -40,7 +40,12 @@ function Inbox() {
         inbox.map((invite) => (
           <div
             key={invite._id}
-            style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}
+            style={{
+              border: '1px solid #ccc',
+              margin: '10px',
+              padding: '10px',
+              opacity: invite.response !== 'pending' ? 0.6 : 1,
+            }}
           >
             <p>
               Invite from: {invite.sender.name} ({invite.sender.email})
@@ -48,15 +53,30 @@ function Inbox() {
             <p>Workspace Named: {invite.payload.workspaceName}</p>
             <p>Workspace Description: {invite.payload.workspaceDescription}</p>
             <p>Requested Role: {invite.payload.role}</p>
-            {invite.type === 'workspace-invite' && (
+            {invite.type === 'workspace-invite' && invite.response === 'pending' ? (
               <div>
-                <button onClick={() => handleAcceptInvite(invite)} className="bg-green-300 p-1">
+                <button
+                  onClick={() => handleAcceptInvite(invite)}
+                  className="mr-2 bg-green-300 p-1"
+                >
                   Accept
                 </button>
                 <button onClick={() => handleDeclineInvite(invite)} className="bg-red-300 p-1">
                   Decline
                 </button>
               </div>
+            ) : (
+              <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
+                Status:{' '}
+                <span
+                  style={{
+                    color: invite.response === 'accepted' ? 'green' : 'red',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {invite.response}
+                </span>
+              </p>
             )}
           </div>
         ))

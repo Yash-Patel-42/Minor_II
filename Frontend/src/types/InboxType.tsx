@@ -11,4 +11,5 @@ export interface IInbox {
     workspaceDescription: string;
   };
   isRead: boolean;
+  response: string;
 }
