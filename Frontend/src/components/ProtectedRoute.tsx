@@ -1,6 +1,6 @@
-import type { JSX } from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthProvider";
+import type { JSX } from 'react';
+import { Navigate } from 'react-router';
+import { useAuth } from '../Context/AuthProvider';
 
 interface Props {
   children: JSX.Element;

@@ -5,6 +5,7 @@ export interface IWorkspace {
   ownerID: {
     name: string;
     email: string;
+    _id: string;
   };
   createdAt: string;
   updatedAt: string;
@@ -19,6 +20,6 @@ export interface IWorkspace {
       role: string;
       status: string;
       userID: { email: string; name: string; _id: string };
-    }
+    },
   ];
 }
