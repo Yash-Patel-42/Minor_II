@@ -130,7 +130,10 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
     });
 
     //Update reference in workspace model for the new created member
-    await Workspace.findByIdAndUpdate({ _id: invite.payload.workspaceId }, { members: member._id });
+    await Workspace.findByIdAndUpdate(
+      { _id: invite.payload.workspaceId },
+      { $addToSet: { members: member._id } }
+    );
 
     //Update the reference in Inbox model for the accepted response
     await Inbox.findByIdAndUpdate({ _id: invite._id }, { response: "accepted", isRead: true });
