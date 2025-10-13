@@ -1,12 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
+import ProtectedRoute from './components/ProtectedRoute.tsx';
 import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import Home from './pages/general/Home.tsx';
-import ProtectedRoute from './components/ProtectedRoute.tsx';
+import Inbox from './pages/general/Inbox.tsx';
+import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
-import Workspace from './pages/general/Workspace.tsx';
 function App() {
   return (
     <Routes>
@@ -29,7 +30,15 @@ function App() {
             <Workspace />
           </ProtectedRoute>
         }
-      ></Route>
+      />
+      <Route
+        path="/invites"
+        element={
+          <ProtectedRoute>
+            <Inbox />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

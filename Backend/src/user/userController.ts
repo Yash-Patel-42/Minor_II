@@ -15,121 +15,129 @@ const options = {
 
 //Register Handler
 const registerUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, password } = req.body;
-  let newUser: IUser;
-  //Validation
-  if (!name || !email || !password) {
-    return next(createHttpError(400, "All fields are required."));
-  }
-  // Database Checking Calls
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      return next(createHttpError(409, "User already exist with this email."));
+    const { name, email, password } = req.body;
+    let newUser: IUser;
+    //Validation
+    if (!name || !email || !password) {
+      return next(createHttpError(400, "All fields are required."));
+    }
+    // Database Checking Calls
+    try {
+      const user = await User.findOne({ email: email });
+      if (user) {
+        return next(createHttpError(409, "User already exist with this email."));
+      }
+    } catch (error) {
+      return next(createHttpError(500, `Error while getting user: ${error}`));
+    }
+    //Password Hashing
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    //Database Save User
+    try {
+      newUser = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+      });
+    } catch (error) {
+      return next(createHttpError(500, `Error Creating User: ${error}`));
+    }
+    //Token Generation
+    try {
+      const accessToken = sign(
+        { _id: newUser._id, email: newUser.email },
+        envConfig.accessTokenSecret as string,
+        {
+          expiresIn: "1d",
+          algorithm: "HS256",
+        }
+      );
+      const refreshToken = sign(
+        { _id: newUser._id, email: newUser.email },
+        envConfig.refreshTokenSecret as string,
+        {
+          expiresIn: "7d",
+          algorithm: "HS256",
+        }
+      );
+      newUser.refreshToken = refreshToken;
+      await newUser.save({ validateBeforeSave: false });
+      //Response
+      res
+        .status(201)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json({
+          user: {
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            avatar: newUser.avatar,
+          },
+        });
+    } catch (error) {
+      return next(createHttpError(500, `Error Creating accessToken or refreshToken : ${error}`));
     }
   } catch (error) {
-    return next(createHttpError(500, `Error while getting user: ${error}`));
-  }
-  //Password Hashing
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  //Database Save User
-  try {
-    newUser = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
-  } catch (error) {
-    return next(createHttpError(500, `Error Creating User: ${error}`));
-  }
-  //Token Generation
-  try {
-    const accessToken = sign(
-      { _id: newUser._id, email: newUser.email },
-      envConfig.accessTokenSecret as string,
-      {
-        expiresIn: "1d",
-        algorithm: "HS256",
-      }
-    );
-    const refreshToken = sign(
-      { _id: newUser._id, email: newUser.email },
-      envConfig.refreshTokenSecret as string,
-      {
-        expiresIn: "7d",
-        algorithm: "HS256",
-      }
-    );
-    newUser.refreshToken = refreshToken;
-    await newUser.save({ validateBeforeSave: false });
-    //Response
-    res
-      .status(201)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json({
-        user: {
-          _id: newUser._id,
-          name: newUser.name,
-          email: newUser.email,
-          avatar: newUser.avatar,
-        },
-      });
-  } catch (error) {
-    return next(createHttpError(500, `Error Creating accessToken or refreshToken : ${error}`));
+    next(createHttpError(500, `Error Creating the user. ${error}`));
   }
 };
 
 //Login Handler
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-  let user;
-  //Validation
-  if (!email || !password) {
-    return next(createHttpError(400, "All fields are required."));
-  }
-  //Database Calls
   try {
-    user = (await User.findOne({ email })) as IUser;
-    if (!user) {
-      return next(createHttpError(404, "User not found."));
+    const { email, password } = req.body;
+    let user;
+    //Validation
+    if (!email || !password) {
+      return next(createHttpError(400, "All fields are required."));
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return next(createHttpError(401, "Username or password incorrect."));
+    //Database Calls
+    try {
+      user = (await User.findOne({ email })) as IUser;
+      if (!user) {
+        return next(createHttpError(404, "User not found."));
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return next(createHttpError(401, "Username or password incorrect."));
+      }
+    } catch (error) {
+      return next(createHttpError(500, `Error fetching user data: ${error}`));
+    }
+    //Token Generation
+    try {
+      const accessToken = sign(
+        { _id: user._id, email: user.email },
+        envConfig.accessTokenSecret as string,
+        {
+          expiresIn: "1d",
+          algorithm: "HS256",
+        }
+      );
+      const refreshToken = sign(
+        { _id: user._id, email: user.email },
+        envConfig.refreshTokenSecret as string,
+        {
+          expiresIn: "7d",
+          algorithm: "HS256",
+        }
+      );
+      //Update DB with Refresh Token
+      user.refreshToken = refreshToken;
+      await user.save({ validateBeforeSave: false });
+      //Response
+      res
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json({ user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar } });
+    } catch (error) {
+      return next(createHttpError(500, `Error generating accessToken or refreshToken : ${error}`));
     }
   } catch (error) {
-    return next(createHttpError(500, `Error fetching user data: ${error}`));
-  }
-  //Token Generation
-  try {
-    const accessToken = sign(
-      { _id: user._id, email: user.email },
-      envConfig.accessTokenSecret as string,
-      {
-        expiresIn: "1d",
-        algorithm: "HS256",
-      }
-    );
-    const refreshToken = sign(
-      { _id: user._id, email: user.email },
-      envConfig.refreshTokenSecret as string,
-      {
-        expiresIn: "7d",
-        algorithm: "HS256",
-      }
-    );
-    //Update DB with Refresh Token
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
-    //Response
-    res
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json({ user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar } });
-  } catch (error) {
-    return next(createHttpError(500, `Error generating accessToken or refreshToken : ${error}`));
+    next(createHttpError(500, `Error logging you in. ${error}`));
   }
 };
 
@@ -243,14 +251,18 @@ const oAuth2Client = new OAuth2Client({
 
 //Frontend will make request on this route.
 const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) => {
-  const redirectURL = oAuth2Client.generateAuthUrl({
+  try {
+    const redirectURL = oAuth2Client.generateAuthUrl({
     assess_type: "offline",
     prompt: "consent",
     scope: ["openid", "profile", "email"],
   });
   if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
   // we will redirect to this generated route.
-  res.redirect(redirectURL);
+  res.redirect(redirectURL);  
+  } catch (error) {
+    next(createHttpError(500, `Error while google login: ${error}`))
+  }
 };
 
 //Google will provide a callback on the generated route, so we can listen that here.

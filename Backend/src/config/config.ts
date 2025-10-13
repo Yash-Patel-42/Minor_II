@@ -6,6 +6,7 @@ const _envConfig = {
   environment: process.env.NODE_ENV,
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  inviteTokenSecret: process.env.INVITE_TOKEN_SECRET,
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   googleLoginRedirectUri: process.env.GOOGLE_LOGIN_REDIRECT_URI,
