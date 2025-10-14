@@ -13,6 +13,15 @@ const memberSchema = new mongoose.Schema<IMember>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Workspace",
     },
+    status: {
+      type: String,
+      enum: ["active", "pending"],
+      default: "pending",
+    },
+    acceptedAt: {
+      type: Date,
+    },
+    roleHistory: [{ role: String, changedBy: mongoose.Schema.Types.ObjectId, changedAt: Date }],
   },
   { timestamps: true }
 );
