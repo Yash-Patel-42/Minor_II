@@ -60,6 +60,7 @@ const Hero: React.FC = () => {
     return Array.from({ length: numShapes }).map((_, i) => generateRandomShape(i));
   }, []);
 
+  //Animate the shapes
   useEffect(() => {
     if (!heroContainerRef.current) return;
     const container = heroContainerRef.current;
@@ -118,37 +119,33 @@ const Hero: React.FC = () => {
       }
     };
   }, []);
-
   return (
     <div
       ref={heroContainerRef}
-      className="relative flex min-h-[90vh] w-full items-center justify-center overflow-hidden bg-gray-900 py-20 md:py-32"
+      className="relative flex min-h-[91vh] w-full items-center justify-center overflow-hidden bg-gray-900 py-5"
     >
       {shapes}{' '}
-      <div className="relative z-30 container mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-        <span className="font-semibold tracking-wider text-blue-400 uppercase">
-          The YouTube Control Panel
+      <div className="relative z-30 container mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+          // AI-POWERED UPLOAD PROTOCOL: ENGAGED //
         </span>
-
-        <h1 className="mt-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-5xl font-extrabold text-transparent sm:text-6xl lg:text-7xl">
-          Your Channel.
+        <h1 className="mt-6 text-5xl font-extrabold text-white sm:text-7xl lg:text-8xl">
+          Empower Your
+          <span className="ml-4 font-serif text-purple-400 italic">Editor</span>
+          ,
           <br />
-          Your Rules.
+          Secure Your
+          <span className="ml-4 font-serif text-cyan-400 italic">Empire</span>.
         </h1>
-
-        <p className="mx-auto mt-6 max-w-2xl text-2xl text-gray-200">
-          Never share your YouTube password again.
+        <p className="mx-auto mt-8 max-w-2xl text-xl text-gray-200">
+          The AI-powered approval gate that lets your team submit videos.
+          <br />
+          <span className="font-bold text-white">You just say yes or no.</span>
         </p>
-
-        <p className="mx-auto mt-4 max-w-lg text-lg text-gray-300">
-          Manage your team, streamline uploads, and approve every video—all from one secure
-          platform.
-        </p>
-
-        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+        <div className="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
           <a
             href="/register"
-            className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-blue-700 hover:shadow-blue-500/50"
+            className="rounded-lg bg-purple-600 px-6 py-3 text-lg font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:bg-purple-700 hover:shadow-xl hover:shadow-purple-500/50"
           >
             Join Private Beta
           </a>
