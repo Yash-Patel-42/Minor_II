@@ -1,3 +1,4 @@
+import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
 import { useAuth } from '../../Context/AuthProvider';
 import type { LoginFormFields } from '../../types/FormType';
 import api from '../../utils/axiosInstance';
@@ -34,20 +35,21 @@ export default function Login() {
     navigate('/register');
   };
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      {/* Card */}
-      <div className="flex w-[480px] flex-col items-center gap-6 rounded-xl border border-gray-200 bg-white p-10 shadow-xl">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2"></div>
-          <p className="text-lg text-gray-500">Log in to continue</p>
+    <AnimatedShapeBackground className="flex min-h-screen items-center justify-center bg-gray-900 p-4">
+      {/* {shapes} */}
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-6 rounded-2xl border border-gray-700 bg-gray-900/50 p-8 shadow-2xl backdrop-blur-lg md:p-10">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+            // Authentication Required //
+          </span>
+          <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
+            Access Your <span className="font-serif text-purple-400 italic">Empire</span>
+          </h1>
         </div>
-
-        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            {errors.root && <p className="text-sm text-red-500">{errors.root.message}</p>}
-            <label className="text-sm text-gray-700">Email</label>
+          {errors.root && <p className="text-sm text-red-400">{errors.root.message}</p>}
+          <div className="flex w-full flex-col gap-1">
+            <label className="text-sm font-medium text-gray-300">Email Protocol</label>
             <input
               {...register('email', {
                 required: 'Email is required.',
@@ -57,13 +59,13 @@ export default function Login() {
                 },
               })}
               type="email"
-              placeholder="Enter your email"
-              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
+              placeholder="editor@your-empire.com"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
-            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700">Password</label>
+          <div className="flex w-full flex-col gap-1">
+            <label className="text-sm font-medium text-gray-300">Security Key</label>
             <input
               {...register('password', {
                 required: 'Password is required.',
@@ -82,34 +84,44 @@ export default function Login() {
                 },
               })}
               type="password"
-              placeholder="Enter your password"
-              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
+              placeholder="••••••••••••"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
-            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
           </div>
-          {/* Login button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-red-600 py-2 text-white transition hover:bg-red-700"
+            className="mt-2 rounded-lg bg-purple-500 px-8 py-3 text-lg font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:bg-purple-700 hover:shadow-xl hover:shadow-purple-500/50 disabled:scale-100 disabled:opacity-50"
           >
-            {isSubmitting ? 'Logging you in...' : 'Login'}
+            {isSubmitting ? 'Authenticating...' : 'Authenticate'}
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex w-full items-center gap-3">
-          <div className="h-px flex-1 bg-gray-300"></div>
-          <span className="text-sm text-gray-400">or</span>
-          <div className="h-px flex-1 bg-gray-300"></div>
+          <div className="h-px flex-1 bg-gray-700"></div>
+          <span className="text-sm text-gray-500">OR</span>
+          <div className="h-px flex-1 bg-gray-700"></div>
         </div>
-
-        {/* Secondary option */}
-        <button onClick={handleGoogleLogin}>Log in with Google</button>
-        <button className="font-medium text-red-600 hover:underline" onClick={navigateToRegister}>
-          Create an account
-        </button>
+        <div className="flex w-full flex-col gap-4">
+          <button
+            onClick={handleGoogleLogin}
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-700 bg-white px-6 py-3 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200"
+          >
+            Log in with Google
+          </button>
+          <div className="text-center text-gray-400">
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={navigateToRegister}
+              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline"
+            >
+              Start Your Empire
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </AnimatedShapeBackground>
   );
 }
