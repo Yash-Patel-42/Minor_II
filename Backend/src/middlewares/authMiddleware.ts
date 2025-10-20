@@ -7,7 +7,7 @@ import { error } from "console";
 import { IDecodedUser, IUser } from "../user/userTypes";
 
 //Auth Middleware to authenticate user for protected routes.
-export const verifyUser = async function (req: Request, res: Response, next: NextFunction) {
+export const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     //Get Access Token From Cookies
     const incomingAccessToken =

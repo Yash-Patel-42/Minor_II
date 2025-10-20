@@ -1,6 +1,6 @@
 export type Role = "owner" | "admin" | "manager" | "editor" | "viewer";
 
-export const permissions = {
+export const GLOBAL_PERMISSIONS = {
   invite: ["owner", "admin", "manager"],
   remove: ["owner", "admin"],
   changeRole: ["owner", "admin"],
@@ -10,8 +10,6 @@ export const permissions = {
   view: ["owner", "admin", "manager", "editor", "viewer"],
   transferOwnership: ["owner"],
   changePermission: ["owner"],
-};
+} as const;
 
-export function roleHasPermission (role:Role, permission: keyof typeof permissions) {
-    return permissions[permission].includes(role);
-}
+export type PermissionKey = keyof typeof GLOBAL_PERMISSIONS;
