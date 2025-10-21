@@ -1,5 +1,6 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
 import { useAuth } from '../../Context/AuthProvider';
 import type { RegisterFormFields } from '../../types/FormType';
 import api from '../../utils/axiosInstance';
@@ -33,22 +34,23 @@ export default function Register() {
     navigate('/login');
   };
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      {/* Card */}
-      <div className="flex w-[480px] flex-col items-center gap-6 rounded-xl border border-gray-200 bg-white p-10 shadow-xl">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2"></div>
-          <p className="text-lg text-gray-500">Sign in to continue</p>
+    <AnimatedShapeBackground className="flex min-h-screen items-center justify-center bg-gray-900 p-4">
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-6 rounded-2xl border border-gray-700 bg-gray-900/50 px-8 py-6 shadow-2xl backdrop-blur-lg">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+            // New User Protocol //
+          </span>
+          <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
+            Build Your <span className="font-serif text-purple-400 italic">Empire</span>
+          </h1>
+          <p className="text-lg text-gray-400">Create your account to begin</p>
         </div>
-
-        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            {errors.root && <p className="text-sm text-red-500">{errors.root.message}</p>}
-            <label className="text-sm text-gray-700">Name</label>
+          {errors.root && <p className="text-sm text-red-400">{errors.root.message}</p>}
+          <div className="flex w-full flex-col gap-1">
+            <label className="text-sm font-medium text-gray-300">Display Name</label>
             <input
-              type="name"
+              type="text"
               placeholder="Enter your name"
               {...register('name', {
                 required: 'Name is required.',
@@ -57,15 +59,15 @@ export default function Register() {
                   message: 'Name can only contain letters and spaces',
                 },
               })}
-              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
-            {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="text-sm text-red-400">{errors.name.message}</p>}
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700">Email</label>
+          <div className="flex w-full flex-col gap-1">
+            <label className="text-sm font-medium text-gray-300">Email Protocol</label>
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="editor@your-empire.com"
               {...register('email', {
                 required: 'Email is required.',
                 pattern: {
@@ -73,15 +75,17 @@ export default function Register() {
                   message: 'Please enter a valid email.',
                 },
               })}
-              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
-            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+            {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700">Password</label>
+
+          {/* Password Field */}
+          <div className="flex w-full flex-col gap-1">
+            <label className="text-sm font-medium text-gray-300">Security Key</label>
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="••••••••••••"
               {...register('password', {
                 required: 'Password is required.',
                 validate: {
@@ -98,34 +102,42 @@ export default function Register() {
                   message: 'Password must be at least 8 characters',
                 },
               })}
-              className="rounded-md border border-gray-300 px-3 py-2 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
-            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
           </div>
-
-          {/* Sign In button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-red-600 py-2 text-white transition hover:bg-red-700"
+            className="mt-2 rounded-lg bg-purple-600 px-8 py-2 text-lg font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:bg-purple-700 hover:shadow-xl hover:shadow-purple-500/50 disabled:scale-100 disabled:opacity-50"
           >
-            {isSubmitting ? 'Registering you ...' : 'Register'}
+            {isSubmitting ? 'Initiating Protocol...' : 'Build Empire'}
           </button>
         </form>
-
-        {/* Divider */}
         <div className="flex w-full items-center gap-3">
-          <div className="h-px flex-1 bg-gray-300"></div>
-          <span className="text-sm text-gray-400">or</span>
-          <div className="h-px flex-1 bg-gray-300"></div>
+          <div className="h-px flex-1 bg-gray-700"></div>
+          <span className="text-sm text-gray-500">OR</span>
+          <div className="h-px flex-1 bg-gray-700"></div>
         </div>
-
-        {/* Secondary option */}
-        <button onClick={handleGoogleLogin}>Sign in with Google</button>
-        <button className="font-medium text-red-600 hover:underline" onClick={navigateToLogin}>
-          Log In
-        </button>
+        <div className="flex w-full flex-col gap-4">
+          <button
+            onClick={handleGoogleLogin}
+            className="flex w-full items-center justify-center rounded-lg border border-gray-700 bg-white px-6 py-2 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200"
+          >
+            Sign in with Google
+          </button>
+          <div className="text-center text-gray-400">
+            Already have an Empire?{' '}
+            <button
+              type="button"
+              onClick={navigateToLogin}
+              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline"
+            >
+              Log In
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </AnimatedShapeBackground>
   );
 }

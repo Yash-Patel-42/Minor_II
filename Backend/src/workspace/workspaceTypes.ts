@@ -16,6 +16,9 @@ export interface IMember extends Document {
   role: "owner" | "admin" | "manager" | "editor" | "viewer";
   invitedBy: ObjectId;
   workspaceID: ObjectId;
+  status: "pending" | "active"
+  acceptedAt: Date;
+  roleHistory: [];
   updatedAt?: Date;
   createdAt?: Date;
 }

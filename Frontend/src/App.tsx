@@ -8,9 +8,11 @@ import Inbox from './pages/general/Inbox.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
+import LandingPage from './pages/LandingPage.tsx';
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
