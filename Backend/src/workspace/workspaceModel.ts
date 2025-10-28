@@ -24,6 +24,11 @@ const workspaceSchema = new mongoose.Schema<IWorkspace>(
       required: false,
     },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: "Member" }],
+    permissionMatrix: {
+      type: Map,
+      of: Map,
+      default: {},
+    },
   },
   { timestamps: true }
 );
