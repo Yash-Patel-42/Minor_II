@@ -1,3 +1,4 @@
+import { DEFAULT_PERMISSION_MATRIX } from "../constant/permissionMatrix";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { Workspace } from "./workspaceModel";
@@ -18,6 +19,7 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
       workspaceName: workspaceName,
       workspaceDescription: workspaceDescription,
       ownerID: ownerID,
+      permissionMatrix: DEFAULT_PERMISSION_MATRIX,
     });
     const member = await Member.create({
       userID: ownerID,
