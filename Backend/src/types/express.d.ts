@@ -1,11 +1,12 @@
 import { IUser } from "../user/userTypes";
-import { IMember } from "../workspace/workspaceTypes";
+import { IMember, IWorkspace } from "../workspace/workspaceTypes";
 
 declare global {
   namespace Express {
     interface Request {
       user: IUser;
-      memberInfo?: IMember;
+      workspace: IWorkspace;
+      member: IMember;
     }
   }
 }
