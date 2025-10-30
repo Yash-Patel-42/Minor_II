@@ -9,6 +9,7 @@ import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
 import LandingPage from './pages/LandingPage.tsx';
+import UploadVideo from './pages/general/UploadVideo.tsx';
 function App() {
   return (
     <Routes>
@@ -38,6 +39,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Inbox />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="workspace/:workspaceId/upload-video"
+        element={
+          <ProtectedRoute>
+            <UploadVideo />
           </ProtectedRoute>
         }
       />

@@ -3,10 +3,13 @@ import createHttpError from "http-errors";
 import cloudinary from "../config/cloudinary";
 import fs from "fs";
 import { Video } from "./videoModel";
+import { Inbox } from "../inbox/inboxModel";
+import { Member } from "../workspace/workspaceMemberModel";
 
 const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const file = req.file;
+    console.log("File: ",file);
     if (!file) return next(createHttpError(404, "No file found to upload"));
 
     const workspaceId = req.workspace._id;
@@ -40,9 +43,50 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
       workspaceID: workspaceId,
     });
 
-    res
-      .status(201)
-      .json({ message: "Video uploaded successfully & pending for review", video: video });
+    //Get permission matrix from req.workspace
+    const permissionMatrix = req.workspace.permissionMatrix;
+
+    //Find roles who can accept or decline video request so we can send them inbox
+    const rolesWithPermissionToReviewRequest: string[] = [];
+    for (const [role, perm] of Object.entries(permissionMatrix)) {
+      if (
+        perm["accept_video_upload_request"] === true ||
+        perm["reject_video_upload_request"] === true
+      ) {
+        rolesWithPermissionToReviewRequest.push(role);
+      }
+    }
+
+    // Find userID of these roles from Member model
+    const permittedMembers = await Member.find({
+      _id: { $in: req.workspace.members },
+      role: { $in: rolesWithPermissionToReviewRequest },
+    }).populate("userID", "_id");
+
+    //Map over userID to finally send Inbox
+    const receiverIDs = permittedMembers.map((m) => m.userID);
+
+    const inbox = await Inbox.create({
+      sender: userId,
+      receiver: receiverIDs,
+      type: "video-upload",
+      payload: {
+        title: video.title,
+        description: video.description,
+        url: video.url,
+        thumbnail: video.thumbnail,
+        uploaderID: video.uploaderID,
+        uploadedAt: video.uploadedAt,
+        workspaceID: video.workspaceID,
+      },
+      isRead: false,
+    });
+
+    res.status(201).json({
+      message: "Video uploaded successfully & pending for review",
+      video: video,
+      inbox: inbox,
+    });
   } catch (error) {
     next(createHttpError(500, `Error uploading video: ${error}`));
   }

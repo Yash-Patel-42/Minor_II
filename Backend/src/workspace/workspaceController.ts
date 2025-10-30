@@ -26,6 +26,8 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
       role: "owner",
       invitedBy: ownerID,
       workspaceID: newWorkspace._id,
+      status: "active",
+      acceptedAt: new Date(),
     });
     await Workspace.findByIdAndUpdate(
       { _id: newWorkspace._id },
