@@ -26,6 +26,8 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
       role: "owner",
       invitedBy: ownerID,
       workspaceID: newWorkspace._id,
+      status: "active",
+      acceptedAt: new Date(),
     });
     await Workspace.findByIdAndUpdate(
       { _id: newWorkspace._id },
@@ -51,9 +53,9 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
     return next(createHttpError(400, "Workspace ID is required."));
   }
   const redirectURL = oAuth2Client.generateAuthUrl({
-    assess_type: "offline",
+    access_type: "offline",
     prompt: "consent",
-    scope: [
+    scope: [  
       "openid",
       "profile",
       "email",
@@ -84,6 +86,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     throw createHttpError(500, "No tokens, Invalid google tokens");
   }
   oAuth2Client.setCredentials(tokens);
+  console.log("Workspace-Controller:89 Tokens:", tokens);
 
   // 3. Verify the ID Token
   const ticket = await oAuth2Client.verifyIdToken({
@@ -118,6 +121,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
       channelID: channelID,
       channelName: channelName,
       channelEmail: channelEmail,
+      channelToken: tokens,
       channelRefreshToken: tokens.refresh_token as string,
     },
     { upsert: true, new: true }

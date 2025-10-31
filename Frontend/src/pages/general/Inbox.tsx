@@ -53,7 +53,8 @@ function Inbox() {
             <p>Workspace Named: {invite.payload.workspaceName}</p>
             <p>Workspace Description: {invite.payload.workspaceDescription}</p>
             <p>Requested Role: {invite.payload.role}</p>
-            {invite.type === 'workspace-invite' && invite.response === 'pending' ? (
+            {invite.type === 'workspace-invite' &&
+            invite.response === 'pending' ? (
               <div>
                 <button
                   onClick={() => handleAcceptInvite(invite)}

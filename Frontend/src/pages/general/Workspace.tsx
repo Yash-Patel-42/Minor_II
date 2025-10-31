@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import type { IWorkspace } from '../../types/WorkspaceType';
 import api from '../../utils/axiosInstance';
 
@@ -8,6 +8,7 @@ function Workspace() {
   const [role, setRole] = useState('');
   const { workspaceId } = useParams();
   const [workspace, setWorkspace] = useState<IWorkspace | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchWorkspace = async () => {
       try {
@@ -40,6 +41,12 @@ function Workspace() {
           <span className="text-sm text-gray-500 italic">({workspace._id})</span>
         </h2>
         <p className="mt-2 text-gray-400">{workspace.workspaceDescription}</p>
+        <button
+          className="border-1 border-white px-2 py-1"
+          onClick={() => navigate(`/workspace/${workspace._id}/upload-requests`)}
+        >
+          Request Icon
+        </button>
       </div>
 
       {/* Workspace Info */}
@@ -74,8 +81,8 @@ function Workspace() {
                 key={idx}
                 className="rounded-xl border border-gray-700 bg-gray-800/60 p-4 transition hover:bg-gray-800"
               >
-                <p className="text-lg font-medium text-white">{member.userID.name}</p>
-                <p className="text-sm text-gray-400">{member.userID.email}</p>
+                <p className="text-lg font-medium text-white">{member.userID?.name}</p>
+                <p className="text-sm text-gray-400">{member.userID?.email}</p>
                 <div className="mt-3 text-sm">
                   <p>
                     <span className="font-semibold text-gray-300">Role:</span>{' '}
@@ -151,6 +158,14 @@ function Workspace() {
           </button>
         </form>
       </div>
+
+      {/* Upload Video Button */}
+      <button
+        className="border-1 border-blue-500 px-4 py-2 font-semibold"
+        onClick={() => navigate(`/workspace/${workspaceId}/upload-video`)}
+      >
+        Upload a Video
+      </button>
     </div>
   );
 }
