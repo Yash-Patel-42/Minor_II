@@ -3,13 +3,13 @@ import createHttpError from "http-errors";
 import cloudinary from "../config/cloudinary";
 import fs from "fs";
 import { Video } from "./videoModel";
-import { Inbox } from "../inbox/inboxModel";
 import { Member } from "../workspace/workspaceMemberModel";
+import { ApprovalRequest } from "../approval/approvalRequestModel";
 
 const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const file = req.file;
-    console.log("File: ",file);
+    console.log("File: ", file);
     if (!file) return next(createHttpError(404, "No file found to upload"));
 
     const workspaceId = req.workspace._id;
@@ -66,10 +66,14 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
     //Map over userID to finally send Inbox
     const receiverIDs = permittedMembers.map((m) => m.userID);
 
-    const inbox = await Inbox.create({
-      sender: userId,
-      receiver: receiverIDs,
-      type: "video-upload",
+    const approvalRequest = await ApprovalRequest.create({
+      video: video._id,
+      workspace: workspaceId,
+      requester: userId,
+      approvers: receiverIDs,
+      status: "pending",
+      response: "pending",
+      summary: "Pending for review",
       payload: {
         title: video.title,
         description: video.description,
@@ -79,13 +83,12 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
         uploadedAt: video.uploadedAt,
         workspaceID: video.workspaceID,
       },
-      isRead: false,
     });
 
     res.status(201).json({
       message: "Video uploaded successfully & pending for review",
       video: video,
-      inbox: inbox,
+      inbox: approvalRequest,
     });
   } catch (error) {
     next(createHttpError(500, `Error uploading video: ${error}`));

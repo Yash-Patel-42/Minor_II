@@ -41,6 +41,12 @@ function Workspace() {
           <span className="text-sm text-gray-500 italic">({workspace._id})</span>
         </h2>
         <p className="mt-2 text-gray-400">{workspace.workspaceDescription}</p>
+        <button
+          className="border-1 border-white px-2 py-1"
+          onClick={() => navigate(`/workspace/${workspace._id}/upload-requests`)}
+        >
+          Request Icon
+        </button>
       </div>
 
       {/* Workspace Info */}

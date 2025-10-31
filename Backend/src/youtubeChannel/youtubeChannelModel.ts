@@ -24,6 +24,10 @@ const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
       type: String,
       required: true,
     },
+    channelToken: {
+      type: Object,
+      required: true,
+    },
     channelRefreshToken: {
       type: String,
       required: true,
