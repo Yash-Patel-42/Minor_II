@@ -39,7 +39,7 @@ export default function Home() {
       try {
         const response = await api.get('/workspaces');
         setWorkspaces(response.data.workspaces);
-        console.log('HomeHome :', response);
+        console.log('HomeHome :', response.data.workspaces);
       } catch (error) {
         console.log('Failed to fetch workspaces: ', error);
         setWorkspaces([]);
@@ -119,7 +119,7 @@ export default function Home() {
               <p className="text-base font-semibold text-white">
                 Your Role:{' '}
                 <span className="text-gray-400 capitalize">
-                  {workspace.members?.find((member) => member.userID._id === user?._id)?.role ||
+                  {workspace.members?.find((member) => member.userID?._id === user?._id)?.role ||
                     'Not a member'}
                 </span>
               </p>
