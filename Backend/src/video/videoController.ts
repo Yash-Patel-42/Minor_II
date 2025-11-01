@@ -39,6 +39,9 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
       description: req.body.description,
       url: videoUrl,
       thumbnail: thumbnailUrl,
+      tags: req.body.tags,
+      category: req.body.category,
+      privacy: req.body.privacy,
       uploaderID: userId,
       workspaceID: workspaceId,
     });

@@ -187,7 +187,7 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
       .lean()
       .exec();
     if (!workspace) return next(createHttpError(404, "Workspace not found"));
-    res.status(201).json({ workspace: workspace });
+    res.status(200).json({ workspace: workspace });
   } catch (error) {
     next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
   }
