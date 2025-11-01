@@ -5,6 +5,9 @@ export interface IVideo {
   description: string;
   url: string;
   thumbnail: string;
+  tags: string[];
+  category: string;
+  privacy: "public" | "private" | "unlisted";
   uploaderID: ObjectId;
   uploadedAt: Date;
   workspaceID: ObjectId;

@@ -6,6 +6,8 @@ import { envConfig } from "../config/config";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
 import { PassThrough } from "stream";
 import axios from "axios";
+import { Video } from "../video/videoModel";
+import { Workspace } from "../workspace/workspaceModel";
 
 const oauth2Client = new google.auth.OAuth2(
   envConfig.googleClientId,
@@ -26,9 +28,19 @@ const fetchApprovalRequests = async (req: Request, res: Response, next: NextFunc
     )
     .populate("requester", "_id name email")
     .populate("approvers", "_id name email")
+    .populate("approvedBy", "_id name email")
     .exec();
-  console.log(approvalRequests);
-  res.status(200).json({ approvalRequests: approvalRequests });
+  const workspace = await Workspace.findById(workspaceId).populate({
+    path: "members",
+    populate: [
+      { path: "userID", select: "name email _id" },
+      { path: "invitedBy", select: "email" },
+    ],
+  });
+  if (!workspace) {
+    return next(new Error("Workspace not found"));
+  }
+  res.status(200).json({ approvalRequests: approvalRequests, workspace: workspace });
 };
 
 //Handle Approve Request
@@ -42,7 +54,8 @@ const handleApproveVideoUploadToYoutubeRequest = async (
     if (!approvalRequest) {
       return next(createHttpError(404, "Approval Request ID is required."));
     }
-
+    if (approvalRequest.status !== "pending")
+      return next(createHttpError(401, "Video is not pending pls re-check it."));
     const youtubeChannel = await YoutubeChannel.findOne({ workspaceID: approvalRequest.workspace });
     if (!youtubeChannel) {
       return next(createHttpError(404, "Youtube Channel not found."));
@@ -50,7 +63,7 @@ const handleApproveVideoUploadToYoutubeRequest = async (
     oauth2Client.setCredentials(youtubeChannel.channelToken);
 
     const youtube = google.youtube({ version: "v3", auth: oauth2Client });
-    const { title, description, url } = approvalRequest.payload;
+    const { title, description, url, tags, category, privacy } = approvalRequest.payload;
     if (!title || !description || !url) {
       return next(createHttpError(400, "Incomplete video data in approval request payload."));
     }
@@ -65,14 +78,28 @@ const handleApproveVideoUploadToYoutubeRequest = async (
         snippet: {
           title,
           description,
-          categoryId: "22",
+          categoryId: category,
+          tags,
         },
-        status: { privacyStatus: "private" },
+        status: { privacyStatus: privacy },
       },
       media: { body: videoStream },
     });
-    console.log("approvalRequestController:74 Youtube Upload Response: ",uploadResponse);
-    res.status(200).json({ video: uploadResponse });
+    if (uploadResponse.data.status?.uploadStatus === "uploaded") {
+      await Video.findOneAndUpdate({ _id: approvalRequest.video._id }, { status: "approved" });
+      await ApprovalRequest.findOneAndUpdate(
+        { _id: approvalRequest._id },
+        {
+          status: "approved",
+          response: "Approved",
+          summary: "Video uploaded to youtube",
+          approvedBy: req.user._id,
+        }
+      );
+      res.status(200).json({ video: uploadResponse });
+    } else {
+      res.status(500).json({ message: "Video upload failed." });
+    }
   } catch (error) {
     return next(createHttpError(500, `Error uploading video to youtube: ${error}`));
   }

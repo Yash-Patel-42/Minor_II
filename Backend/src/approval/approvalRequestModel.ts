@@ -18,6 +18,10 @@ const approvalRequestSchema = new mongoose.Schema<IApprovalRequest>(
       required: true,
     },
     approvers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected", "cancelled", "need_edits", "reuploaded"],
