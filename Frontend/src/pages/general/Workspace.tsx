@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router';
 import type { IWorkspace } from '../../types/WorkspaceType';
 import api from '../../utils/axiosInstance';
@@ -29,11 +30,35 @@ function Workspace() {
 
   const addUserToWorkspace = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await api.post(`/workspace/${workspaceId}/invite/user`, {
-      newMemberEmail: email,
-      newMemberRole: role,
-    });
-    console.log(response);
+    try {
+      const response = await api.post(`/workspace/${workspaceId}/invite/user`, {
+        newMemberEmail: email,
+        newMemberRole: role,
+      });
+      toast.success(`Invite sent to ${email}!`, {
+        duration: 4000,
+        position: 'bottom-right',
+        style: {
+          background: '#1f2937',
+          color: '#fff',
+          border: '1px solid rgba(255,255,255,0.1)',
+        },
+      });
+      setEmail('');
+      setRole('');
+      console.log(response);
+    } catch (error) {
+      // Show error toast
+      toast.error(`Failed to send invite. Please try again. ${error}}`, {
+        duration: 4000,
+        position: 'bottom-right',
+        style: {
+          background: '#1f2937',
+          color: '#fff',
+          border: '1px solid rgba(255,255,255,0.1)',
+        },
+      });
+    }
   };
 
   if (!workspace) return <div>Loading</div>;
