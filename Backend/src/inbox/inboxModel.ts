@@ -7,10 +7,13 @@ const inboxSchema = new mongoose.Schema<IInbox>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    receiver: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    receivers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
     type: {
       type: String,
       required: true,

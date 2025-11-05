@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { RoleType } from "../workspace/workspaceTypes";
+import { IRoleType } from "../workspace/workspaceTypes";
 
 const requirePermission =
   (permission: string) => (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +9,7 @@ const requirePermission =
     if (!workspace || !member) return next(createHttpError(404, "Invalid workspace or member"));
 
     const permissionMatrix = workspace.permissionMatrix;
-    const role = member.role as RoleType;
+    const role = member.role as IRoleType;
 
     const rolePermission = permissionMatrix?.[role];
     if (!rolePermission)

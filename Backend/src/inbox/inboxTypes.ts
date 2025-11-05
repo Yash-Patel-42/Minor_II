@@ -2,7 +2,7 @@ import { Document, ObjectId } from "mongoose";
 
 export interface IInbox extends Document {
   sender: ObjectId;
-  receiver: ObjectId;
+  receivers: ObjectId[];
   type: string;
   payload: object;
   message: string;

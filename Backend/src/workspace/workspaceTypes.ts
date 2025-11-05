@@ -1,9 +1,9 @@
 import { Date, Document, ObjectId } from "mongoose";
 
-export type RoleType = "owner" | "admin" | "manager" | "editor" | "viewer";
+export type IRoleType = "owner" | "admin" | "manager" | "editor" | "viewer";
 
-export type PermissionMatrix = {
-  [role in RoleType]: {
+export type IPermissionMatrix = {
+  [role in IRoleType]: {
     [permission: string]: boolean;
   };
 };
@@ -15,7 +15,7 @@ export interface IWorkspace extends Document {
   ownerID: ObjectId;
   youtubeChannelID: ObjectId;
   members: ObjectId[];
-  permissionMatrix: PermissionMatrix;
+  permissionMatrix: IPermissionMatrix;
   createdAt?: Date;
   updatedAt?: Date;
 }

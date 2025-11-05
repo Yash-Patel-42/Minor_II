@@ -1,6 +1,6 @@
-import { PermissionMatrix } from "../workspace/workspaceTypes";
+import { IPermissionMatrix } from "../workspace/workspaceTypes";
 
-export const DEFAULT_PERMISSION_MATRIX:PermissionMatrix = {
+export const DEFAULT_PERMISSION_MATRIX:IPermissionMatrix = {
   owner: {
     invite_member: true,
     remove_member: true,

@@ -3,7 +3,11 @@ import createHttpError from "http-errors";
 import { Member } from "../workspace/workspaceMemberModel";
 import { Workspace } from "../workspace/workspaceModel";
 
-export const authenticateWorkspace = async function (req: Request, res: Response, next: NextFunction) {
+export const authenticateWorkspace = async function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const incomingWorkspaceId = req.params.workspaceId;
     const userId = req.user._id;
@@ -11,7 +15,7 @@ export const authenticateWorkspace = async function (req: Request, res: Response
     if (!incomingWorkspaceId) return next(createHttpError(404, "Invalid or No Workspace ID."));
     if (!userId) return next(createHttpError(404, "Invalid or No userId"));
 
-    const workspace = await Workspace.findById(incomingWorkspaceId);
+    const workspace = await Workspace.findById(incomingWorkspaceId).lean();
     if (!workspace) return next(createHttpError(404, "Workspace not found"));
 
     const member = await Member.findOne({

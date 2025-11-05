@@ -74,7 +74,7 @@ const handleUserInvite = async (req: Request, res: Response, next: NextFunction)
         {
           sender: req.user._id,
           type: "workspace-invite",
-          receiver: newMember._id,
+          receivers: [newMember._id],
           payload: {
             role: newMemberRole,
             workspaceId: workspaceId,
@@ -103,12 +103,11 @@ const fetchInbox = async (req: Request, res: Response, next: NextFunction) => {
     const userID = req.user._id;
     if (!userID) return next(createHttpError(404, "No user ID found. Try logging in again."));
 
-    const inbox = await Inbox.find({ receiver: userID })
+    const inbox = await Inbox.find({ receivers: { $in: [req.user._id] } })
       .populate("sender", "email name")
       .sort({ createdAt: -1 });
 
     if (!inbox) return next(createHttpError(404, "Inbox is empty!"));
-
     res.status(200).json({ inbox: inbox });
   } catch (error) {
     next(createHttpError(500, `Error fetching inbox: ${error}`));
@@ -121,12 +120,17 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
     //Get data from request
     const { invite } = req.body;
 
+    // console.log("Invite: ", invite);
+    if (invite.receivers.length === 0) return next(createHttpError(404, "User Not Found"));
+
     // //Add Member to workspace
     const member = await Member.create({
-      userID: invite.receiver,
+      userID: invite.receivers[0],
       role: invite.payload.role,
       invitedBy: invite.sender._id,
       workspaceID: invite.payload.workspaceId,
+      status: "active",
+      acceptedAt: new Date(),
     });
 
     //Update reference in workspace model for the new created member

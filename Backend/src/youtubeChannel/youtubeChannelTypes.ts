@@ -7,6 +7,7 @@ export interface IYoutubeChannel extends Document {
   channelID: string;
   channelName: string;
   channelEmail: string;
+  channelToken: object;
   channelRefreshToken: string;
   createdAt: Date;
   updatedAt: Date;
