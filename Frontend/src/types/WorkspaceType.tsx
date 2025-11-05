@@ -22,4 +22,8 @@ export interface IWorkspace {
       userID: { email: string; name: string; _id: string };
     },
   ];
+  permissionMatrix?: {
+    key: string;
+    value: { key: string; value: boolean };
+  };
 }

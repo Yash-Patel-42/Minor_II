@@ -19,6 +19,19 @@ const videoSchema = new mongoose.Schema<IVideo>(
       type: String,
       required: false,
     },
+    tags: {
+      type: [String],
+      required: false,
+    },
+    category: {
+      type: String,
+      required: false,
+    },
+    privacy: {
+      type: String,
+      enum: ["public", "private", "unlisted"],
+      default: "private",
+    },
     uploaderID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
