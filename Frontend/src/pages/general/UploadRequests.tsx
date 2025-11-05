@@ -283,10 +283,10 @@ const UploadRequests = () => {
                       </div>
                     ) : (
                       <div className="border-t border-white/10 bg-neutral-800/50 p-4">
-                        {req.status === 'approved' && req.approvedBy ? (
+                        {req.status === 'approved' && req.moderator ? (
                           <div className="flex items-center gap-2 text-lg font-medium text-green-400">
                             <FiCheckCircle />
-                            <span>Approved by {req.approvedBy.name}</span>
+                            <span>Approved by {req.moderator.name}</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 text-lg font-medium text-gray-400">
