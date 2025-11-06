@@ -18,7 +18,7 @@ const approvalRequestSchema = new mongoose.Schema<IApprovalRequest>(
       required: true,
     },
     approvers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    approvedBy: {
+    moderator: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },

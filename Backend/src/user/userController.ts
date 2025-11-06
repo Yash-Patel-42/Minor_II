@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction, Request, Response } from "express";
 import { sign, verify } from "jsonwebtoken";
 import { envConfig } from "../config/config";
 import { IDecodedUser, IUser } from "./userTypes";
@@ -8,9 +8,10 @@ import { OAuth2Client } from "google-auth-library";
 import { User } from "./userModel";
 
 // options for cookies
-const options = {
+const options: CookieOptions = {
   httpOnly: true,
   secure: envConfig.environment === "production",
+  sameSite: envConfig.environment === "production" ? "none" : "lax",
 };
 
 //Register Handler
@@ -253,15 +254,15 @@ const oAuth2Client = new OAuth2Client({
 const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) => {
   try {
     const redirectURL = oAuth2Client.generateAuthUrl({
-    assess_type: "offline",
-    prompt: "consent",
-    scope: ["openid", "profile", "email"],
-  });
-  if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
-  // we will redirect to this generated route.
-  res.redirect(redirectURL);  
+      assess_type: "offline",
+      prompt: "consent",
+      scope: ["openid", "profile", "email"],
+    });
+    if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
+    // we will redirect to this generated route.
+    res.redirect(redirectURL);
   } catch (error) {
-    next(createHttpError(500, `Error while google login: ${error}`))
+    next(createHttpError(500, `Error while google login: ${error}`));
   }
 };
 

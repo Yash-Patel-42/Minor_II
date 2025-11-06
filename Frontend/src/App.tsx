@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router';
 
+import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import LandingPage from './pages/LandingPage.tsx';
 import Login from './pages/auth/Login.tsx';
@@ -11,55 +12,67 @@ import UploadVideo from './pages/general/UploadVideo.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
+import Permissions from './pages/general/Permissions.tsx';
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/terms-of-service" element={<TermsOfService />} />
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workspace/:workspaceId"
-        element={
-          <ProtectedRoute>
-            <Workspace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/invites"
-        element={
-          <ProtectedRoute>
-            <Inbox />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="workspace/:workspaceId/upload-video"
-        element={
-          <ProtectedRoute>
-            <UploadVideo />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="workspace/:workspaceId/upload-requests"
-        element={
-          <ProtectedRoute>
-            <UploadRequests />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+    <>
+      <Toaster />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace/:workspaceId"
+          element={
+            <ProtectedRoute>
+              <Workspace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invites"
+          element={
+            <ProtectedRoute>
+              <Inbox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/permissions"
+          element={
+            <ProtectedRoute>
+              <Permissions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/upload-video"
+          element={
+            <ProtectedRoute>
+              <UploadVideo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/upload-requests"
+          element={
+            <ProtectedRoute>
+              <UploadRequests />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
