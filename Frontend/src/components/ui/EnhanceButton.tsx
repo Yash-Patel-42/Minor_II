@@ -17,7 +17,8 @@ const EnhanceButton = <T,>({
   const handleEnhance = async () => {
     setLoading(true);
     try {
-      const response = await api.post(url, data);
+      const response = await api.post(url, { data });
+      // console.log("data", response)
       onEnhanced(response.data);
     } catch (error) {
       console.error('Error enhancing data:', error);

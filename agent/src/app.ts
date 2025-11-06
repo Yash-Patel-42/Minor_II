@@ -9,7 +9,7 @@ export const app: Application = express();
 // middlewares
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   }),
 );

@@ -72,10 +72,10 @@ const VideoUpload: React.FC = () => {
 
   const [enhancedDescription, setEnhancedDescription] = useState<string | null>(null);
   interface EnhancedDescriptionResponse {
-    title: string | null;
+    description: string | null;
   }
   const handleEnhancedDescription = (enhancedData: EnhancedDescriptionResponse): void => {
-    setEnhancedDescription(enhancedData.title);
+    setEnhancedDescription(enhancedData.description);
   };
 
   const [enhancedTags, setEnhancedTags] = useState<string | null>(null);
@@ -295,7 +295,7 @@ const VideoUpload: React.FC = () => {
                       />
                       <EnhanceButton
                         data={title}
-                        url="videos/tittle/generate"
+                        url="/videos/title/generate"
                         onEnhanced={handleEnhancedTitle}
                       />
                       {enhancedTitle && (
@@ -324,12 +324,12 @@ const VideoUpload: React.FC = () => {
                       />
                       <EnhanceButton
                         data={description}
-                        url="videos/description/generate"
+                        url="/videos/description/generate"
                         onEnhanced={handleEnhancedDescription}
                       />
                       {enhancedDescription && (
                         <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
-                          <p>Enhanced Title:</p>
+                          <p>Enhanced Description:</p>
                           <p>{enhancedDescription}</p>
                         </div>
                       )}
