@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { FiAlertTriangle, FiCheckCircle, FiImage, FiTag, FiUploadCloud } from 'react-icons/fi';
 import { useParams } from 'react-router';
+import EnhanceButton from '../../components/ui/EnhanceButton';
 import api from '../../utils/axiosInstance';
 
 const VIDEO_CATEGORIES = [
@@ -59,6 +60,31 @@ const VideoUpload: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const { workspaceId } = useParams();
+
+  //AI Enhanced
+  const [enhancedTitle, setEnhancedTitle] = useState<string | null>(null);
+  interface EnhancedTitleResponse {
+    title: string | null;
+  }
+  const handleEnhancedTitle = (enhancedData: EnhancedTitleResponse): void => {
+    setEnhancedTitle(enhancedData.title);
+  };
+
+  const [enhancedDescription, setEnhancedDescription] = useState<string | null>(null);
+  interface EnhancedDescriptionResponse {
+    title: string | null;
+  }
+  const handleEnhancedDescription = (enhancedData: EnhancedDescriptionResponse): void => {
+    setEnhancedDescription(enhancedData.title);
+  };
+
+  const [enhancedTags, setEnhancedTags] = useState<string | null>(null);
+  interface EnhancedTagsResponse {
+    tags: string | null;
+  }
+  const handleEnhancedTags = (enhancedData: EnhancedTagsResponse): void => {
+    setEnhancedTags(enhancedData.tags);
+  };
 
   //Cleanup for Video Preview
   useEffect(() => {
@@ -267,6 +293,17 @@ const VideoUpload: React.FC = () => {
                         className="font-display w-full border-0 border-b-2 border-neutral-700 bg-transparent p-2 text-4xl font-bold text-white placeholder-neutral-600 transition-all focus:border-indigo-500 focus:ring-0"
                         placeholder="Give your video a title..."
                       />
+                      <EnhanceButton
+                        data={title}
+                        url="videos/tittle/generate"
+                        onEnhanced={handleEnhancedTitle}
+                      />
+                      {enhancedTitle && (
+                        <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
+                          <p>Enhanced Title:</p>
+                          <p>{enhancedTitle}</p>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <label
@@ -285,6 +322,17 @@ const VideoUpload: React.FC = () => {
                         className="w-full rounded-md border-0 bg-neutral-700 p-4 text-white placeholder-gray-500 shadow-inner focus:ring-2 focus:ring-indigo-500"
                         placeholder="Tell viewers about your video..."
                       />
+                      <EnhanceButton
+                        data={description}
+                        url="videos/description/generate"
+                        onEnhanced={handleEnhancedDescription}
+                      />
+                      {enhancedDescription && (
+                        <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
+                          <p>Enhanced Title:</p>
+                          <p>{enhancedDescription}</p>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <label className="mb-2 block text-lg font-medium text-gray-400">
@@ -328,6 +376,11 @@ const VideoUpload: React.FC = () => {
                         Advanced Options
                       </h3>
                       <div>
+                        <EnhanceButton
+                          data={title}
+                          url="videos/tags/generate"
+                          onEnhanced={handleEnhancedTags}
+                        />
                         <label className="mb-1 block text-sm font-medium text-gray-400">Tags</label>
                         <div className="space-y-2">
                           <input
@@ -356,6 +409,12 @@ const VideoUpload: React.FC = () => {
                               </span>
                             ))}
                           </div>
+                          {enhancedTags && (
+                            <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
+                              <p>Enhanced Tags:</p>
+                              <p>{enhancedTags}</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div>
