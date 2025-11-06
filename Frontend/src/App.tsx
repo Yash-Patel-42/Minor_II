@@ -12,6 +12,7 @@ import UploadVideo from './pages/general/UploadVideo.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
+import Permissions from './pages/general/Permissions.tsx';
 function App() {
   return (
     <>
@@ -43,6 +44,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Inbox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/permissions"
+          element={
+            <ProtectedRoute>
+              <Permissions />
             </ProtectedRoute>
           }
         />

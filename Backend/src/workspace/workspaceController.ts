@@ -7,6 +7,7 @@ import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
 import { Member } from "./workspaceMemberModel";
+import getPermissionMatrixChanges from "../helper/getPermissionMatrixChanges";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +56,7 @@ const channelAuthInitiator = (req: Request, res: Response, next: NextFunction) =
   const redirectURL = oAuth2Client.generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
-    scope: [  
+    scope: [
       "openid",
       "profile",
       "email",
@@ -192,10 +193,67 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
     next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
   }
 };
+
+const updateWorkspacePermission = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const newPermissionMatrix = req.body.permissionMatrix;
+    const workspaceId = req.params.workspaceId;
+    const userId = req.user._id;
+    if (!newPermissionMatrix || !workspaceId || !userId)
+      return next(createHttpError(400, "Invalid request body"));
+
+    const workspace = await Workspace.findById(workspaceId).lean().exec();
+    const member = await Member.findOne({ userID: userId, workspaceID: workspaceId });
+    if (!workspace || !member) return next(createHttpError(404, "Workspace not found"));
+    if (member.role === "editor" || member.role === "viewer")
+      return next(createHttpError(403, "You don't have permission to update this workspace"));
+
+    const currentRole = member.role;
+    const oldPermissionMatrix = workspace.permissionMatrix;
+    const changes = getPermissionMatrixChanges(oldPermissionMatrix, newPermissionMatrix);
+    const IMMUTABLE_PERMS = ["transfer ownership", "authorize channel"];
+
+    if (["admin", "manager"].includes(currentRole)) {
+      const currentPerms = oldPermissionMatrix[currentRole] || {};
+      for (const [roleChanged, permsChanged] of Object.entries(changes)) {
+        if (roleChanged === "owner")
+          return next(createHttpError(403, "You cannot modify owner permissions"));
+        if (currentRole === "manager" && roleChanged === "admin")
+          return next(createHttpError(403, "Manager cannot modify admin permissions"));
+        for (const [perm, { new: newValue }] of Object.entries(permsChanged)) {
+          if (IMMUTABLE_PERMS.includes(perm))
+            return next(createHttpError(403, `Permission '${perm}' cannot be modified`));
+          if (newValue === true && !currentPerms[perm])
+            return next(
+              createHttpError(403, `You cannot assign '${perm}' permission that you don't have`)
+            );
+        }
+      }
+    }
+    if (currentRole === "owner") {
+      for (const permsChanged of Object.values(changes)) {
+        for (const [perm] of Object.entries(permsChanged)) {
+          if (IMMUTABLE_PERMS.includes(perm))
+            return next(createHttpError(403, `Permission '${perm}' cannot be modified`));
+        }
+      }
+    }
+    const updatedWorkspace = await Workspace.findByIdAndUpdate(
+      workspaceId,
+      { permissionMatrix: newPermissionMatrix },
+      { new: true }
+    );
+    return res.status(200).json({ workspace: updatedWorkspace, changes });
+  } catch (error) {
+    return next(createHttpError(500, `Error updating workspace permission: ${error}`));
+  }
+};
+
 export {
   createWorkspace,
   channelAuthInitiator,
   channelAuthCallback,
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
+  updateWorkspacePermission,
 };
