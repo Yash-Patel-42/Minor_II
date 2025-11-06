@@ -39,7 +39,6 @@ const handleGenerateDescription = async (req: Request, res: Response, next: Next
 const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const file = req.file;
-    console.log("File: ", file);
     if (!file) return next(createHttpError(404, "No file found to upload"));
 
     const workspaceId = req.workspace._id;
