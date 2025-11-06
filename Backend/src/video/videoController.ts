@@ -5,6 +5,36 @@ import fs from "fs";
 import { Video } from "./videoModel";
 import { Member } from "../workspace/workspaceMemberModel";
 import { ApprovalRequest } from "../approval/approvalRequestModel";
+import axios from "axios";
+import { AxiosResponse } from "../types/axios.types";
+
+const handleGeneratetitle = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const title = req.body.title as string;
+    if (!title) return next(createHttpError(400, "Title is required"));
+
+    const response = await axios.post<AxiosResponse>("/api/v1/agent/agent/generatetitle", {
+      body: title,
+    });
+    res.status(200).json({ title: response.data.data });
+  } catch (error) {
+    next(createHttpError(500, `Error generating title: ${error}`));
+  }
+};
+
+const handleGenerateDescription = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const description = req.body.description as string;
+    if (!description) return next(createHttpError(400, "Title is required"));
+
+    const response = await axios.post<AxiosResponse>("/api/v1/agent/generate-description", {
+      body: description,
+    });
+    res.status(200).json({ description: response.data.data });
+  } catch (error) {
+    next(createHttpError(500, `Error generating title: ${error}`));
+  }
+};
 
 const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -98,4 +128,4 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
   }
 };
 
-export { handleVideoUploadToWorkspace };
+export { handleVideoUploadToWorkspace, handleGeneratetitle, handleGenerateDescription };

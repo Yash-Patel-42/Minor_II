@@ -1,16 +1,11 @@
-import "tsconfig-paths/register";
+import { geminillm } from "@/utils/llm";
 
-import { geminillm, groqllm } from "@/utils/llm";
-
-export async function processUserInput(
-  userInput: string,
-  useGroq: boolean = false,
-) {
+export async function processUserInput(userInput: string) {
   try {
-    const output = useGroq
-      ? await groqllm(userInput)
-      : await geminillm(userInput);
-    return output;
+    const geminiOutput = await geminillm(userInput);
+    // const groqOutput = await groqllm(userInput);
+
+    return geminiOutput;
   } catch (error) {
     console.error("Error processing user input:", error);
     throw error;

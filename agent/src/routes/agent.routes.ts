@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import {
-  agentHandler,
+  // agentHandler,
   generateDescriptionHandler,
   generateTagsHandler,
 //   generateImageHandler,
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-router.post("/generate", agentHandler);
+// router.post("/generate", agentHandler);
 router.post("/generatetitle", generateTitleHandler);
 router.post("/generate-description", generateDescriptionHandler);
 router.post("/generate-tags", generateTagsHandler);
