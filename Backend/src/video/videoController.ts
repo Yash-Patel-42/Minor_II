@@ -5,6 +5,57 @@ import fs from "fs";
 import { Video } from "./videoModel";
 import { Member } from "../workspace/workspaceMemberModel";
 import { ApprovalRequest } from "../approval/approvalRequestModel";
+import { api } from "../utils/axiosInstance.utils";
+import { AxiosResponse } from "../types/axios.types";
+
+const handleGeneratetitle = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const title = req.body.data as string;
+    
+
+    if (!title) return next(createHttpError(400, "Title is required"));
+
+    const response = await api.post<AxiosResponse>("/api/v1/agent/generatetitle", {
+      prompt: title,
+    });
+
+    // console.log("res ==>", response.data.data)
+
+    res.status(200).json({ title: response.data.data });
+  } catch (error) {
+    return next(createHttpError(500, `Error generating title: ${error}`));
+  }
+};
+
+const handleGenerateDescription = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const description = req.body.data as string;
+    if (!description) return next(createHttpError(400, "Title is required"));
+
+    const response = await api.post<AxiosResponse>("/api/v1/agent/generate-description", {
+      prompt: description,
+    });
+    // console.log("res ==>", response.data);
+    res.status(200).json({ description: response.data.data });
+  } catch (error) {
+    return next(createHttpError(500, `Error generating description: ${error}`));
+  }
+};
+
+const handleGenerateTags = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const title = req.body.data as string;
+    if (!title) return next(createHttpError(400, "Title is required"));
+
+    const response = await api.post<AxiosResponse>("/api/v1/agent/generate-tags", {
+      prompt: title,
+    });
+    console.log("res ==>", response.data);
+    res.status(200).json({ tags: response.data.data });
+  } catch (error) {
+    return next(createHttpError(500, `Error generating tags: ${error}`));
+  }
+};
 
 const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -97,4 +148,9 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
   }
 };
 
-export { handleVideoUploadToWorkspace };
+export {
+  handleVideoUploadToWorkspace,
+  handleGeneratetitle,
+  handleGenerateDescription,
+  handleGenerateTags,
+};
