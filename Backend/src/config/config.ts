@@ -12,6 +12,7 @@ const _envConfig = {
   googleLoginRedirectUri: process.env.GOOGLE_LOGIN_REDIRECT_URI,
   googleChannelAuthRedirectUri: process.env.GOOGLE_CHANNEL_AUTH_REDIRECT_URI,
   frontendUrl: process.env.FRONTEND_URI,
+  agentUri: process.env.AGENT_URI,
   cloudinaryUrl: process.env.CLOUDINARY_URL,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
