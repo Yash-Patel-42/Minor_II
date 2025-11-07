@@ -260,7 +260,6 @@ const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) =
     });
     if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
     // we will redirect to this generated route.
-    console.log("redirect : ", redirectURL)
     res.redirect(redirectURL);
   } catch (error) {
     next(createHttpError(500, `Error while google login: ${error}`));
@@ -343,7 +342,7 @@ const googleLoginCallback = async (req: Request, res: Response, next: NextFuncti
     res
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .redirect("http://localhost:5173/home");
+      .redirect(`${envConfig.frontendUrl as string}/home`);
   } catch (error) {
     next(createHttpError(500, `An error occurred during Google authentication: ${error}`));
   }
