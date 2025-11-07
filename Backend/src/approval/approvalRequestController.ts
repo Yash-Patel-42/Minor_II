@@ -28,7 +28,8 @@ const fetchApprovalRequests = async (req: Request, res: Response, next: NextFunc
     )
     .populate("requester", "_id name email")
     .populate("approvers", "_id name email")
-    .populate("approvedBy", "_id name email")
+    .populate("moderator", "_id name email")
+    .sort({ createdAt: -1 })
     .exec();
   const workspace = await Workspace.findById(workspaceId).populate({
     path: "members",
@@ -57,9 +58,7 @@ const handleApproveVideoUploadToYoutubeRequest = async (
     if (approvalRequest.status !== "pending")
       return next(createHttpError(401, "Video is not pending pls re-check it."));
     const youtubeChannel = await YoutubeChannel.findOne({ workspaceID: approvalRequest.workspace });
-    if (!youtubeChannel) {
-      return next(createHttpError(404, "Youtube Channel not found."));
-    }
+    if (!youtubeChannel) return next(createHttpError(404, "Youtube Channel not found."));
     oauth2Client.setCredentials(youtubeChannel.channelToken);
 
     const youtube = google.youtube({ version: "v3", auth: oauth2Client });
@@ -74,14 +73,15 @@ const handleApproveVideoUploadToYoutubeRequest = async (
 
     const uploadResponse = await youtube.videos.insert({
       part: ["snippet", "status"],
+      // prettier-ignore
       requestBody: {
         snippet: {
-          title,
-          description,
-          categoryId: category,
-          tags,
+          "title": title,
+          "description": description,
+          "categoryId": category,
+          "tags": [tags],
         },
-        status: { privacyStatus: privacy },
+        status: { "privacyStatus": privacy, "selfDeclaredMadeForKids": false },
       },
       media: { body: videoStream },
     });
@@ -91,9 +91,9 @@ const handleApproveVideoUploadToYoutubeRequest = async (
         { _id: approvalRequest._id },
         {
           status: "approved",
-          response: "Approved",
-          summary: "Video uploaded to youtube",
-          approvedBy: req.user._id,
+          response: "approved",
+          summary: "video approved, uploaded to youtube",
+          moderator: req.user._id,
         }
       );
       res.status(200).json({ video: uploadResponse });
@@ -104,4 +104,40 @@ const handleApproveVideoUploadToYoutubeRequest = async (
     return next(createHttpError(500, `Error uploading video to youtube: ${error}`));
   }
 };
-export { fetchApprovalRequests, handleApproveVideoUploadToYoutubeRequest };
+
+//Handle Reject Request
+const handleRejectVideoUploadToYoutubeRequest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { req: approvalRequest } = req.body;
+    if (!approvalRequest) return next(createHttpError(404, "Approval Request ID is required."));
+    if (approvalRequest.status !== "pending")
+      return next(createHttpError(401, "Video is not pending pls re-check it."));
+
+    const youtubeChannel = await YoutubeChannel.findOne({ workspaceID: approvalRequest.workspace });
+    if (!youtubeChannel) return next(createHttpError(404, "Youtube Channel not found."));
+
+    await Video.findOneAndUpdate({ _id: approvalRequest.video._id }, { status: "approved" });
+    await ApprovalRequest.findOneAndUpdate(
+      { _id: approvalRequest._id },
+      {
+        status: "rejected",
+        response: "rejected",
+        summary: "video rejected, not uploaded to youtube",
+        moderator: req.user._id,
+      }
+    );
+    res.status(200).json({ message: "Video rejected successfully." });
+  } catch (error) {
+    return next(createHttpError(500, `Error rejecting video upload to youtube: ${error}`));
+  }
+};
+
+export {
+  fetchApprovalRequests,
+  handleApproveVideoUploadToYoutubeRequest,
+  handleRejectVideoUploadToYoutubeRequest,
+};

@@ -7,6 +7,7 @@ import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import Home from './pages/general/Home.tsx';
 import Inbox from './pages/general/Inbox.tsx';
+import Permissions from './pages/general/Permissions.tsx';
 import UploadRequests from './pages/general/UploadRequests.tsx';
 import UploadVideo from './pages/general/UploadVideo.tsx';
 import Workspace from './pages/general/Workspace.tsx';
@@ -43,6 +44,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Inbox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/permissions"
+          element={
+            <ProtectedRoute>
+              <Permissions />
             </ProtectedRoute>
           }
         />
