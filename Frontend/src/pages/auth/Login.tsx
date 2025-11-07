@@ -13,6 +13,10 @@ export default function Login() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormFields>({ mode: 'onChange' });
+
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const onSubmit: SubmitHandler<LoginFormFields> = async (inputData) => {
     try {
       const response = await api.post('/users/login', {
@@ -20,7 +24,7 @@ export default function Login() {
         password: inputData.password,
       });
       const user = response.data.user;
-      login(user);
+      login(user);  
       navigate('/home');
     } catch (error) {
       setError('root', { message: `Error Occurred: ${error}` });
@@ -29,8 +33,7 @@ export default function Login() {
   const handleGoogleLogin = () => {
     window.location.href = import.meta.env.VITE_GOOGLE_AUTH_URL;
   };
-  const navigate = useNavigate();
-  const { login } = useAuth();
+
   const navigateToRegister = () => {
     navigate('/register');
   };
