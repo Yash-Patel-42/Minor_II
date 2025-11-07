@@ -2,11 +2,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import Navbar from '../../components/Navbar';
 import { useAuth } from '../../Context/AuthProvider';
 import type { CreateWorkspaceFormFields } from '../../types/FormType';
 import type { IWorkspace } from '../../types/WorkspaceType';
 import api from '../../utils/axiosInstance';
+import Navbar from '../../components/ui/Navbar';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);

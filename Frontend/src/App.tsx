@@ -7,12 +7,12 @@ import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import Home from './pages/general/Home.tsx';
 import Inbox from './pages/general/Inbox.tsx';
+import Permissions from './pages/general/Permissions.tsx';
 import UploadRequests from './pages/general/UploadRequests.tsx';
 import UploadVideo from './pages/general/UploadVideo.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
-import Permissions from './pages/general/Permissions.tsx';
 function App() {
   return (
     <>
