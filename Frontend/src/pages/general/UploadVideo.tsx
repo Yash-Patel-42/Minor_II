@@ -1,7 +1,14 @@
 import { isAxiosError, type AxiosProgressEvent } from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { FiAlertTriangle, FiCheckCircle, FiClipboard, FiImage, FiTag, FiUploadCloud } from 'react-icons/fi';
+import {
+  FiAlertTriangle,
+  FiCheckCircle,
+  FiClipboard,
+  FiImage,
+  FiTag,
+  FiUploadCloud,
+} from 'react-icons/fi';
 import { useParams } from 'react-router';
 import EnhanceButton from '../../components/ui/EnhanceButton';
 import api from '../../utils/axiosInstance';
@@ -166,6 +173,11 @@ const VideoUpload: React.FC = () => {
 
     const thumbnailInput = document.getElementById('thumbnail-upload-input') as HTMLInputElement;
     if (thumbnailInput) thumbnailInput.value = '';
+
+    // Clear the enhanced data
+    setEnhancedTitle(null);
+    setEnhancedDescription(null);
+    setEnhancedTags(null);
   };
 
   //Form Submission
@@ -333,7 +345,7 @@ const VideoUpload: React.FC = () => {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                         disabled={loading || !!success}
-                        className="font-display w-full border-0 border-b-2 border-neutral-700 bg-transparent p-2 text-4xl font-bold text-white placeholder-neutral-600 transition-all focus:border-indigo-500 focus:ring-0"
+                        className="font-display w-full border-0 border-b-2 border-neutral-700 bg-transparent p-2 text-xl font-bold text-white placeholder-neutral-600 transition-all focus:border-indigo-500 focus:ring-0"
                         placeholder="Give your video a title..."
                       />
                       <EnhancedContent title="Title" content={enhancedTitle} />

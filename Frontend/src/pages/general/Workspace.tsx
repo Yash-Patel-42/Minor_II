@@ -11,12 +11,14 @@ function Workspace() {
   const { workspaceId } = useParams();
   const [workspace, setWorkspace] = useState<IWorkspace | null>(null);
   const navigate = useNavigate();
+
+  // console.log("id in wspa: ", workspaceId)
   useEffect(() => {
     const fetchWorkspace = async () => {
       try {
         const response = await api.get(`/workspace/${workspaceId}`, { withCredentials: true });
         setWorkspace(response.data.workspace);
-        console.log(response);
+        console.log("response ==>", response);
       } catch (error) {
         console.error(error);
       }
@@ -102,6 +104,15 @@ function Workspace() {
               whileTap={{ scale: 0.95 }}
             >
               Adjust Permissions
+            </motion.button>
+
+            <motion.button
+              onClick={() => navigate(`/channel/info/${workspaceId}`)}
+              className="rounded-lg bg-neutral-700 px-5 py-3 font-medium text-gray-300 ring-1 ring-neutral-600 transition-all hover:bg-neutral-600 hover:text-white"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Channel Info
             </motion.button>
           </div>
           <div className="mb-12 grid gap-6 md:grid-cols-2">

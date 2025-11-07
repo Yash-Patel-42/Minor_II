@@ -41,7 +41,7 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
 };
 
 //Google Auth
-const oAuth2Client = new OAuth2Client({
+export const oAuth2Client = new OAuth2Client({
   clientId: envConfig.googleClientId,
   clientSecret: envConfig.googleClientSecret,
   redirectUri: envConfig.googleChannelAuthRedirectUri,

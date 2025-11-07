@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@types/react-router-dom": "^5.3.3",
     "animejs": "^4.2.2",
     "axios": "^1.12.2",
     "framer-motion": "^12.23.24",

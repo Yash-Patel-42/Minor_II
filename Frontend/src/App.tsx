@@ -13,6 +13,7 @@ import UploadVideo from './pages/general/UploadVideo.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
+import ChannelInfo from './pages/youytube/channelInfo.tsx';
 function App() {
   return (
     <>
@@ -68,6 +69,15 @@ function App() {
           element={
             <ProtectedRoute>
               <UploadRequests />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="channel/info/:workspaceId"
+          element={
+            <ProtectedRoute>
+              <ChannelInfo />
             </ProtectedRoute>
           }
         />

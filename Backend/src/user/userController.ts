@@ -260,6 +260,7 @@ const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) =
     });
     if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
     // we will redirect to this generated route.
+    console.log("redirect : ", redirectURL)
     res.redirect(redirectURL);
   } catch (error) {
     next(createHttpError(500, `Error while google login: ${error}`));
