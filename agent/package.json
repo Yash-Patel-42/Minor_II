@@ -1,0 +1,49 @@
+{
+  "name": "agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix",
+    "agent": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
+    "agent-dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/agent.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@google/genai": "^1.28.0",
+    "@google/generative-ai": "^0.24.1",
+    "@langchain/core": "^1.0.2",
+    "@langchain/google-genai": "^1.0.0",
+    "@langchain/groq": "^1.0.0",
+    "@langchain/langgraph": "^1.0.1",
+    "@types/compression": "^1.8.1",
+    "axios": "^1.13.1",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "langchain": "^1.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.9.2",
+    "eslint": "^9.38.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.6.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2"
+  }
+}

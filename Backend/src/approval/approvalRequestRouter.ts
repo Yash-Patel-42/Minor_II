@@ -1,7 +1,11 @@
 import express from "express";
 import { authenticateUser } from "../middlewares/authMiddleware";
 import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
-import {fetchApprovalRequests, handleApproveVideoUploadToYoutubeRequest} from "./approvalRequestController";
+import {
+  fetchApprovalRequests,
+  handleApproveVideoUploadToYoutubeRequest,
+  handleRejectVideoUploadToYoutubeRequest,
+} from "./approvalRequestController";
 import requirePermission from "../middlewares/requirePermissionMiddleware";
 
 const approvalRequestRouter = express.Router();
@@ -18,6 +22,13 @@ approvalRequestRouter.post(
   authenticateWorkspace,
   requirePermission("accept_video_upload_request"),
   handleApproveVideoUploadToYoutubeRequest
+);
+approvalRequestRouter.post(
+  "/workspace/:workspaceId/approval-requests/reject",
+  authenticateUser,
+  authenticateWorkspace,
+  requirePermission("reject_video_upload_request"),
+  handleRejectVideoUploadToYoutubeRequest
 );
 
 export default approvalRequestRouter;

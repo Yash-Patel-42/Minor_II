@@ -8,10 +8,10 @@ import { OAuth2Client } from "google-auth-library";
 import { User } from "./userModel";
 
 // options for cookies
-const options:CookieOptions = {
+const options: CookieOptions = {
   httpOnly: true,
   secure: envConfig.environment === "production",
-  sameSite: "none",
+  sameSite: envConfig.environment === "production" ? "none" : "lax",
 };
 
 //Register Handler

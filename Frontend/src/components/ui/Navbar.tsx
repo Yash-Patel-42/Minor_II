@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../Context/AuthProvider';
+import { useAuth } from '../../Context/AuthProvider';
 function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();

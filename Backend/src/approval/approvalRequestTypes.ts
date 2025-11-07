@@ -5,7 +5,7 @@ export interface IApprovalRequest {
   workspace: ObjectId;
   requester: ObjectId;
   approvers: ObjectId[];
-  approvedBy: ObjectId;
+  moderator: ObjectId;
   status: "pending" | "approved" | "rejected" | "cancelled" | "need_edits" | "reuploaded";
   response: string;
   summary: string;
