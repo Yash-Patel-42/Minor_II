@@ -1,7 +1,7 @@
 import { isAxiosError, type AxiosProgressEvent } from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { FiAlertTriangle, FiCheckCircle, FiImage, FiTag, FiUploadCloud } from 'react-icons/fi';
+import { FiAlertTriangle, FiCheckCircle, FiClipboard, FiImage, FiTag, FiUploadCloud } from 'react-icons/fi';
 import { useParams } from 'react-router';
 import EnhanceButton from '../../components/ui/EnhanceButton';
 import api from '../../utils/axiosInstance';
@@ -224,6 +224,36 @@ const VideoUpload: React.FC = () => {
     }
   };
 
+  const EnhancedContent = ({ title, content }: { title: string; content: string | null }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+      if (content) {
+        navigator.clipboard.writeText(content);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    };
+
+    if (!content) return null;
+
+    return (
+      <div className="mt-4 rounded-md bg-neutral-700/50 p-4 ring-1 ring-white/10">
+        <div className="flex items-center justify-between">
+          <p className="text-lg font-semibold text-white">Enhanced {title}</p>
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1 text-sm font-bold text-white transition-all hover:bg-indigo-500"
+          >
+            <FiClipboard />
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+        <p className="mt-2 text-gray-300">{content}</p>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 p-4 pt-8 text-gray-300 md:p-10">
       <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-800 shadow-xl ring-1 ring-white/10">
@@ -283,6 +313,19 @@ const VideoUpload: React.FC = () => {
                       </div>
                     )}
                     <div>
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="title"
+                          className="mb-2 block text-lg font-medium text-gray-400"
+                        >
+                          Title
+                        </label>
+                        <EnhanceButton
+                          data={title}
+                          url="/videos/title/generate"
+                          onEnhanced={handleEnhancedTitle}
+                        />
+                      </div>
                       <input
                         type="text"
                         id="title"
@@ -293,25 +336,22 @@ const VideoUpload: React.FC = () => {
                         className="font-display w-full border-0 border-b-2 border-neutral-700 bg-transparent p-2 text-4xl font-bold text-white placeholder-neutral-600 transition-all focus:border-indigo-500 focus:ring-0"
                         placeholder="Give your video a title..."
                       />
-                      <EnhanceButton
-                        data={title}
-                        url="/videos/title/generate"
-                        onEnhanced={handleEnhancedTitle}
-                      />
-                      {enhancedTitle && (
-                        <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
-                          <p>Enhanced Title:</p>
-                          <p>{enhancedTitle}</p>
-                        </div>
-                      )}
+                      <EnhancedContent title="Title" content={enhancedTitle} />
                     </div>
                     <div>
-                      <label
-                        htmlFor="description"
-                        className="mb-2 block text-lg font-medium text-gray-400"
-                      >
-                        Description
-                      </label>
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="description"
+                          className="mb-2 block text-lg font-medium text-gray-400"
+                        >
+                          Description
+                        </label>
+                        <EnhanceButton
+                          data={description}
+                          url="/videos/description/generate"
+                          onEnhanced={handleEnhancedDescription}
+                        />
+                      </div>
                       <textarea
                         id="description"
                         rows={10}
@@ -322,17 +362,7 @@ const VideoUpload: React.FC = () => {
                         className="w-full rounded-md border-0 bg-neutral-700 p-4 text-white placeholder-gray-500 shadow-inner focus:ring-2 focus:ring-indigo-500"
                         placeholder="Tell viewers about your video..."
                       />
-                      <EnhanceButton
-                        data={description}
-                        url="/videos/description/generate"
-                        onEnhanced={handleEnhancedDescription}
-                      />
-                      {enhancedDescription && (
-                        <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
-                          <p>Enhanced Title:</p>
-                          <p>{enhancedDescription}</p>
-                        </div>
-                      )}
+                      <EnhancedContent title="Description" content={enhancedDescription} />
                     </div>
                     <div>
                       <label className="mb-2 block text-lg font-medium text-gray-400">
@@ -376,12 +406,16 @@ const VideoUpload: React.FC = () => {
                         Advanced Options
                       </h3>
                       <div>
-                        <EnhanceButton
-                          data={title}
-                          url="/videos/tags/generate"
-                          onEnhanced={handleEnhancedTags}
-                        />
-                        <label className="mb-1 block text-sm font-medium text-gray-400">Tags</label>
+                        <div className="flex items-center justify-between">
+                          <label className="mb-1 block text-sm font-medium text-gray-400">
+                            Tags
+                          </label>
+                          <EnhanceButton
+                            data={title}
+                            url="/videos/tags/generate"
+                            onEnhanced={handleEnhancedTags}
+                          />
+                        </div>
                         <div className="space-y-2">
                           <input
                             type="text"
@@ -409,12 +443,7 @@ const VideoUpload: React.FC = () => {
                               </span>
                             ))}
                           </div>
-                          {enhancedTags && (
-                            <div className="rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
-                              <p>Enhanced Tags:</p>
-                              <p>{enhancedTags}</p>
-                            </div>
-                          )}
+                          <EnhancedContent title="Tags" content={enhancedTags} />
                         </div>
                       </div>
                       <div>
