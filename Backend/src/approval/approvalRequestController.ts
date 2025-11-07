@@ -74,7 +74,7 @@ const handleApproveVideoUploadToYoutubeRequest = async (
       part: ["snippet", "status"],
       requestBody: {
         snippet: {
-          title,
+          title: title,
           description,
           categoryId: category,
           tags,

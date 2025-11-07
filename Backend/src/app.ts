@@ -8,6 +8,7 @@ import workspaceRouter from "./workspace/workspaceRouter";
 import inboxRouter from "./inbox/inboxRouter";
 import videoRouter from "./video/videoRouter";
 import approvalRequestRouter from "./approval/approvalRequestRouter";
+import youtubeChannelRouter from "./youtubeChannel/youtubeChannelRouter";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api", workspaceRouter);
 app.use("/api", inboxRouter);
 app.use("/api", videoRouter);
 app.use("/api", approvalRequestRouter);
+app.use("/api/channel", youtubeChannelRouter)
 
 // Global error handler
 app.use(globalErrorHandler);
