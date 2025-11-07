@@ -29,6 +29,7 @@ const fetchApprovalRequests = async (req: Request, res: Response, next: NextFunc
     .populate("requester", "_id name email")
     .populate("approvers", "_id name email")
     .populate("moderator", "_id name email")
+    .sort({ createdAt: -1 })
     .exec();
   const workspace = await Workspace.findById(workspaceId).populate({
     path: "members",
@@ -72,14 +73,15 @@ const handleApproveVideoUploadToYoutubeRequest = async (
 
     const uploadResponse = await youtube.videos.insert({
       part: ["snippet", "status"],
+      // prettier-ignore
       requestBody: {
         snippet: {
-          title: title,
-          description,
-          categoryId: category,
-          tags,
+          "title": title,
+          "description": description,
+          "categoryId": category,
+          "tags": [tags],
         },
-        status: { privacyStatus: privacy },
+        status: { "privacyStatus": privacy, "selfDeclaredMadeForKids": false },
       },
       media: { body: videoStream },
     });

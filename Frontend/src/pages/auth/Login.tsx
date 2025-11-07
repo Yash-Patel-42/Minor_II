@@ -31,7 +31,7 @@ export default function Login() {
     }
   };
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/api/users/auth/google';
+    window.location.href = import.meta.env.VITE_GOOGLE_AUTH_URL;
   };
 
   const navigateToRegister = () => {

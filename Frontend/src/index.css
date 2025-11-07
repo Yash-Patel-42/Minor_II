@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 html {
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -10,8 +10,24 @@ html {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded;
+  @apply rounded bg-gray-400;
 }
 ::-webkit-scrollbar-track {
   @apply bg-gray-100;
+}
+@theme {
+  --color-background: #f8efed;
+  --color-background_dark: #120907;
+
+  --color-primary: #6b271a;
+  --color-primary_dark: #e5a294;
+
+  --color-secondary: #ee8572;
+  --color-secondary_dark: #8d2411;
+  
+  --color-accent: #f62804;
+  --color-accent_dark: #fb2d09;
+
+  --color-text: #130d0b;
+  --color-text_dark: #f4eeec;
 }
