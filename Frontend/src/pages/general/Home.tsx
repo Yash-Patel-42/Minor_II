@@ -2,11 +2,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import Navbar from '../../components/ui/Navbar';
 import { useAuth } from '../../Context/AuthProvider';
 import type { CreateWorkspaceFormFields } from '../../types/FormType';
 import type { IWorkspace } from '../../types/WorkspaceType';
 import api from '../../utils/axiosInstance';
-import Navbar from '../../components/ui/Navbar';
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -52,8 +52,8 @@ export default function Home() {
   }, []);
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
+      <div className="flex h-screen items-center justify-center bg-neutral-900">
+        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-white"></div>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaGithub, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaGithub, FaInstagram } from 'react-icons/fa';
+import TubixLogo from '../../assets/Tubix(SVG)/3.svg';
 
 const Footer: React.FC = () => {
   return (
@@ -8,8 +9,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2">
-              <FaYoutube className="h-8 w-8 text-red-500" />
-              <span className="text-xl font-semibold">Minor Project II</span>
+              <img src={TubixLogo} alt="" className="size-15 sm:size-25" />
+              <span className="text-xl font-semibold">Tubix</span>
             </div>
             <p className="mt-4 max-w-xs text-gray-400">
               The secure control panel your YouTube channel has been missing.
@@ -17,7 +18,7 @@ const Footer: React.FC = () => {
           </div>
           <div className="grid grid-cols-2 gap-8 lg:col-span-2 lg:grid-cols-3">
             <div>
-              <h3 className="font-semibold text-white uppercase">Product</h3>
+              <h3 className="font-semibold uppercase text-white">Product</h3>
               <ul className="mt-4 space-y-3">
                 <li>
                   <a href="#features" className="text-gray-400 transition-colors hover:text-white">
@@ -45,7 +46,7 @@ const Footer: React.FC = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white uppercase">Resources</h3>
+              <h3 className="font-semibold uppercase text-white">Resources</h3>
               <ul className="mt-4 space-y-3">
                 <li>
                   <a href="#" className="text-gray-400 transition-colors hover:text-white">
@@ -67,7 +68,7 @@ const Footer: React.FC = () => {
 
             {/* Link Column 3 */}
             <div>
-              <h3 className="font-semibold text-white uppercase">Legal</h3>
+              <h3 className="font-semibold uppercase text-white">Legal</h3>
               <ul className="mt-4 space-y-3">
                 <li>
                   <a
@@ -91,7 +92,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-gray-800 pt-8 sm:flex-row">
           <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} Minor Project II. All Rights Reserved.
+            © {new Date().getFullYear()} Tubix. All Rights Reserved.
           </p>
           <div className="flex items-center space-x-6">
             <a

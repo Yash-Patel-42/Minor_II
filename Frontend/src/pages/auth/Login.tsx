@@ -1,10 +1,11 @@
+import { isAxiosError } from 'axios';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { FcGoogle } from 'react-icons/fc';
+import { useNavigate } from 'react-router';
 import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
 import { useAuth } from '../../Context/AuthProvider';
 import type { LoginFormFields } from '../../types/FormType';
 import api from '../../utils/axiosInstance';
-
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 
 export default function Login() {
   const {
@@ -24,10 +25,14 @@ export default function Login() {
         password: inputData.password,
       });
       const user = response.data.user;
-      login(user);  
+      login(user);
       navigate('/home');
     } catch (error) {
-      setError('root', { message: `Error Occurred: ${error}` });
+      if (isAxiosError(error)) {
+        setError('root', {
+          message: `Error: ${error?.response?.data?.message || 'Network Error Occured.'}`,
+        });
+      }
     }
   };
   const handleGoogleLogin = () => {
@@ -50,7 +55,9 @@ export default function Login() {
           </h1>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
-          {errors.root && <p className="text-sm text-red-400">{errors.root.message}</p>}
+          {errors.root && (
+            <p className="text-sm font-semibold text-red-400">{errors.root.message}</p>
+          )}
           <div className="flex w-full flex-col gap-1">
             <label className="text-sm font-medium text-gray-300">Email Protocol</label>
             <input
@@ -95,7 +102,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-2 rounded-lg bg-purple-500 px-8 py-3 text-lg font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:bg-purple-700 hover:shadow-xl hover:shadow-purple-500/50 disabled:scale-100 disabled:opacity-50"
+            className="mt-2 rounded-lg bg-purple-500 px-8 py-3 text-lg font-bold text-white shadow-lg shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:bg-purple-700 hover:shadow-xl hover:shadow-purple-500/50 disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting ? 'Authenticating...' : 'Authenticate'}
           </button>
@@ -109,16 +116,18 @@ export default function Login() {
         <div className="flex w-full flex-col gap-4">
           <button
             onClick={handleGoogleLogin}
-            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-700 bg-white px-6 py-3 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200"
+            disabled={isSubmitting}
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-700 bg-white px-6 py-3 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Log in with Google
+            Log in with Google{<FcGoogle size={30} />}
           </button>
           <div className="text-center text-gray-400">
             Don't have an account?{' '}
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={navigateToRegister}
-              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline"
+              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               Start Your Empire
             </button>

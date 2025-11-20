@@ -99,11 +99,11 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       user = (await User.findOne({ email })) as IUser;
       if (!user) {
-        return next(createHttpError(404, "User not found."));
+        return next(createHttpError(401, `Email: ${email} is incorrect`));
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return next(createHttpError(401, "Username or password incorrect."));
+        return next(createHttpError(401, "Password is incorrect."));
       }
     } catch (error) {
       return next(createHttpError(500, `Error fetching user data: ${error}`));

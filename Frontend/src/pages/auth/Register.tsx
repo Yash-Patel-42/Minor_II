@@ -1,4 +1,5 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router';
 import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
 import { useAuth } from '../../Context/AuthProvider';
@@ -122,16 +123,18 @@ export default function Register() {
         <div className="flex w-full flex-col gap-4">
           <button
             onClick={handleGoogleLogin}
-            className="flex w-full items-center justify-center rounded-lg border border-gray-700 bg-white px-6 py-2 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200"
+            disabled={isSubmitting}
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-700 bg-white px-6 py-2 text-lg font-bold text-gray-900 transition-all hover:scale-105 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Sign in with Google
+            Sign in with Google{<FcGoogle size={30} />}
           </button>
           <div className="text-center text-gray-400">
             Already have an Empire?{' '}
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={navigateToLogin}
-              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline"
+              className="font-medium text-cyan-400 transition-all hover:text-cyan-300 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               Log In
             </button>

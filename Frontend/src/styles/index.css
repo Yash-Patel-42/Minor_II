@@ -4,16 +4,7 @@ html {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  @apply rounded bg-gray-400;
-}
-::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  scrollbar-width: none;
 }
 @theme {
   --color-background: #f8efed;
@@ -24,7 +15,7 @@ html {
 
   --color-secondary: #ee8572;
   --color-secondary_dark: #8d2411;
-  
+
   --color-accent: #f62804;
   --color-accent_dark: #fb2d09;
 
