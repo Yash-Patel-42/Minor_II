@@ -236,7 +236,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
       .json({
         accessToken: accessToken,
         refreshToken: refreshToken,
-        user: { _id: user._id, name: user.name, email: user.email },
+        user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar },
       });
   } catch (error) {
     return next(createHttpError(500, `Unexpected error during token refresh: ${error}`));
