@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router';
 import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import LandingPage from './pages/LandingPage.tsx';
+import PageNotFound from './pages/PageNotFound.tsx';
 import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
 import Home from './pages/general/Home.tsx';
@@ -81,6 +82,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );
