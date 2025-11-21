@@ -15,6 +15,7 @@ import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
 import ChannelInfo from './pages/youytube/channelInfo.tsx';
+import UserSetting from './pages/general/UserSetting.tsx';
 function App() {
   return (
     <>
@@ -70,6 +71,14 @@ function App() {
           element={
             <ProtectedRoute>
               <UploadRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <ProtectedRoute>
+              <UserSetting />
             </ProtectedRoute>
           }
         />
