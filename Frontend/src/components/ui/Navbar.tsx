@@ -35,9 +35,8 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="border-border-default dark:border-border-default bg-surface-base/80 dark:bg-surface-base/80 sticky top-0 z-50 w-full border-b backdrop-blur-md">
+    <nav className="bg-surface border-muted sticky top-0 z-50 w-full border-b backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <button
           className="cursor-pointer transition-transform hover:scale-105"
           onClick={() => navigate('/home')}
@@ -50,59 +49,42 @@ function Navbar() {
           )}
         </button>
         <div className="flex items-center gap-4">
-          {/* User Info - Hidden on mobile */}
           <div className="hidden text-right sm:block">
-            <p className="text-text-primary dark:text-text-primary text-sm font-semibold">
-              {user?.name}
-            </p>
-            <p className="text-text-tertiary dark:text-text-tertiary text-xs">{user?.email}</p>
+            <p className="text-content text-sm font-semibold">{user?.name}</p>
+            <p className="text-tertiary text-xs">{user?.email}</p>
           </div>
-
-          {/* Invites Button */}
           <button
             onClick={() => navigate('/invites')}
-            className="bg-primary-600 hover:bg-primary-700 cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 active:scale-95"
+            className="bg-primary cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 active:scale-95"
             title="View Invites"
           >
             Invites
           </button>
-
-          {/* Theme Toggle */}
           <button
-            className="text-text-secondary dark:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-raised hover:text-accent-600 dark:hover:text-accent-400 cursor-pointer rounded-lg p-2 text-xl transition-colors"
+            className="text-tertiary hover:bg-secondary hover:text-accent cursor-pointer rounded-lg p-2 text-xl transition-colors"
             onClick={toggleTheme}
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {theme === 'dark' ? <FaRegMoon /> : <GoSun />}
           </button>
-
-          {/* User Menu */}
           <div className="relative" ref={dropdownRef}>
             <button
-              className="border-border-strong dark:border-border-strong hover:border-primary-500 dark:hover:border-primary-400 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all duration-200 hover:shadow-sm"
+              className="border-muted hover:border-primary flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 transition-all duration-200 hover:shadow-sm"
               onClick={handleToggleOptions}
               title="User Menu"
             >
               {user?.avatar ? (
                 <img src={user?.avatar} alt="User Avatar" className="h-9 w-9 rounded-full" />
               ) : (
-                <GiDeer className="text-text-secondary dark:text-text-secondary h-6 w-6" />
+                <GiDeer className="text-tertiary h-6 w-6" />
               )}
             </button>
-
-            {/* Dropdown Menu */}
             {showUserOptions && (
-              <div className="border-border-default dark:border-border-default bg-surface-base dark:bg-surface-base absolute right-0 mt-2 w-48 origin-top-right rounded-lg border shadow-lg ring-1 ring-black/5">
-                <div
-                  className="py-1"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu"
-                >
+              <div className="border-muted bg-surface absolute right-0 mt-2 w-48 origin-top-right rounded-lg border shadow-lg ring-1 ring-black/5">
+                <div className="py-1" role="menu">
                   <button
                     onClick={() => navigate('/settings')}
-                    className="text-text-primary dark:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-raised flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-sm transition-colors"
-                    role="menuitem"
+                    className="text-content hover:bg-secondary flex w-full items-center gap-2 px-4 py-2.5 text-sm transition-colors"
                     title="Account Settings"
                   >
                     <IoSettingsOutline className="h-4 w-4" />
@@ -110,8 +92,7 @@ function Navbar() {
                   </button>
                   <button
                     onClick={logout}
-                    className="text-text-primary dark:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-raised flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:text-red-600 dark:hover:text-red-400"
-                    role="menuitem"
+                    className="text-content hover:bg-secondary flex w-full items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:text-red-600"
                     title="Sign Out"
                   >
                     <TbLogout2 className="h-4 w-4" />
