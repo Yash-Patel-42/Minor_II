@@ -23,12 +23,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [channelInfo, setChannelInfo] = useState<ChannelInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Auto check auth on page load
+  // Auto check auth on page load
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await api.post('/users/refresh-token', {}, { withCredentials: true });
         setUser(res.data.user);
+        console.log(res.data.user);
       } catch (error) {
         setUser(null);
         console.error('Auth refresh failed:', error);
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  // 🔹 Function to fetch YouTube channel info for a workspace
+  // Function to fetch YouTube channel info for a workspace
   const fetchYouTubeChannelInfo = useCallback(async (workspaceId: string) => {
     if (!workspaceId) return;
     try {

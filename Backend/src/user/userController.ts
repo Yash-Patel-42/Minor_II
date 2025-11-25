@@ -99,11 +99,11 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       user = (await User.findOne({ email })) as IUser;
       if (!user) {
-        return next(createHttpError(404, "User not found."));
+        return next(createHttpError(401, `Email: ${email} is incorrect`));
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return next(createHttpError(401, "Username or password incorrect."));
+        return next(createHttpError(401, "Password is incorrect."));
       }
     } catch (error) {
       return next(createHttpError(500, `Error fetching user data: ${error}`));
@@ -236,7 +236,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
       .json({
         accessToken: accessToken,
         refreshToken: refreshToken,
-        user: { _id: user._id, name: user.name, email: user.email },
+        user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar },
       });
   } catch (error) {
     return next(createHttpError(500, `Unexpected error during token refresh: ${error}`));
@@ -260,7 +260,6 @@ const googleLoginInitiator = (req: Request, res: Response, next: NextFunction) =
     });
     if (!redirectURL) return next(createHttpError(500, "Error generating google redirectURL"));
     // we will redirect to this generated route.
-    console.log("redirect : ", redirectURL)
     res.redirect(redirectURL);
   } catch (error) {
     next(createHttpError(500, `Error while google login: ${error}`));
@@ -343,7 +342,7 @@ const googleLoginCallback = async (req: Request, res: Response, next: NextFuncti
     res
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
-      .redirect("http://localhost:5173/home");
+      .redirect(`${envConfig.frontendUrl as string}/home`);
   } catch (error) {
     next(createHttpError(500, `An error occurred during Google authentication: ${error}`));
   }

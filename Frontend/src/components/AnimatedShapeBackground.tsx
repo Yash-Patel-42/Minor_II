@@ -11,9 +11,25 @@ const clipPaths = [
   'circle(50% at 50% 50%)', // Circle
   'ellipse(50% 40% at 50% 50%)', // Ellipse
   'polygon(0 0, 100% 0, 75% 100%, 25% 100%)', // Trapezoid
+  // // The "Shard" - An aggressive, sharp, asymmetrical quadrilateral
+  // 'polygon(10% 25%, 35% 25%, 35% 0%, 65% 0%, 65% 25%, 90% 25%, 90% 50%, 65% 50%, 65% 100%, 35% 100%, 35% 50%, 10% 50%)',
+  // // The "Wobbly Pentagon" - Looks like a box that melted slightly
+  // 'polygon(20% 10%, 80% 0%, 90% 50%, 70% 90%, 10% 80%)',
+  // // The "Glitch" - A rectangle with a jagged bite taken out of it
+  // 'polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%)',
+  // // The "Paper Tear" - Irregular edges on top and bottom
+  // 'polygon(0% 10%, 30% 0%, 60% 10%, 100% 0%, 100% 90%, 70% 100%, 30% 90%, 0% 100%)',
+  // // The "Diamond Skew" - Asymmetrical diamond
+  // 'polygon(50% 0%, 100% 25%, 80% 100%, 0% 75%)',
+  // // The "Abstract Arrow" - Points randomly to the side
+  // 'polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%)',
+  // // The "Broken Rock" - Many random vertices
+  // 'polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%, 10% 50%, 90% 50%)',
+  // // The "Slant" - A simple block with a heavy diagonal cut
+  // 'polygon(0 0, 100% 15%, 100% 100%, 0 85%)',
 ];
-const generateRandomShape = (index: number) => {
-  const size = Math.random() * (200 - 80) + 80;
+const generateRandomShape = (index: number, minSize: number, maxSize: number) => {
+  const size = Math.random() * (maxSize - minSize) + minSize;
   const top = Math.random() * 100;
   const left = Math.random() * 100;
   const opacity = Math.random() * (0.4 - 0.1) + 0.1;
@@ -45,13 +61,28 @@ const generateRandomShape = (index: number) => {
     />
   );
 };
-type Props = PropsWithChildren<{ className?: string }>;
-export const AnimatedShapeBackground: React.FC<Props> = ({ children, className }) => {
+type Props = PropsWithChildren<{
+  className?: string;
+  minSize?: number;
+  maxSize?: number;
+  minCount?: number;
+  maxCount?: number;
+}>;
+export const AnimatedShapeBackground: React.FC<Props> = ({
+  children,
+  className,
+  minSize = 80,
+  maxSize = 200,
+  minCount = 20,
+  maxCount = 30,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shapes = useMemo(() => {
-    const numShapes = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
-    return Array.from({ length: numShapes }).map((_, i) => generateRandomShape(i));
-  }, []);
+    const numShapes = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+    return Array.from({ length: numShapes }).map((_, i) =>
+      generateRandomShape(i, minSize, maxSize)
+    );
+  }, [minSize, maxSize, minCount, maxCount]);
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;

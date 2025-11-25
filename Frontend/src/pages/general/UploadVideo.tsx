@@ -254,6 +254,7 @@ const VideoUpload: React.FC = () => {
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold text-white">Enhanced {title}</p>
           <button
+            type="button"
             onClick={handleCopy}
             className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1 text-sm font-bold text-white transition-all hover:bg-indigo-500"
           >
