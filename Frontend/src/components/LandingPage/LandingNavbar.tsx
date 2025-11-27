@@ -1,6 +1,6 @@
 import React from 'react';
 import TubixLogo from '../../assets/Tubix(SVG)/3.svg';
-const Navbar: React.FC = () => {
+const LandingNavbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-700 bg-gray-900/70 px-4 backdrop-blur-md sm:px-6 lg:px-8">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between">
@@ -35,4 +35,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default LandingNavbar;

@@ -13,7 +13,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { useParams } from 'react-router';
-import { useAuth } from '../../Context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import type { IApprovalRequest } from '../../types/ApprovalRequest';
 import api from '../../utils/axiosInstance';
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
@@ -238,10 +238,10 @@ const UploadRequests = () => {
                           </div>
                         )}
                         <div className="flex gap-4 text-sm text-gray-400">
-                          <span className="font-medium text-white capitalize">
+                          <span className="font-medium capitalize text-white">
                             Category: {req.video.category}
                           </span>
-                          <span className="font-medium text-white capitalize">
+                          <span className="font-medium capitalize text-white">
                             <PrivacyIcon privacy={req.video.privacy} />
                             {req.video.privacy}
                           </span>

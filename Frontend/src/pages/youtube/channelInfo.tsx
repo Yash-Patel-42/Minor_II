@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useAuth } from '../../Context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 
 export default function ChannelInfo() {
   const { user, channelInfo, fetchYouTubeChannelInfo } = useAuth();
@@ -42,45 +42,43 @@ export default function ChannelInfo() {
   return (
     <div className="flex min-h-screen flex-col items-center bg-gray-900 px-6 py-10 text-gray-100">
       {/* Channel Header */}
-<motion.div
-  className="w-full max-w-5xl overflow-hidden rounded-2xl shadow-lg relative bg-gray-800"
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.4 }}
->
-  {/* Banner */}
-  <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-80">
-    <img
-      src={
-        channelInfo?.thumbnails?.high?.url ||
-        channelInfo?.thumbnails?.default?.url ||
-        "https://via.placeholder.com/1200x400?text=YouTube+Channel+Banner"
-      }
-      alt="Channel banner"
-      className="w-full h-full object-cover"
-    />
-  </div>
+      <motion.div
+        className="relative w-full max-w-5xl overflow-hidden rounded-2xl bg-gray-800 shadow-lg"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {/* Banner */}
+        <div className="relative h-56 w-full sm:h-64 md:h-72 lg:h-80">
+          <img
+            src={
+              channelInfo?.thumbnails?.high?.url ||
+              channelInfo?.thumbnails?.default?.url ||
+              'https://via.placeholder.com/1200x400?text=YouTube+Channel+Banner'
+            }
+            alt="Channel banner"
+            className="h-full w-full object-cover"
+          />
+        </div>
 
-  {/* Avatar + Info */}
-  <div className="flex flex-col items-center mt-8 pb-6 text-center">
-    <img
-      src={
-        channelInfo?.thumbnails?.medium?.url ||
-        "https://via.placeholder.com/100?text=Logo"
-      }
-      alt="Channel avatar"
-      className="w-28 h-28 rounded-full border-4 border-gray-900 shadow-xl bg-gray-700"
-    />
+        {/* Avatar + Info */}
+        <div className="mt-8 flex flex-col items-center pb-6 text-center">
+          <img
+            src={
+              channelInfo?.thumbnails?.medium?.url || 'https://via.placeholder.com/100?text=Logo'
+            }
+            alt="Channel avatar"
+            className="h-28 w-28 rounded-full border-4 border-gray-900 bg-gray-700 shadow-xl"
+          />
 
-    <h1 className="mt-4 text-3xl font-bold text-white capitalize">
-      {channelInfo?.channelName}
-    </h1>
-    <p className="text-gray-400 text-sm mt-1">
-      Managed by <span className="text-purple-400">{user?.name}</span>
-    </p>
-  </div>
-</motion.div>
-
+          <h1 className="mt-4 text-3xl font-bold capitalize text-white">
+            {channelInfo?.channelName}
+          </h1>
+          <p className="mt-1 text-sm text-gray-400">
+            Managed by <span className="text-purple-400">{user?.name}</span>
+          </p>
+        </div>
+      </motion.div>
 
       {/* Channel Description */}
       <div className="mt-20 w-full max-w-5xl text-center">
@@ -127,7 +125,7 @@ function StatCard({ label, value }: { label: string; value?: string | number }) 
       className="rounded-xl border border-gray-700 bg-gray-800 p-6 text-center shadow-lg"
     >
       <h3 className="text-2xl font-semibold text-white">{value ?? '—'}</h3>
-      <p className="mt-1 text-sm tracking-wide text-gray-400 uppercase">{label}</p>
+      <p className="mt-1 text-sm uppercase tracking-wide text-gray-400">{label}</p>
     </motion.div>
   );
 }

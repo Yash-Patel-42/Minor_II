@@ -3,7 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router';
 import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
-import { useAuth } from '../../Context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import type { LoginFormFields } from '../../types/FormType';
 import api from '../../utils/axiosInstance';
 
@@ -47,11 +47,11 @@ export default function Login() {
       {/* {shapes} */}
       <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-6 rounded-2xl border border-gray-700 bg-gray-900/50 p-8 shadow-2xl backdrop-blur-lg md:p-10">
         <div className="flex flex-col items-center gap-3 text-center">
-          <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+          <span className="font-mono text-sm uppercase tracking-widest text-cyan-400 shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
             // Authentication Required //
           </span>
           <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
-            Access Your <span className="font-serif text-purple-400 italic">Empire</span>
+            Access Your <span className="font-serif italic text-purple-400">Empire</span>
           </h1>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
@@ -70,7 +70,7 @@ export default function Login() {
               })}
               type="email"
               placeholder="editor@your-empire.com"
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 outline-none ring-2 ring-transparent transition-all placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
             {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
           </div>
@@ -95,7 +95,7 @@ export default function Login() {
               })}
               type="password"
               placeholder="••••••••••••"
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-gray-200 outline-none ring-2 ring-transparent transition-all placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
             {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
           </div>

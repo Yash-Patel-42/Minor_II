@@ -11,11 +11,11 @@ import Inbox from './pages/general/Inbox.tsx';
 import Permissions from './pages/general/Permissions.tsx';
 import UploadRequests from './pages/general/UploadRequests.tsx';
 import UploadVideo from './pages/general/UploadVideo.tsx';
+import UserSetting from './pages/general/UserSetting.tsx';
 import Workspace from './pages/general/Workspace.tsx';
 import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
 import TermsOfService from './pages/policy/TermsOfService.tsx';
-import ChannelInfo from './pages/youytube/channelInfo.tsx';
-import UserSetting from './pages/general/UserSetting.tsx';
+import ChannelInfo from './pages/youtube/channelInfo.tsx';
 function App() {
   return (
     <>

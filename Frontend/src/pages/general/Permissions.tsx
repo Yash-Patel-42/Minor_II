@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useAuth } from '../../Context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import type { IWorkspace } from '../../types/WorkspaceType';
 import api from '../../utils/axiosInstance';
 

@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router';
 import AnimatedShapeBackground from '../../components/AnimatedShapeBackground';
-import { useAuth } from '../../Context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import type { RegisterFormFields } from '../../types/FormType';
 import api from '../../utils/axiosInstance';
 export default function Register() {
@@ -38,11 +38,11 @@ export default function Register() {
     <AnimatedShapeBackground className="flex min-h-screen items-center justify-center bg-gray-900 p-4">
       <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-6 rounded-2xl border border-gray-700 bg-gray-900/50 px-8 py-6 shadow-2xl backdrop-blur-lg">
         <div className="flex flex-col items-center gap-3 text-center">
-          <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+          <span className="font-mono text-sm uppercase tracking-widest text-cyan-400 shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
             // New User Protocol //
           </span>
           <h1 className="text-4xl font-extrabold text-white sm:text-5xl">
-            Build Your <span className="font-serif text-purple-400 italic">Empire</span>
+            Build Your <span className="font-serif italic text-purple-400">Empire</span>
           </h1>
           <p className="text-lg text-gray-400">Create your account to begin</p>
         </div>
@@ -60,7 +60,7 @@ export default function Register() {
                   message: 'Name can only contain letters and spaces',
                 },
               })}
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 outline-none ring-2 ring-transparent transition-all placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
             {errors.name && <p className="text-sm text-red-400">{errors.name.message}</p>}
           </div>
@@ -76,7 +76,7 @@ export default function Register() {
                   message: 'Please enter a valid email.',
                 },
               })}
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 outline-none ring-2 ring-transparent transition-all placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
             {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
           </div>
@@ -103,7 +103,7 @@ export default function Register() {
                   message: 'Password must be at least 8 characters',
                 },
               })}
-              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 ring-2 ring-transparent transition-all outline-none placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
+              className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-gray-200 outline-none ring-2 ring-transparent transition-all placeholder:text-gray-500 focus:border-purple-500 focus:bg-gray-900 focus:ring-purple-500/50"
             />
             {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
           </div>

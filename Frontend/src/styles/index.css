@@ -2,196 +2,120 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* === BRAND COLORS === */
-  /* Primary: Soft Blue (Main Actions) */
-  --color-primary: #4f8adb;
-  --color-primary-hover: #3d7bc7;
-  --color-primary-light: #6ba3e8;
-  --color-primary-dark: #2d69b3;
+  /* Backgrounds */
+  --color-background: #ffffff;
+  --color-background-muted: #fafafa;
+  --color-background-raised: #f4f4f5;
+  --color-background-hover: #e4e4e7;
 
-  /* Accent: Gentle Teal (Highlights & Features) */
-  --color-accent: #5ba8a0;
-  --color-accent-hover: #4a9188;
-  --color-accent-light: #7dbdb7;
-  --color-accent-dark: #3a7a73;
+  /* Text */
+  --color-text: #18181b;
+  --color-text-muted: #52525b;
+  --color-text-inverted: #ffffff;
 
-  /* Secondary: Muted Slate (Secondary Actions) */
-  --color-secondary: #6c7a89;
-  --color-secondary-hover: #5a6774;
-  --color-secondary-light: #8594a3;
+  /* Border */
+  --color-border: #e4e4e7;
+  --color-border-muted: #f4f4f5;
+  --color-border-strong: #d4d4d8;
+  --color-border-hover: #d4d4d8;
 
-  /* === BACKGROUND COLORS === */
-  --color-background: #f8f9fa;
-  --color-background-secondary: #f1f3f5;
-  --color-background-elevated: #ffffff;
+  /* Primary */
+  --color-primary: #18181b;
+  --color-primary-hover: #27272a;
+  --color-primary-active: #3f3f46;
 
-  /* === SURFACE COLORS === */
-  --color-surface: #ffffff;
-  --color-surface-hover: #f8f9fa;
-  --color-surface-elevated: #ffffff;
+  /* Secondary */
+  --color-secondary: #71717a;
+  --color-secondary-hover: #52525b;
+  --color-secondary-active: #3f3f46;
 
-  /* === BORDER COLORS === */
-  --color-border: #e9ecef;
-  --color-border-hover: #dee2e6;
-  --color-border-focus: #4f8adb;
-  --color-border-strong: #adb5bd;
+  /* Accent */
+  --color-accent: #52525b;
+  --color-accent-hover: #3f3f46;
+  --color-accent-active: #27272a;
 
-  /* === TEXT COLORS === */
-  --color-content: #212529;
-  --color-content-secondary: #495057;
-  --color-content-tertiary: #6c757d;
-  --color-content-muted: #adb5bd;
-  --color-content-disabled: #ced4da;
+  /* Status */
+  --color-success: #10b981;
+  --color-success-hover: #059669;
+  --color-success-bg: #ecfdf5;
+  --color-success-border: #a7f3d0;
 
-  /* === STATUS COLORS === */
-  --color-success: #51cf66;
-  --color-success-bg: #d3f9d8;
-  --color-warning: #ffa94d;
-  --color-warning-bg: #ffe8cc;
-  --color-error: #ff6b6b;
-  --color-error-bg: #ffe3e3;
-  --color-info: #4f8adb;
-  --color-info-bg: #d0ebff;
+  --color-error: #ef4444;
+  --color-error-hover: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
 
-  /* === SHADOWS === */
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-  --shadow-glow-primary: 0 0 15px rgba(79, 138, 219, 0.2);
-  --shadow-glow-accent: 0 0 15px rgba(91, 168, 160, 0.2);
+  --color-warning: #f59e0b;
+  --color-warning-hover: #d97706;
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fde68a;
 
-  /* === GLASS EFFECTS === */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-blur: blur(12px);
+  --color-info: #3b82f6;
+  --color-info-hover: #2563eb;
+  --color-info-bg: #eff6ff;
+  --color-info-border: #bfdbfe;
 }
 
 .dark {
-  /* === BRAND COLORS (Dark Mode Adjusted) === */
-  --color-primary: #6ba3e8;
-  --color-primary-hover: #5593da;
-  --color-primary-light: #8bb7ed;
-  --color-primary-dark: #4f8adb;
+  /* Backgrounds */
+  --color-background: #09090b;
+  --color-background-muted: #18181b;
+  --color-background-raised: #27272a;
+  --color-background-hover: #27272a;
 
-  --color-accent: #7dbdb7;
-  --color-accent-hover: #6aada7;
-  --color-accent-light: #96cdc8;
-  --color-accent-dark: #5ba8a0;
+  /* Text */
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-text-inverted: #09090b;
 
-  --color-secondary: #8594a3;
-  --color-secondary-hover: #6c7a89;
-  --color-secondary-light: #a1adb9;
+  /* Border */
+  --color-border: #27272a;
+  --color-border-muted: #18181b;
+  --color-border-strong: #3f3f46;
+  --color-border-hover: #3f3f46;
 
-  /* === BACKGROUND COLORS === */
-  --color-background: #0d1117;
-  --color-background-secondary: #161b22;
-  --color-background-elevated: #1f2937;
+  /* Primary */
+  --color-primary: #fafafa;
+  --color-primary-hover: #f4f4f5;
+  --color-primary-active: #e4e4e7;
 
-  /* === SURFACE COLORS === */
-  --color-surface: #1f2937;
-  --color-surface-hover: #374151;
-  --color-surface-elevated: #374151;
+  /* Secondary */
+  --color-secondary: #a1a1aa;
+  --color-secondary-hover: #d4d4d8;
+  --color-secondary-active: #e4e4e7;
 
-  /* === BORDER COLORS === */
-  --color-border: #374151;
-  --color-border-hover: #4b5563;
-  --color-border-focus: #6ba3e8;
-  --color-border-strong: #6b7280;
+  /* Accent */
+  --color-accent: #a1a1aa;
+  --color-accent-hover: #d4d4d8;
+  --color-accent-active: #e4e4e7;
 
-  /* === TEXT COLORS === */
-  --color-content: #f3f4f6;
-  --color-content-secondary: #e5e7eb;
-  --color-content-tertiary: #9ca3af;
-  --color-content-muted: #6b7280;
-  --color-content-disabled: #4b5563;
+  /* Status */
+  --color-success: #34d399;
+  --color-success-hover: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+  --color-success-border: rgba(16, 185, 129, 0.2);
 
-  /* === STATUS COLORS === */
-  --color-success: #6bcf7f;
-  --color-success-bg: #1a4d2e;
-  --color-warning: #ffb366;
-  --color-warning-bg: #5c3d2e;
-  --color-error: #ff8787;
-  --color-error-bg: #5c1f1f;
-  --color-info: #6ba3e8;
-  --color-info-bg: #1e3a5f;
+  --color-error: #f87171;
+  --color-error-hover: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-error-border: rgba(239, 68, 68, 0.2);
 
-  /* === SHADOWS === */
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -1px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.45), 0 10px 10px -5px rgba(0, 0, 0, 0.35);
-  --shadow-glow-primary: 0 0 20px rgba(107, 163, 232, 0.25);
-  --shadow-glow-accent: 0 0 20px rgba(125, 189, 183, 0.25);
+  --color-warning: #fbbf24;
+  --color-warning-hover: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-warning-border: rgba(245, 158, 11, 0.2);
 
-  /* === GLASS EFFECTS === */
-  --glass-bg: rgba(31, 41, 55, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(12px);
+  --color-info: #60a5fa;
+  --color-info-hover: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.1);
+  --color-info-border: rgba(59, 130, 246, 0.2);
 }
 
-/* === GLOBAL STYLES === */
+/* Global Styles */
 html {
   scroll-behavior: smooth;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-hover) transparent;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/* === CUSTOM SCROLLBAR === */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border-hover);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-strong);
-}
-
-/* === UTILITY CLASSES === */
-.gradient-primary {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-}
-
-.gradient-accent {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.glass-morphism {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-}
-
-.glow-text-primary {
-  text-shadow: 0 0 15px rgba(79, 138, 219, 0.4);
-}
-
-.glow-text-accent {
-  text-shadow: 0 0 15px rgba(91, 168, 160, 0.4);
+  scrollbar-width: none;
 }

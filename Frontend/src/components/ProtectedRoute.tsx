@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { Navigate } from 'react-router';
-import { useAuth } from '../Context/AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 
 interface Props {
   children: JSX.Element;

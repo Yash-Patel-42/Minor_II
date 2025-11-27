@@ -12,13 +12,11 @@ function Workspace() {
   const [workspace, setWorkspace] = useState<IWorkspace | null>(null);
   const navigate = useNavigate();
 
-  // console.log("id in wspa: ", workspaceId)
   useEffect(() => {
     const fetchWorkspace = async () => {
       try {
         const response = await api.get(`/workspace/${workspaceId}`, { withCredentials: true });
         setWorkspace(response.data.workspace);
-        console.log("response ==>", response);
       } catch (error) {
         console.error(error);
       }
@@ -33,7 +31,7 @@ function Workspace() {
   const addUserToWorkspace = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await api.post(`/workspace/${workspaceId}/invite/user`, {
+      await api.post(`/workspace/${workspaceId}/invite/user`, {
         newMemberEmail: email,
         newMemberRole: role,
       });
@@ -48,7 +46,6 @@ function Workspace() {
       });
       setEmail('');
       setRole('');
-      console.log(response);
     } catch (error) {
       // Show error toast
       toast.error(`Failed to send invite. Please try again. ${error}}`, {
@@ -184,7 +181,7 @@ function Workspace() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 italic">No members added yet.</p>
+                <p className="italic text-gray-500">No members added yet.</p>
               )}
             </div>
             <div className="lg:col-span-1">
