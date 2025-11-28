@@ -1,20 +1,20 @@
-import type React from 'react';
-import AnimatedShapeBackground from '../AnimatedShapeBackground';
+import type React from "react";
+import AnimatedShapeBackground from "../AnimatedShapeBackground";
 
 const Hero: React.FC = () => {
   return (
     <AnimatedShapeBackground className="flex min-h-[91vh] w-full items-center justify-center overflow-hidden bg-gray-900 py-5">
-      <div className="relative z-30 container mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-        <span className="font-mono text-sm tracking-widest text-cyan-400 uppercase shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
+      <div className="container relative z-30 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        <span className="font-mono text-sm uppercase tracking-widest text-cyan-400 shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
           // AI-POWERED UPLOAD PROTOCOL: ENGAGED //
         </span>
         <h1 className="mt-6 text-5xl font-extrabold text-white sm:text-7xl lg:text-8xl">
           Empower Your
-          <span className="ml-4 font-serif text-purple-400 italic">Editor</span>
+          <span className="ml-4 font-serif italic text-purple-400">Editor</span>
           ,
           <br />
           Secure Your
-          <span className="ml-4 font-serif text-cyan-400 italic">Empire</span>.
+          <span className="ml-4 font-serif italic text-cyan-400">Empire</span>.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-xl text-gray-200">
           The AI-powered approval gate that lets your team submit videos.

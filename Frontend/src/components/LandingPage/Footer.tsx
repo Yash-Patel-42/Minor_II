@@ -1,6 +1,6 @@
-import React from 'react';
-import { FaGithub, FaInstagram } from 'react-icons/fa';
-import TubixLogo from '../../assets/Tubix(SVG)/3.svg';
+import React from "react";
+import { FaGithub, FaInstagram } from "react-icons/fa";
+import TubixLogo from "../../assets/Tubix(SVG)/3.svg";
 
 const Footer: React.FC = () => {
   return (
@@ -21,7 +21,10 @@ const Footer: React.FC = () => {
               <h3 className="font-semibold uppercase text-white">Product</h3>
               <ul className="mt-4 space-y-3">
                 <li>
-                  <a href="#features" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="#features"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     Features
                   </a>
                 </li>
@@ -34,12 +37,18 @@ const Footer: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#ai" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="#ai"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     AI Tools
                   </a>
                 </li>
                 <li>
-                  <a href="/register" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="/register"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     Sign Up
                   </a>
                 </li>
@@ -49,17 +58,26 @@ const Footer: React.FC = () => {
               <h3 className="font-semibold uppercase text-white">Resources</h3>
               <ul className="mt-4 space-y-3">
                 <li>
-                  <a href="#" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="#"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     Blog
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="#"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     Case Studies
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 transition-colors hover:text-white">
+                  <a
+                    href="#"
+                    className="text-gray-400 transition-colors hover:text-white"
+                  >
                     Help Center
                   </a>
                 </li>

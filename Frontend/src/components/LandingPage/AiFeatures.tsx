@@ -1,16 +1,20 @@
-import React from 'react';
-import { FaChartLine, FaFire, FaLightbulb, FaUsers } from 'react-icons/fa';
+import React from "react";
+import { FaChartLine, FaFire, FaLightbulb, FaUsers } from "react-icons/fa";
 
 const AiFeatures: React.FC = () => {
   return (
     <div id="ai" className="py-24">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <span className="text-sm font-semibold text-blue-400 uppercase">Coming Soon</span>
-          <h2 className="mt-2 text-3xl font-bold md:text-4xl">Your AI-Powered Command Center</h2>
+          <span className="text-sm font-semibold uppercase text-blue-400">
+            Coming Soon
+          </span>
+          <h2 className="mt-2 text-3xl font-bold md:text-4xl">
+            Your AI-Powered Command Center
+          </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-300">
-            Stop guessing. We're integrating cutting-edge AI and deep analytics to optimize your
-            entire workflow, from idea to upload.
+            Stop guessing. We're integrating cutting-edge AI and deep analytics
+            to optimize your entire workflow, from idea to upload.
           </p>
         </div>
 
@@ -18,10 +22,12 @@ const AiFeatures: React.FC = () => {
           {/* Card 1*/}
           <div className="rounded-lg border border-blue-700 bg-gradient-to-br from-blue-900/50 to-gray-900 p-8 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20">
             <FaLightbulb className="mb-4 h-10 w-10 text-blue-300" />
-            <h3 className="text-2xl font-bold">AI Title & Description Generator</h3>
+            <h3 className="text-2xl font-bold">
+              AI Title & Description Generator
+            </h3>
             <p className="mt-2 text-gray-300">
-              Hook your audience instantly. Get dozens of click-worthy titles and SEO-optimized
-              descriptions tailored to your video's content.
+              Hook your audience instantly. Get dozens of click-worthy titles
+              and SEO-optimized descriptions tailored to your video's content.
             </p>
           </div>
 
@@ -30,8 +36,8 @@ const AiFeatures: React.FC = () => {
             <FaFire className="mb-4 h-10 w-10 text-green-300" />
             <h3 className="text-2xl font-bold">Smart Tag & Trend Hunter</h3>
             <p className="mt-2 text-gray-300">
-              Maximize your reach. Our AI scans the YouTube landscape to discover trending topics
-              and high-traffic tags for your niche.
+              Maximize your reach. Our AI scans the YouTube landscape to
+              discover trending topics and high-traffic tags for your niche.
             </p>
           </div>
 
@@ -40,8 +46,8 @@ const AiFeatures: React.FC = () => {
             <FaUsers className="mb-4 h-10 w-10 text-purple-300" />
             <h3 className="text-2xl font-bold">Team Performance Metrics</h3>
             <p className="mt-2 text-gray-300">
-              Understand your workflow. Track your team's productivity, see upload frequencies, and
-              monitor approval times per member.
+              Understand your workflow. Track your team's productivity, see
+              upload frequencies, and monitor approval times per member.
             </p>
           </div>
 
@@ -50,8 +56,9 @@ const AiFeatures: React.FC = () => {
             <FaChartLine className="mb-4 h-10 w-10 text-yellow-300" />
             <h3 className="text-2xl font-bold">Deep Channel Analytics</h3>
             <p className="mt-2 text-gray-300">
-              Go beyond YouTube Studio. Get aggregated reports across all your workspaces and see
-              what content formats are *really* driving growth.
+              Go beyond YouTube Studio. Get aggregated reports across all your
+              workspaces and see what content formats are *really* driving
+              growth.
             </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   FiAlertTriangle,
   FiCheck,
@@ -11,35 +11,38 @@ import {
   FiRefreshCw,
   FiTag,
   FiX,
-} from 'react-icons/fi';
-import { useParams } from 'react-router';
-import { useAuth } from '../../context/AuthProvider';
-import type { IApprovalRequest } from '../../types/ApprovalRequest';
-import api from '../../utils/axiosInstance';
+} from "react-icons/fi";
+import { useParams } from "react-router";
+import { useAuth } from "../../context/AuthProvider";
+import type { IApprovalRequest } from "../../types/ApprovalRequest";
+import api from "../../utils/axiosInstance";
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const statusConfig = {
-    pending: 'bg-yellow-500/20 text-yellow-300 ring-yellow-500/30',
-    approved: 'bg-green-500/20 text-green-300 ring-green-500/30',
-    rejected: 'bg-red-500/20 text-red-300 ring-red-500/30',
-    need_edits: 'bg-blue-500/20 text-blue-300 ring-blue-500/30',
-    default: 'bg-neutral-500/20 text-neutral-300 ring-neutral-500/30',
+    pending: "bg-yellow-500/20 text-yellow-300 ring-yellow-500/30",
+    approved: "bg-green-500/20 text-green-300 ring-green-500/30",
+    rejected: "bg-red-500/20 text-red-300 ring-red-500/30",
+    need_edits: "bg-blue-500/20 text-blue-300 ring-blue-500/30",
+    default: "bg-neutral-500/20 text-neutral-300 ring-neutral-500/30",
   };
 
-  const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.default;
+  const config =
+    statusConfig[status as keyof typeof statusConfig] || statusConfig.default;
 
   return (
-    <span className={`rounded-full px-3 py-1 text-xs font-bold capitalize ring-1 ${config}`}>
-      {status.replace('_', ' ')}
+    <span
+      className={`rounded-full px-3 py-1 text-xs font-bold capitalize ring-1 ${config}`}
+    >
+      {status.replace("_", " ")}
     </span>
   );
 };
 const PrivacyIcon: React.FC<{ privacy: string }> = ({ privacy }) => {
   switch (privacy) {
-    case 'public':
+    case "public":
       return <FiGlobe className="mr-1 inline h-4 w-4" />;
-    case 'private':
+    case "private":
       return <FiLock className="mr-1 inline h-4 w-4" />;
-    case 'unlisted':
+    case "unlisted":
       return <FiEye className="mr-1 inline h-4 w-4" />;
     default:
       return null;
@@ -51,7 +54,9 @@ const UploadRequests = () => {
   const [uploadRequests, setUploadRequests] = useState<IApprovalRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [processingRequestId, setProcessingRequestId] = useState<string | null>(null);
+  const [processingRequestId, setProcessingRequestId] = useState<string | null>(
+    null
+  );
   const { user } = useAuth();
 
   useEffect(() => {
@@ -60,13 +65,16 @@ const UploadRequests = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await api.get(`/workspace/${workspaceId}/upload-requests`, {
-          withCredentials: true,
-        });
+        const response = await api.get(
+          `/workspace/${workspaceId}/upload-requests`,
+          {
+            withCredentials: true,
+          }
+        );
         setUploadRequests(response.data.approvalRequests);
       } catch (error) {
         console.error(error);
-        setError('Failed to fetch upload requests.');
+        setError("Failed to fetch upload requests.");
       } finally {
         setLoading(false);
       }
@@ -75,20 +83,31 @@ const UploadRequests = () => {
   }, [workspaceId]);
 
   const handleApprove = async (req: IApprovalRequest) => {
-    if (!req) return console.error('No request found');
+    if (!req) return console.error("No request found");
     setProcessingRequestId(req._id);
     try {
       await api.post(
         `workspace/${workspaceId}/approval-requests/approve`,
-        { req },
-        { withCredentials: true }
+        {
+          req,
+        },
+        {
+          withCredentials: true,
+        }
       );
       setUploadRequests((prev) =>
-        prev.map((r) => (r._id === req._id ? { ...r, status: 'approved' } : r))
+        prev.map((r) =>
+          r._id === req._id
+            ? {
+                ...r,
+                status: "approved",
+              }
+            : r
+        )
       );
     } catch (err) {
       console.error(err);
-      setError('Failed to approve request.');
+      setError("Failed to approve request.");
     } finally {
       setProcessingRequestId(null);
     }
@@ -100,15 +119,26 @@ const UploadRequests = () => {
     try {
       await api.post(
         `workspace/${workspaceId}/approval-requests/reject`,
-        { req },
-        { withCredentials: true }
+        {
+          req,
+        },
+        {
+          withCredentials: true,
+        }
       );
       setUploadRequests((prev) =>
-        prev.map((r) => (r._id === req._id ? { ...r, status: 'rejected' } : r))
+        prev.map((r) =>
+          r._id === req._id
+            ? {
+                ...r,
+                status: "rejected",
+              }
+            : r
+        )
       );
     } catch (err) {
       console.error(err);
-      setError('Failed to reject request.');
+      setError("Failed to reject request.");
     } finally {
       setProcessingRequestId(null);
     }
@@ -120,15 +150,26 @@ const UploadRequests = () => {
     try {
       await api.post(
         `workspace/${workspaceId}/approval-requests/request-reupload`,
-        { req },
-        { withCredentials: true }
+        {
+          req,
+        },
+        {
+          withCredentials: true,
+        }
       );
       setUploadRequests((prev) =>
-        prev.map((r) => (r._id === req._id ? { ...r, status: 'need_edits' } : r))
+        prev.map((r) =>
+          r._id === req._id
+            ? {
+                ...r,
+                status: "need_edits",
+              }
+            : r
+        )
       );
     } catch (err) {
       console.error(err);
-      setError('Failed to request re-upload.');
+      setError("Failed to request re-upload.");
     } finally {
       setProcessingRequestId(null);
     }
@@ -157,7 +198,9 @@ const UploadRequests = () => {
         </div>
       )}
       <div className="min-h-screen bg-neutral-900 p-4 pt-8 text-gray-300 md:p-10">
-        <h1 className="font-display mb-8 text-5xl font-bold text-white">Upload Requests</h1>
+        <h1 className="font-display mb-8 text-5xl font-bold text-white">
+          Upload Requests
+        </h1>
 
         {/*Permission Warning*/}
         {!canApprove && !canDecline && (
@@ -168,7 +211,9 @@ const UploadRequests = () => {
         )}
         {uploadRequests === null || uploadRequests?.length === 0 ? (
           <div className="flex h-64 flex-col items-center justify-center rounded-2xl border-4 border-dashed border-neutral-700 p-16 text-center">
-            <span className="block text-2xl font-semibold text-white">No Upload Requests</span>
+            <span className="block text-2xl font-semibold text-white">
+              No Upload Requests
+            </span>
             <p className="mt-2 text-gray-400">
               When an editor submits a video, it will appear here for review.
             </p>
@@ -178,17 +223,31 @@ const UploadRequests = () => {
             <AnimatePresence>
               {uploadRequests.map((req) => {
                 const isProcessing = processingRequestId === req._id;
-                const isPending = req.status === 'pending';
+                const isPending = req.status === "pending";
                 const isDisabled = !canApprove || !isPending || isProcessing;
 
                 return (
                   <motion.div
                     key={req._id}
                     layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    initial={{
+                      opacity: 0,
+                      y: 20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      height: 0,
+                      marginBottom: 0,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                    }}
                     className="overflow-hidden rounded-2xl bg-neutral-800 shadow-xl ring-1 ring-white/10"
                   >
                     <div className="grid grid-cols-1 lg:grid-cols-3">
@@ -205,15 +264,17 @@ const UploadRequests = () => {
                           <StatusBadge status={req.status} />
                           <div className="text-right text-sm text-gray-500">
                             <p>
-                              Requested by:{' '}
+                              Requested by:{" "}
                               <span className="font-medium text-gray-300">
                                 {req.requester?.name}
                               </span>
                             </p>
                             <p>
-                              Date:{' '}
+                              Date:{" "}
                               <span className="font-medium text-gray-300">
-                                {new Date(req.video.uploadedAt).toLocaleDateString()}
+                                {new Date(
+                                  req.video.uploadedAt
+                                ).toLocaleDateString()}
                               </span>
                             </p>
                           </div>
@@ -223,7 +284,9 @@ const UploadRequests = () => {
                           {req.video.title}
                         </h2>
 
-                        <p className="whitespace-pre-wrap text-gray-400">{req.video.description}</p>
+                        <p className="whitespace-pre-wrap text-gray-400">
+                          {req.video.description}
+                        </p>
                         {req.video.tags && req.video.tags.length > 0 && (
                           <div className="flex flex-wrap gap-2">
                             {req.video.tags.map((tag) => (
@@ -254,19 +317,31 @@ const UploadRequests = () => {
                           onClick={() => handleApprove(req)}
                           disabled={isDisabled}
                           className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-green-600 px-5 py-3 font-bold text-white transition-all hover:bg-green-500 disabled:cursor-not-allowed disabled:bg-neutral-600"
-                          whileHover={{ scale: isDisabled ? 1 : 1.03 }}
-                          whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+                          whileHover={{
+                            scale: isDisabled ? 1 : 1.03,
+                          }}
+                          whileTap={{
+                            scale: isDisabled ? 1 : 0.98,
+                          }}
                         >
-                          {isProcessing ? <FiLoader className="animate-spin" /> : <FiCheck />}
-                          {isProcessing ? 'Approving...' : 'Approve & Upload'}
+                          {isProcessing ? (
+                            <FiLoader className="animate-spin" />
+                          ) : (
+                            <FiCheck />
+                          )}
+                          {isProcessing ? "Approving..." : "Approve & Upload"}
                         </motion.button>
 
                         <motion.button
                           onClick={() => handleDecline(req)}
                           disabled={isDisabled}
                           className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-red-600 px-5 py-3 font-bold text-white transition-all hover:bg-red-500 disabled:cursor-not-allowed disabled:bg-neutral-600"
-                          whileHover={{ scale: isDisabled ? 1 : 1.03 }}
-                          whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+                          whileHover={{
+                            scale: isDisabled ? 1 : 1.03,
+                          }}
+                          whileTap={{
+                            scale: isDisabled ? 1 : 0.98,
+                          }}
                         >
                           <FiX /> Decline
                         </motion.button>
@@ -275,22 +350,28 @@ const UploadRequests = () => {
                           onClick={() => handleRequestReupload(req)}
                           disabled={isDisabled}
                           className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-yellow-600 px-5 py-3 font-bold text-white transition-all hover:bg-yellow-500 disabled:cursor-not-allowed disabled:bg-neutral-600"
-                          whileHover={{ scale: isDisabled ? 1 : 1.03 }}
-                          whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+                          whileHover={{
+                            scale: isDisabled ? 1 : 1.03,
+                          }}
+                          whileTap={{
+                            scale: isDisabled ? 1 : 0.98,
+                          }}
                         >
                           <FiRefreshCw /> Request Re-upload
                         </motion.button>
                       </div>
                     ) : (
                       <div className="border-t border-white/10 bg-neutral-800/50 p-4">
-                        {req.status === 'approved' && req.moderator ? (
+                        {req.status === "approved" && req.moderator ? (
                           <div className="flex items-center gap-2 text-lg font-medium text-green-400">
                             <FiCheckCircle />
                             <span>Approved by {req.moderator.name}</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 text-lg font-medium text-gray-400">
-                            <span className="capitalize">Final Status: {req.status}</span>
+                            <span className="capitalize">
+                              Final Status: {req.status}
+                            </span>
                           </div>
                         )}
                       </div>

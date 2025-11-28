@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { FaRegMoon } from 'react-icons/fa';
-import { GiDeer } from 'react-icons/gi';
-import { GoSun } from 'react-icons/go';
-import { IoSettingsOutline } from 'react-icons/io5';
-import { MdNotificationsNone } from 'react-icons/md';
-import { TbLogout2 } from 'react-icons/tb';
-import { useNavigate } from 'react-router';
-import NavbarLogoLight from '../../assets/Tubix(SVG)/1.svg';
-import NavbarLogoDark from '../../assets/Tubix(SVG)/2.svg';
-import { useAuth } from '../../context/AuthProvider';
-import useTheme from '../../hooks/useTheme';
+import NavbarLogoLight from "@assets/Tubix(SVG)/1.svg";
+import NavbarLogoDark from "@assets/Tubix(SVG)/2.svg";
+import { useAuth } from "@context/AuthProvider";
+import useTheme from "@hooks/useTheme";
+import { useEffect, useRef, useState } from "react";
+import { FaRegMoon } from "react-icons/fa";
+import { GiDeer } from "react-icons/gi";
+import { GoSun } from "react-icons/go";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdNotificationsNone } from "react-icons/md";
+import { TbLogout2 } from "react-icons/tb";
+import { useNavigate } from "react-router";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -23,15 +23,18 @@ function Navbar() {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setShowUserOptions(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -41,10 +44,10 @@ function Navbar() {
         {/* Logo */}
         <button
           className="flex cursor-pointer items-center gap-3 transition-transform hover:scale-105"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate("/home")}
           title="Go to Dashboard"
         >
-          {theme === 'dark' ? (
+          {theme === "dark" ? (
             <img src={NavbarLogoDark} alt="Tubix Logo" className="size-35" />
           ) : (
             <img src={NavbarLogoLight} alt="Tubix Logo" className="size-35" />
@@ -61,7 +64,7 @@ function Navbar() {
 
           {/* Invites Button */}
           <button
-            onClick={() => navigate('/invites')}
+            onClick={() => navigate("/invites")}
             className="bg-primary text-background group relative flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
             title="View Invites"
           >
@@ -73,9 +76,11 @@ function Navbar() {
           <button
             className="text-text-muted bg-background-hover cursor-pointer rounded-lg p-2.5 text-xl transition-all duration-200 hover:scale-105"
             onClick={toggleTheme}
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            title={
+              theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+            }
           >
-            {theme === 'dark' ? <FaRegMoon /> : <GoSun />}
+            {theme === "dark" ? <FaRegMoon /> : <GoSun />}
           </button>
 
           {/* User Menu */}
@@ -86,10 +91,16 @@ function Navbar() {
               title="User Menu"
             >
               {user?.avatar ? (
-                <img src={user?.avatar} alt="User Avatar" className="h-full w-full object-cover" />
+                <img
+                  src={user?.avatar}
+                  alt="User Avatar"
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <div className="bg-primary text-background flex h-full w-full items-center justify-center font-semibold">
-                  {user?.name?.charAt(0).toUpperCase() || <GiDeer className="h-6 w-6" />}
+                  {user?.name?.charAt(0).toUpperCase() || (
+                    <GiDeer className="h-6 w-6" />
+                  )}
                 </div>
               )}
             </button>
@@ -99,14 +110,16 @@ function Navbar() {
               <div className="bg-background border-border absolute right-0 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border">
                 {/* User Info in Dropdown - Visible on Mobile */}
                 <div className="border-border border-b px-4 py-3 sm:hidden">
-                  <p className="text-text text-sm font-semibold">{user?.name}</p>
+                  <p className="text-text text-sm font-semibold">
+                    {user?.name}
+                  </p>
                   <p className="text-text-muted text-xs">{user?.email}</p>
                 </div>
 
                 <div className="py-1" role="menu">
                   <button
                     onClick={() => {
-                      navigate('/settings');
+                      navigate("/settings");
                       setShowUserOptions(false);
                     }}
                     className="text-text hover:bg-background-hover flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm transition-colors"

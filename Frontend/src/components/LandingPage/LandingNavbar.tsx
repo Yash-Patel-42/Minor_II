@@ -1,5 +1,5 @@
-import React from 'react';
-import TubixLogo from '../../assets/Tubix(SVG)/3.svg';
+import React from "react";
+import TubixLogo from "../../assets/Tubix(SVG)/3.svg";
 const LandingNavbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-700 bg-gray-900/70 px-4 backdrop-blur-md sm:px-6 lg:px-8">
@@ -12,13 +12,22 @@ const LandingNavbar: React.FC = () => {
 
         {/* Nav Links (Desktop) */}
         <div className="hidden items-center space-x-6 md:flex">
-          <a href="#features" className="text-gray-300 transition-colors hover:text-white">
+          <a
+            href="#features"
+            className="text-gray-300 transition-colors hover:text-white"
+          >
             Features
           </a>
-          <a href="#how-it-works" className="text-gray-300 transition-colors hover:text-white">
+          <a
+            href="#how-it-works"
+            className="text-gray-300 transition-colors hover:text-white"
+          >
             How It Works
           </a>
-          <a href="#ai" className="text-gray-300 transition-colors hover:text-white">
+          <a
+            href="#ai"
+            className="text-gray-300 transition-colors hover:text-white"
+          >
             AI Tools
           </a>
         </div>

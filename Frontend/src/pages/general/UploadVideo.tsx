@@ -1,6 +1,6 @@
-import { isAxiosError, type AxiosProgressEvent } from 'axios';
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import { isAxiosError, type AxiosProgressEvent } from "axios";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import {
   FiAlertTriangle,
   FiCheckCircle,
@@ -8,57 +8,57 @@ import {
   FiImage,
   FiTag,
   FiUploadCloud,
-} from 'react-icons/fi';
-import { useParams } from 'react-router';
-import EnhanceButton from '../../components/ui/EnhanceButton';
-import api from '../../utils/axiosInstance';
+} from "react-icons/fi";
+import { useParams } from "react-router";
+import EnhanceButton from "../../components/ui/EnhanceButton";
+import api from "../../utils/axiosInstance";
 
 const VIDEO_CATEGORIES = [
-  { id: 1, name: 'Film & Animation' },
-  { id: 2, name: 'Autos & Vehicles' },
-  { id: 10, name: 'Music' },
-  { id: 15, name: 'Pets & Animals' },
-  { id: 17, name: 'Sports' },
-  { id: 18, name: 'Short Movies' },
-  { id: 19, name: 'Travel & Events' },
-  { id: 20, name: 'Gaming' },
-  { id: 21, name: 'Videoblogging' },
-  { id: 22, name: 'People & Blogs' },
-  { id: 23, name: 'Comedy' },
-  { id: 24, name: 'Entertainment' },
-  { id: 25, name: 'News & Politics' },
-  { id: 26, name: 'Howto & Style' },
-  { id: 27, name: 'Education' },
-  { id: 28, name: 'Science & Technology' },
-  { id: 29, name: 'Nonprofits & Activism' },
-  { id: 30, name: 'Movies' },
-  { id: 31, name: 'Anime/Animation' },
-  { id: 32, name: 'Action/Adventure' },
-  { id: 33, name: 'Classics' },
-  { id: 34, name: 'Comedy' },
-  { id: 35, name: 'Documentary' },
-  { id: 36, name: 'Drama' },
-  { id: 37, name: 'Family' },
-  { id: 38, name: 'Foreign' },
-  { id: 39, name: 'Horror' },
-  { id: 40, name: 'Sci-Fi/Fantasy' },
-  { id: 41, name: 'Thriller' },
-  { id: 42, name: 'Shorts' },
-  { id: 43, name: 'Shows' },
-  { id: 44, name: 'Trailers' },
+  { id: 1, name: "Film & Animation" },
+  { id: 2, name: "Autos & Vehicles" },
+  { id: 10, name: "Music" },
+  { id: 15, name: "Pets & Animals" },
+  { id: 17, name: "Sports" },
+  { id: 18, name: "Short Movies" },
+  { id: 19, name: "Travel & Events" },
+  { id: 20, name: "Gaming" },
+  { id: 21, name: "Videoblogging" },
+  { id: 22, name: "People & Blogs" },
+  { id: 23, name: "Comedy" },
+  { id: 24, name: "Entertainment" },
+  { id: 25, name: "News & Politics" },
+  { id: 26, name: "Howto & Style" },
+  { id: 27, name: "Education" },
+  { id: 28, name: "Science & Technology" },
+  { id: 29, name: "Nonprofits & Activism" },
+  { id: 30, name: "Movies" },
+  { id: 31, name: "Anime/Animation" },
+  { id: 32, name: "Action/Adventure" },
+  { id: 33, name: "Classics" },
+  { id: 34, name: "Comedy" },
+  { id: 35, name: "Documentary" },
+  { id: 36, name: "Drama" },
+  { id: 37, name: "Family" },
+  { id: 38, name: "Foreign" },
+  { id: 39, name: "Horror" },
+  { id: 40, name: "Sci-Fi/Fantasy" },
+  { id: 41, name: "Thriller" },
+  { id: 42, name: "Shorts" },
+  { id: 43, name: "Shows" },
+  { id: 44, name: "Trailers" },
 ];
 
 const VideoUpload: React.FC = () => {
   //Form Fields State
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [privacy, setPrivacy] = useState('private');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [privacy, setPrivacy] = useState("private");
   const [file, setFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [category, setCategory] = useState('1');
-  const [currentTag, setCurrentTag] = useState('');
+  const [category, setCategory] = useState("1");
+  const [currentTag, setCurrentTag] = useState("");
 
   //UI & Preview State
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -77,11 +77,15 @@ const VideoUpload: React.FC = () => {
     setEnhancedTitle(enhancedData.title);
   };
 
-  const [enhancedDescription, setEnhancedDescription] = useState<string | null>(null);
+  const [enhancedDescription, setEnhancedDescription] = useState<string | null>(
+    null
+  );
   interface EnhancedDescriptionResponse {
     description: string | null;
   }
-  const handleEnhancedDescription = (enhancedData: EnhancedDescriptionResponse): void => {
+  const handleEnhancedDescription = (
+    enhancedData: EnhancedDescriptionResponse
+  ): void => {
     setEnhancedDescription(enhancedData.description);
   };
 
@@ -135,12 +139,12 @@ const VideoUpload: React.FC = () => {
   };
 
   const handleAddTag = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && currentTag.trim()) {
+    if (e.key === "Enter" && currentTag.trim()) {
       e.preventDefault();
       if (!tags.includes(currentTag.trim())) {
         setTags([...tags, currentTag.trim()]);
       }
-      setCurrentTag('');
+      setCurrentTag("");
     }
   };
 
@@ -158,21 +162,25 @@ const VideoUpload: React.FC = () => {
     setUploadProgress(0);
     setError(null);
     setSuccess(null);
-    setTitle('');
-    setDescription('');
-    setPrivacy('private');
+    setTitle("");
+    setDescription("");
+    setPrivacy("private");
     setThumbnail(null);
     setThumbnailPreview(null);
     setTags([]);
-    setCategory('1');
-    setCurrentTag('');
+    setCategory("1");
+    setCurrentTag("");
 
     // Clear the file input
-    const fileInput = document.getElementById('video-upload-input') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    const fileInput = document.getElementById(
+      "video-upload-input"
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
 
-    const thumbnailInput = document.getElementById('thumbnail-upload-input') as HTMLInputElement;
-    if (thumbnailInput) thumbnailInput.value = '';
+    const thumbnailInput = document.getElementById(
+      "thumbnail-upload-input"
+    ) as HTMLInputElement;
+    if (thumbnailInput) thumbnailInput.value = "";
 
     // Clear the enhanced data
     setEnhancedTitle(null);
@@ -186,7 +194,7 @@ const VideoUpload: React.FC = () => {
 
     if (!file || !title || !description || !privacy) {
       // NEW: Added privacy check
-      setError('Please fill out all fields and select a video file.');
+      setError("Please fill out all fields and select a video file.");
       return;
     }
     setLoading(true);
@@ -195,40 +203,50 @@ const VideoUpload: React.FC = () => {
     setUploadProgress(0);
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('privacy', privacy);
-    formData.append('video', file);
-    formData.append('category', category);
-    formData.append('tags', JSON.stringify(tags));
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("privacy", privacy);
+    formData.append("video", file);
+    formData.append("category", category);
+    formData.append("tags", JSON.stringify(tags));
     if (thumbnail) {
-      formData.append('thumbnail', thumbnail);
+      formData.append("thumbnail", thumbnail);
     }
 
     const config = {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         if (progressEvent.total) {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           setUploadProgress(percentCompleted);
         }
       },
     };
 
     try {
-      const response = await api.post(`/workspace/${workspaceId}/video/upload`, formData, config);
-      setSuccess(response.data.message || 'Upload successful!');
+      const response = await api.post(
+        `/workspace/${workspaceId}/video/upload`,
+        formData,
+        config
+      );
+      setSuccess(response.data.message || "Upload successful!");
 
       // Reset form after a short delay
       setTimeout(() => {
         handleCancel();
       }, 2000);
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error("Upload error:", error);
       if (isAxiosError(error)) {
-        setError(error.response?.data?.message || 'An error occurred during upload.');
+        setError(
+          error.response?.data?.message || "An error occurred during upload."
+        );
       } else {
-        setError('An unexpected error occurred.');
+        setError("An unexpected error occurred.");
       }
       setUploadProgress(0);
     } finally {
@@ -236,7 +254,13 @@ const VideoUpload: React.FC = () => {
     }
   };
 
-  const EnhancedContent = ({ title, content }: { title: string; content: string | null }) => {
+  const EnhancedContent = ({
+    title,
+    content,
+  }: {
+    title: string;
+    content: string | null;
+  }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -259,7 +283,7 @@ const VideoUpload: React.FC = () => {
             className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1 text-sm font-bold text-white transition-all hover:bg-indigo-500"
           >
             <FiClipboard />
-            {copied ? 'Copied!' : 'Copy'}
+            {copied ? "Copied!" : "Copy"}
           </button>
         </div>
         <p className="mt-2 text-gray-300">{content}</p>
@@ -271,18 +295,33 @@ const VideoUpload: React.FC = () => {
     <div className="min-h-screen bg-neutral-900 p-4 pt-8 text-gray-300 md:p-10">
       <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-800 shadow-xl ring-1 ring-white/10">
         <div className="border-b border-white/10 p-6">
-          <h2 className="font-display text-4xl font-bold text-white">Upload Video</h2>
-          <p className="mt-1 text-gray-400">Send a new video for review in this workspace.</p>
+          <h2 className="font-display text-4xl font-bold text-white">
+            Upload Video
+          </h2>
+          <p className="mt-1 text-gray-400">
+            Send a new video for review in this workspace.
+          </p>
         </div>
         <div className="p-8">
           <AnimatePresence mode="wait">
             {!file && (
               <motion.div
                 key="dropzone"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.95,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.95,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
               >
                 <label
                   htmlFor="video-upload-input"
@@ -309,20 +348,33 @@ const VideoUpload: React.FC = () => {
             {file && (
               <motion.div
                 key="form"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                initial={{
+                  opacity: 0,
+                  y: 20,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.3,
+                }}
               >
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <form
+                  onSubmit={handleSubmit}
+                  className="grid grid-cols-1 gap-12 lg:grid-cols-12"
+                >
                   <div className="space-y-8 lg:col-span-8">
                     {error && (
                       <div className="flex items-center gap-3 rounded-md bg-red-900/50 p-4 text-red-300 ring-1 ring-red-500/30">
-                        <FiAlertTriangle className="h-5 w-5 flex-shrink-0" /> {error}
+                        <FiAlertTriangle className="h-5 w-5 flex-shrink-0" />{" "}
+                        {error}
                       </div>
                     )}
                     {success && (
                       <div className="flex items-center gap-3 rounded-md bg-green-900/50 p-4 text-green-300 ring-1 ring-green-500/30">
-                        <FiCheckCircle className="h-5 w-5 flex-shrink-0" /> {success}
+                        <FiCheckCircle className="h-5 w-5 flex-shrink-0" />{" "}
+                        {success}
                       </div>
                     )}
                     <div>
@@ -375,7 +427,10 @@ const VideoUpload: React.FC = () => {
                         className="w-full rounded-md border-0 bg-neutral-700 p-4 text-white placeholder-gray-500 shadow-inner focus:ring-2 focus:ring-indigo-500"
                         placeholder="Tell viewers about your video..."
                       />
-                      <EnhancedContent title="Description" content={enhancedDescription} />
+                      <EnhancedContent
+                        title="Description"
+                        content={enhancedDescription}
+                      />
                     </div>
                     <div>
                       <label className="mb-2 block text-lg font-medium text-gray-400">
@@ -403,7 +458,9 @@ const VideoUpload: React.FC = () => {
                             Upload a custom thumbnail
                           </span>
                           <p>Drag and drop, or click to select. (Optional)</p>
-                          <p className="text-xs text-neutral-500">16:9 aspect ratio recommended</p>
+                          <p className="text-xs text-neutral-500">
+                            16:9 aspect ratio recommended
+                          </p>
                         </div>
                         <input
                           id="thumbnail-upload"
@@ -456,7 +513,10 @@ const VideoUpload: React.FC = () => {
                               </span>
                             ))}
                           </div>
-                          <EnhancedContent title="Tags" content={enhancedTags} />
+                          <EnhancedContent
+                            title="Tags"
+                            content={enhancedTags}
+                          />
                         </div>
                       </div>
                       <div>
@@ -483,18 +543,25 @@ const VideoUpload: React.FC = () => {
                   </div>
                   <div className="h-max space-y-6 lg:sticky lg:top-10 lg:col-span-4">
                     <div className="space-y-4 rounded-xl bg-neutral-700/50 p-4 ring-1 ring-white/10">
-                      <h3 className="font-display text-2xl font-semibold text-white">Preview</h3>
+                      <h3 className="font-display text-2xl font-semibold text-white">
+                        Preview
+                      </h3>
                       <div className="aspect-video w-full">
                         {previewUrl && (
-                          <video src={previewUrl} controls className="w-full rounded-lg bg-black" />
+                          <video
+                            src={previewUrl}
+                            controls
+                            className="w-full rounded-lg bg-black"
+                          />
                         )}
                       </div>
                       <div className="text-sm">
                         <p className="truncate font-medium text-gray-300">
-                          <span className="text-gray-500">File:</span> {file.name}
+                          <span className="text-gray-500">File:</span>{" "}
+                          {file.name}
                         </p>
                         <p className="text-gray-400">
-                          <span className="text-gray-500">Size:</span>{' '}
+                          <span className="text-gray-500">Size:</span>{" "}
                           {(file.size / 1024 / 1024).toFixed(2)} MB
                         </p>
                       </div>
@@ -507,9 +574,15 @@ const VideoUpload: React.FC = () => {
                         <div className="h-2.5 w-full overflow-hidden rounded-full bg-neutral-700">
                           <motion.div
                             className="h-2.5 rounded-full bg-indigo-600"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${uploadProgress}%` }}
-                            transition={{ duration: 0.3 }}
+                            initial={{
+                              width: 0,
+                            }}
+                            animate={{
+                              width: `${uploadProgress}%`,
+                            }}
+                            transition={{
+                              duration: 0.3,
+                            }}
                           />
                         </div>
                         <p className="text-right font-mono text-lg font-bold text-white">
@@ -542,10 +615,16 @@ const VideoUpload: React.FC = () => {
                         type="submit"
                         disabled={loading}
                         className="flex w-full justify-center rounded-lg bg-indigo-600 px-6 py-4 font-bold text-white shadow-lg shadow-indigo-500/40 transition-all hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-neutral-600"
-                        whileHover={{ scale: loading ? 1 : 1.03 }}
-                        whileTap={{ scale: loading ? 1 : 0.98 }}
+                        whileHover={{
+                          scale: loading ? 1 : 1.03,
+                        }}
+                        whileTap={{
+                          scale: loading ? 1 : 0.98,
+                        }}
                       >
-                        {loading ? 'Uploading...' : 'Upload and Send for Review'}
+                        {loading
+                          ? "Uploading..."
+                          : "Upload and Send for Review"}
                       </motion.button>
                     )}
                     {!loading && !success && (

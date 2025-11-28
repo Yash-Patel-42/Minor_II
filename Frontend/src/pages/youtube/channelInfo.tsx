@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { useAuth } from '../../context/AuthProvider';
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function ChannelInfo() {
   const { user, channelInfo, fetchYouTubeChannelInfo } = useAuth();
@@ -30,9 +30,15 @@ export default function ChannelInfo() {
       <div className="flex h-[80vh] flex-col items-center justify-center text-gray-400">
         <motion.div
           className="mb-6 h-16 w-16 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.4,
+          }}
         />
         <p className="text-lg">Fetching your YouTube channel data...</p>
       </div>
@@ -44,9 +50,17 @@ export default function ChannelInfo() {
       {/* Channel Header */}
       <motion.div
         className="relative w-full max-w-5xl overflow-hidden rounded-2xl bg-gray-800 shadow-lg"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.4,
+        }}
       >
         {/* Banner */}
         <div className="relative h-56 w-full sm:h-64 md:h-72 lg:h-80">
@@ -54,7 +68,7 @@ export default function ChannelInfo() {
             src={
               channelInfo?.thumbnails?.high?.url ||
               channelInfo?.thumbnails?.default?.url ||
-              'https://via.placeholder.com/1200x400?text=YouTube+Channel+Banner'
+              "https://via.placeholder.com/1200x400?text=YouTube+Channel+Banner"
             }
             alt="Channel banner"
             className="h-full w-full object-cover"
@@ -65,7 +79,8 @@ export default function ChannelInfo() {
         <div className="mt-8 flex flex-col items-center pb-6 text-center">
           <img
             src={
-              channelInfo?.thumbnails?.medium?.url || 'https://via.placeholder.com/100?text=Logo'
+              channelInfo?.thumbnails?.medium?.url ||
+              "https://via.placeholder.com/100?text=Logo"
             }
             alt="Channel avatar"
             className="h-28 w-28 rounded-full border-4 border-gray-900 bg-gray-700 shadow-xl"
@@ -83,16 +98,25 @@ export default function ChannelInfo() {
       {/* Channel Description */}
       <div className="mt-20 w-full max-w-5xl text-center">
         <p className="text-lg leading-relaxed text-gray-300">
-          {channelInfo?.channelDescription || 'No description available.'}
+          {channelInfo?.channelDescription || "No description available."}
         </p>
       </div>
 
       {/* Stats Section */}
       <motion.div
         className="mt-10 grid w-full max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4 }}
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 0.2,
+          duration: 0.4,
+        }}
       >
         <StatCard label="Subscribers" value={channelInfo?.subscribers} />
         <StatCard label="Total Views" value={channelInfo?.views} />
@@ -104,28 +128,43 @@ export default function ChannelInfo() {
         <motion.button
           onClick={handleRefresh}
           disabled={refreshing}
-          whileHover={{ scale: refreshing ? 1 : 1.05 }}
-          whileTap={{ scale: refreshing ? 1 : 0.95 }}
+          whileHover={{
+            scale: refreshing ? 1 : 1.05,
+          }}
+          whileTap={{
+            scale: refreshing ? 1 : 0.95,
+          }}
           className={`rounded-lg px-6 py-3 text-white shadow-md transition ${
-            refreshing ? 'cursor-not-allowed bg-purple-800' : 'bg-purple-600 hover:bg-purple-700'
+            refreshing
+              ? "cursor-not-allowed bg-purple-800"
+              : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
-          {refreshing ? 'Refreshing...' : 'Refresh Stats'}
+          {refreshing ? "Refreshing..." : "Refresh Stats"}
         </motion.button>
       </div>
     </div>
   );
 }
 
-// ✅ Stat Card Component
-function StatCard({ label, value }: { label: string; value?: string | number }) {
+function StatCard({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string | number;
+}) {
   return (
     <motion.div
-      whileHover={{ scale: 1.03 }}
+      whileHover={{
+        scale: 1.03,
+      }}
       className="rounded-xl border border-gray-700 bg-gray-800 p-6 text-center shadow-lg"
     >
-      <h3 className="text-2xl font-semibold text-white">{value ?? '—'}</h3>
-      <p className="mt-1 text-sm uppercase tracking-wide text-gray-400">{label}</p>
+      <h3 className="text-2xl font-semibold text-white">{value ?? "—"}</h3>
+      <p className="mt-1 text-sm uppercase tracking-wide text-gray-400">
+        {label}
+      </p>
     </motion.div>
   );
 }

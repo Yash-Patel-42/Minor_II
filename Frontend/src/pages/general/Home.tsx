@@ -1,17 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { toast, Toaster } from 'react-hot-toast';
-import { FaClock, FaCrown, FaEllipsisV, FaPlus, FaUsers, FaVideo, FaYoutube } from 'react-icons/fa';
-import { HiSparkles, HiViewGrid, HiViewList } from 'react-icons/hi';
-import { MdOpenInNew } from 'react-icons/md';
-import { useNavigate } from 'react-router';
-import Navbar from '../../components/ui/Navbar';
-import { useAuth } from '../../context/AuthProvider';
-import type { CreateWorkspaceFormFields } from '../../types/FormType';
-import type { IWorkspace } from '../../types/WorkspaceType';
-import api from '../../utils/axiosInstance';
+import { useEffect, useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
+import {
+  FaClock,
+  FaCrown,
+  FaEllipsisV,
+  FaPlus,
+  FaUsers,
+  FaVideo,
+  FaYoutube,
+} from "react-icons/fa";
+import { HiSparkles, HiViewGrid, HiViewList } from "react-icons/hi";
+import { MdOpenInNew } from "react-icons/md";
+import { useNavigate } from "react-router";
+import Navbar from "../../components/ui/Navbar";
+import { useAuth } from "../../context/AuthProvider";
+import type { CreateWorkspaceFormFields } from "../../types/FormType";
+import type { IWorkspace } from "../../types/WorkspaceType";
+import api from "../../utils/axiosInstance";
 
-type ViewMode = 'grid' | 'list';
+type ViewMode = "grid" | "list";
 
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
@@ -20,7 +28,7 @@ export default function Home() {
   const [workspaces, setWorkspaces] = useState<IWorkspace[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const { user } = useAuth();
   const navigate = useNavigate();
   const {
@@ -35,11 +43,13 @@ export default function Home() {
     if (!showForm) reset();
   };
 
-  const createWorkspace: SubmitHandler<CreateWorkspaceFormFields> = async (inputData) => {
+  const createWorkspace: SubmitHandler<CreateWorkspaceFormFields> = async (
+    inputData
+  ) => {
     setIsCreating(true);
-    const loadingToast = toast.loading('Creating workspace...');
+    const loadingToast = toast.loading("Creating workspace...");
     try {
-      const response = await api.post('/workspace/create', {
+      const response = await api.post("/workspace/create", {
         workspaceName: inputData.workspaceName,
         workspaceDescription: inputData.workspaceDescription,
         ownerID: user?._id,
@@ -50,13 +60,17 @@ export default function Home() {
         setNewWorkspaceId(workspace._id);
         setShowYoutubeAuthButton(true);
         setWorkspaces((prev) => [...prev, workspace]);
-        toast.success('Workspace created successfully!', { id: loadingToast });
+        toast.success("Workspace created successfully!", {
+          id: loadingToast,
+        });
         setShowForm(false);
         reset();
       }
     } catch (error) {
-      console.error('Failed to create workspace:', error);
-      toast.error('Failed to create workspace.', { id: loadingToast });
+      console.error("Failed to create workspace:", error);
+      toast.error("Failed to create workspace.", {
+        id: loadingToast,
+      });
     } finally {
       setIsCreating(false);
     }
@@ -66,18 +80,18 @@ export default function Home() {
     if (newWorkspaceId) {
       window.location.href = `http://localhost:3000/api/workspace/auth/google?workspaceId=${newWorkspaceId}`;
     } else {
-      toast.error('Workspace ID missing. Please try again.');
+      toast.error("Workspace ID missing. Please try again.");
     }
   };
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
       try {
-        const response = await api.get('/workspaces');
+        const response = await api.get("/workspaces");
         setWorkspaces(response.data.workspaces);
       } catch (error) {
-        console.error('Failed to fetch workspaces: ', error);
-        toast.error('Failed to load workspaces.');
+        console.error("Failed to fetch workspaces: ", error);
+        toast.error("Failed to load workspaces.");
         setWorkspaces([]);
       } finally {
         setLoading(false);
@@ -87,7 +101,9 @@ export default function Home() {
   }, []);
 
   const ownedWorkspaces = workspaces.filter((w) => w.ownerID._id === user?._id);
-  const sharedWorkspaces = workspaces.filter((w) => w.ownerID._id !== user?._id);
+  const sharedWorkspaces = workspaces.filter(
+    (w) => w.ownerID._id !== user?._id
+  );
   const recentWorkspaces = [...workspaces].slice(0, 3);
 
   if (loading) {
@@ -106,7 +122,7 @@ export default function Home() {
       <Toaster
         position="top-right"
         toastOptions={{
-          className: 'bg-background text-text border border-border rounded-xl',
+          className: "bg-background text-text border border-border rounded-xl",
         }}
       />
 
@@ -124,7 +140,9 @@ export default function Home() {
                     <FaCrown className="text-background h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-text text-2xl font-bold">{ownedWorkspaces.length}</p>
+                    <p className="text-text text-2xl font-bold">
+                      {ownedWorkspaces.length}
+                    </p>
                     <p className="text-text-muted text-xs">Owned Workspaces</p>
                   </div>
                 </div>
@@ -136,7 +154,9 @@ export default function Home() {
                     <FaUsers className="text-background h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-text text-2xl font-bold">{sharedWorkspaces.length}</p>
+                    <p className="text-text text-2xl font-bold">
+                      {sharedWorkspaces.length}
+                    </p>
                     <p className="text-text-muted text-xs">Shared With Me</p>
                   </div>
                 </div>
@@ -148,7 +168,9 @@ export default function Home() {
                     <FaVideo className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-text text-2xl font-bold">{workspaces.length}</p>
+                    <p className="text-text text-2xl font-bold">
+                      {workspaces.length}
+                    </p>
                     <p className="text-text-muted text-xs">Total Workspaces</p>
                   </div>
                 </div>
@@ -168,7 +190,8 @@ export default function Home() {
                         Workspace Created Successfully!
                       </h3>
                       <p className="text-text-muted text-xs">
-                        Connect your YouTube channel to unlock content management features.
+                        Connect your YouTube channel to unlock content
+                        management features.
                       </p>
                     </div>
                   </div>
@@ -189,7 +212,9 @@ export default function Home() {
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <FaClock className="text-text-muted h-4 w-4" />
-                    <h2 className="text-text text-sm font-semibold">Quick Access</h2>
+                    <h2 className="text-text text-sm font-semibold">
+                      Quick Access
+                    </h2>
                   </div>
                 </div>
                 <div className="flex gap-3 overflow-x-auto pb-2">
@@ -225,21 +250,21 @@ export default function Home() {
                   {/* View Toggle */}
                   <div className="border-border flex rounded-lg border p-0.5">
                     <button
-                      onClick={() => setViewMode('grid')}
+                      onClick={() => setViewMode("grid")}
                       className={`rounded p-1.5 transition-all ${
-                        viewMode === 'grid'
-                          ? 'bg-primary text-background'
-                          : 'text-text-muted bg-transparent'
+                        viewMode === "grid"
+                          ? "bg-primary text-background"
+                          : "text-text-muted bg-transparent"
                       }`}
                     >
                       <HiViewGrid className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => setViewMode('list')}
+                      onClick={() => setViewMode("list")}
                       className={`rounded p-1.5 transition-all ${
-                        viewMode === 'list'
-                          ? 'bg-primary text-background'
-                          : 'text-text-muted bg-transparent'
+                        viewMode === "list"
+                          ? "bg-primary text-background"
+                          : "text-text-muted bg-transparent"
                       }`}
                     >
                       <HiViewList className="h-4 w-4" />
@@ -257,7 +282,7 @@ export default function Home() {
               </div>
 
               {/* Grid View */}
-              {viewMode === 'grid' && workspaces.length > 0 && (
+              {viewMode === "grid" && workspaces.length > 0 && (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {workspaces.map((workspace) => (
                     <div
@@ -265,8 +290,8 @@ export default function Home() {
                       onClick={() => navigate(`/workspace/${workspace._id}`)}
                       className={`border-border bg-background group cursor-pointer overflow-hidden rounded-xl border transition-all hover:-translate-y-1 hover:shadow-lg ${
                         workspace.ownerID._id === user?._id
-                          ? 'hover:border-primary'
-                          : 'hover:border-accent'
+                          ? "hover:border-primary"
+                          : "hover:border-accent"
                       }`}
                     >
                       <div className="p-4">
@@ -274,8 +299,8 @@ export default function Home() {
                           <div
                             className={`flex h-11 w-11 items-center justify-center rounded-lg text-sm font-bold ${
                               workspace.ownerID._id === user?._id
-                                ? 'bg-primary text-background'
-                                : 'bg-background-muted text-accent'
+                                ? "bg-primary text-background"
+                                : "bg-background-muted text-accent"
                             }`}
                           >
                             {workspace.workspaceName.charAt(0).toUpperCase()}
@@ -305,10 +330,14 @@ export default function Home() {
                           </div>
                           <span
                             className={`text-xs font-medium ${
-                              workspace.ownerID._id === user?._id ? 'text-primary' : 'text-accent'
+                              workspace.ownerID._id === user?._id
+                                ? "text-primary"
+                                : "text-accent"
                             }`}
                           >
-                            {workspace.ownerID._id === user?._id ? 'Owner' : 'Member'}
+                            {workspace.ownerID._id === user?._id
+                              ? "Owner"
+                              : "Member"}
                           </span>
                         </div>
                       </div>
@@ -318,13 +347,15 @@ export default function Home() {
               )}
 
               {/* List View */}
-              {viewMode === 'list' && workspaces.length > 0 && (
+              {viewMode === "list" && workspaces.length > 0 && (
                 <div className="border-border bg-background overflow-hidden rounded-xl border">
                   <table className="w-full">
                     <thead>
                       <tr className="border-border bg-background-muted text-text-muted border-b text-left text-xs font-semibold">
                         <th className="px-4 py-3">Workspace</th>
-                        <th className="hidden px-4 py-3 lg:table-cell">Description</th>
+                        <th className="hidden px-4 py-3 lg:table-cell">
+                          Description
+                        </th>
                         <th className="px-4 py-3">Status</th>
                         <th className="px-4 py-3">Role</th>
                         <th className="px-4 py-3"></th>
@@ -334,7 +365,9 @@ export default function Home() {
                       {workspaces.map((workspace) => (
                         <tr
                           key={workspace._id}
-                          onClick={() => navigate(`/workspace/${workspace._id}`)}
+                          onClick={() =>
+                            navigate(`/workspace/${workspace._id}`)
+                          }
                           className="border-border hover:bg-background-hover cursor-pointer border-b transition-colors last:border-0"
                         >
                           <td className="px-4 py-3">
@@ -342,11 +375,13 @@ export default function Home() {
                               <div
                                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
                                   workspace.ownerID._id === user?._id
-                                    ? 'bg-primary text-background'
-                                    : 'bg-background-muted text-accent'
+                                    ? "bg-primary text-background"
+                                    : "bg-background-muted text-accent"
                                 }`}
                               >
-                                {workspace.workspaceName.charAt(0).toUpperCase()}
+                                {workspace.workspaceName
+                                  .charAt(0)
+                                  .toUpperCase()}
                               </div>
                               <span className="text-text text-sm font-semibold">
                                 {workspace.workspaceName}
@@ -370,10 +405,14 @@ export default function Home() {
                           <td className="px-4 py-3">
                             <span
                               className={`text-xs font-semibold ${
-                                workspace.ownerID._id === user?._id ? 'text-primary' : 'text-accent'
+                                workspace.ownerID._id === user?._id
+                                  ? "text-primary"
+                                  : "text-accent"
                               }`}
                             >
-                              {workspace.ownerID._id === user?._id ? 'Owner' : 'Member'}
+                              {workspace.ownerID._id === user?._id
+                                ? "Owner"
+                                : "Member"}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-right">
@@ -397,9 +436,12 @@ export default function Home() {
                   <div className="bg-background-muted mb-4 rounded-full p-4">
                     <FaVideo className="text-primary h-8 w-8" />
                   </div>
-                  <h3 className="text-text text-base font-bold">No workspaces yet</h3>
+                  <h3 className="text-text text-base font-bold">
+                    No workspaces yet
+                  </h3>
                   <p className="text-text-muted mb-4 mt-1 max-w-sm text-sm">
-                    Create your first workspace to start managing YouTube content
+                    Create your first workspace to start managing YouTube
+                    content
                   </p>
                   <button
                     onClick={toggleFormVisibility}
@@ -426,24 +468,31 @@ export default function Home() {
             </div>
 
             <div className="p-6">
-              <form onSubmit={handleSubmit(createWorkspace)} className="space-y-5">
+              <form
+                onSubmit={handleSubmit(createWorkspace)}
+                className="space-y-5"
+              >
                 <div>
                   <label className="text-text mb-2 block text-sm font-semibold">
                     Workspace Name <span className="text-error">*</span>
                   </label>
                   <input
-                    {...register('workspaceName', { required: 'Workspace name is required' })}
+                    {...register("workspaceName", {
+                      required: "Workspace name is required",
+                    })}
                     type="text"
                     disabled={isCreating}
                     className={`bg-background text-text w-full rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                       errors.workspaceName
-                        ? 'border-error focus:border-error'
-                        : 'border-border focus:border-primary'
+                        ? "border-error focus:border-error"
+                        : "border-border focus:border-primary"
                     }`}
                     placeholder="e.g., Marketing Campaign 2024"
                   />
                   {errors.workspaceName && (
-                    <p className="text-error mt-1.5 text-xs">{errors.workspaceName.message}</p>
+                    <p className="text-error mt-1.5 text-xs">
+                      {errors.workspaceName.message}
+                    </p>
                   )}
                 </div>
 
@@ -452,15 +501,15 @@ export default function Home() {
                     Description <span className="text-error">*</span>
                   </label>
                   <textarea
-                    {...register('workspaceDescription', {
-                      required: 'Description is required',
+                    {...register("workspaceDescription", {
+                      required: "Description is required",
                     })}
                     disabled={isCreating}
                     rows={4}
                     className={`bg-background text-text w-full resize-none rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                       errors.workspaceDescription
-                        ? 'border-error focus:border-error'
-                        : 'border-border focus:border-primary'
+                        ? "border-error focus:border-error"
+                        : "border-border focus:border-primary"
                     }`}
                     placeholder="Briefly describe this workspace and its purpose..."
                   />
@@ -483,7 +532,7 @@ export default function Home() {
                         Creating...
                       </span>
                     ) : (
-                      'Create Workspace'
+                      "Create Workspace"
                     )}
                   </button>
 
