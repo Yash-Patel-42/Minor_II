@@ -1,3 +1,6 @@
+import Navbar from "@components/ui/Navbar";
+import { useAuth } from "@context/AuthProvider";
+import api from "@utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
@@ -13,11 +16,9 @@ import {
 import { HiSparkles, HiViewGrid, HiViewList } from "react-icons/hi";
 import { MdOpenInNew } from "react-icons/md";
 import { useNavigate } from "react-router";
-import Navbar from "../../components/ui/Navbar";
-import { useAuth } from "../../context/AuthProvider";
 import type { CreateWorkspaceFormFields } from "../../types/FormType";
+import type { IVideo } from "../../types/VideoType";
 import type { IWorkspace } from "../../types/WorkspaceType";
-import api from "../../utils/axiosInstance";
 
 type ViewMode = "grid" | "list";
 
@@ -26,6 +27,7 @@ export default function Home() {
   const [showYoutubeAuthButton, setShowYoutubeAuthButton] = useState(false);
   const [newWorkspaceId, setNewWorkspaceId] = useState<string | null>(null);
   const [workspaces, setWorkspaces] = useState<IWorkspace[]>([]);
+  const [videos, setVideos] = useState<IVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -100,6 +102,19 @@ export default function Home() {
     fetchWorkspaces();
   }, []);
 
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await api.get("/videos");
+        setVideos(response.data.videos);
+      } catch (error) {
+        console.error("Failed to fetch videos: ", error);
+        toast.error("Failed to load videos.");
+      }
+    };
+    fetchVideos();
+  }, []);
+
   const ownedWorkspaces = workspaces.filter((w) => w.ownerID._id === user?._id);
   const sharedWorkspaces = workspaces.filter(
     (w) => w.ownerID._id !== user?._id
@@ -172,6 +187,22 @@ export default function Home() {
                       {workspaces.length}
                     </p>
                     <p className="text-text-muted text-xs">Total Workspaces</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-border bg-background rounded-xl border p-4 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="bg-background-muted text-secondary flex h-10 w-10 items-center justify-center rounded-lg">
+                    <FaVideo className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-text text-2xl font-bold">
+                      {videos.length}
+                    </p>
+                    <p className="text-text-muted text-xs">
+                      Total Videos Uploaded
+                    </p>
                   </div>
                 </div>
               </div>

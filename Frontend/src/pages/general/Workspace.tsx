@@ -148,6 +148,18 @@ function Workspace() {
             >
               Channel Info
             </motion.button>
+            <motion.button
+              onClick={() => navigate(`/workspace/${workspaceId}/videos`)}
+              className="rounded-lg bg-neutral-700 px-5 py-3 font-medium text-gray-300 ring-1 ring-neutral-600 transition-all hover:bg-neutral-600 hover:text-white"
+              whileHover={{
+                scale: 1.05,
+              }}
+              whileTap={{
+                scale: 0.95,
+              }}
+            >
+              All Videos
+            </motion.button>
           </div>
           <div className="mb-12 grid gap-6 md:grid-cols-2">
             {/* Owner Details Card */}

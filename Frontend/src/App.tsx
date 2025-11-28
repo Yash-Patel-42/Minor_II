@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 
+import WorkspaceVideos from "@pages/general/WorkspaceVideos.tsx";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
@@ -71,6 +72,14 @@ function App() {
           element={
             <ProtectedRoute>
               <UploadRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/videos"
+          element={
+            <ProtectedRoute>
+              <WorkspaceVideos />
             </ProtectedRoute>
           }
         />
