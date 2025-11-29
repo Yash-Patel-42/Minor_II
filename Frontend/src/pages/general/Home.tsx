@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
 import {
-  FaClock,
   FaCrown,
   FaEllipsisV,
   FaPlus,
@@ -14,7 +13,6 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import { HiSparkles, HiViewGrid, HiViewList } from "react-icons/hi";
-import { MdOpenInNew } from "react-icons/md";
 import { useNavigate } from "react-router";
 import type { CreateWorkspaceFormFields } from "../../types/FormType";
 import type { IVideo } from "../../types/VideoType";
@@ -119,7 +117,6 @@ export default function Home() {
   const sharedWorkspaces = workspaces.filter(
     (w) => w.ownerID._id !== user?._id
   );
-  const recentWorkspaces = [...workspaces].slice(0, 3);
 
   if (loading) {
     return (
@@ -148,11 +145,11 @@ export default function Home() {
         <main className="flex-1">
           <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
             {/* Top Stats Bar */}
-            <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="border-border bg-background rounded-xl border p-4 transition-all">
+            <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="border-border bg-background rounded-xl border p-4 shadow-sm transition-all hover:shadow-md">
                 <div className="flex items-center gap-3">
                   <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-lg">
-                    <FaCrown className="text-background h-5 w-5" />
+                    <FaCrown className="text-text-inverted h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-text text-2xl font-bold">
@@ -163,10 +160,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-border bg-background rounded-xl border p-4 transition-all">
+              <div className="border-border bg-background rounded-xl border p-4 shadow-sm transition-all hover:shadow-md">
                 <div className="flex items-center gap-3">
                   <div className="bg-accent flex h-10 w-10 items-center justify-center rounded-lg">
-                    <FaUsers className="text-background h-5 w-5" />
+                    <FaUsers className="text-text-inverted h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-text text-2xl font-bold">
@@ -177,9 +174,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-border bg-background rounded-xl border p-4 transition-all">
+              <div className="border-border bg-background rounded-xl border p-4 shadow-sm transition-all hover:shadow-md">
                 <div className="flex items-center gap-3">
-                  <div className="bg-background-muted text-secondary flex h-10 w-10 items-center justify-center rounded-lg">
+                  <div className="bg-background-raised text-secondary flex h-10 w-10 items-center justify-center rounded-lg">
                     <FaVideo className="h-5 w-5" />
                   </div>
                   <div>
@@ -191,9 +188,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-border bg-background rounded-xl border p-4 transition-all">
+              <div className="border-border bg-background rounded-xl border p-4 shadow-sm transition-all hover:shadow-md">
                 <div className="flex items-center gap-3">
-                  <div className="bg-background-muted text-secondary flex h-10 w-10 items-center justify-center rounded-lg">
+                  <div className="bg-background-raised text-secondary flex h-10 w-10 items-center justify-center rounded-lg">
                     <FaVideo className="h-5 w-5" />
                   </div>
                   <div>
@@ -210,10 +207,10 @@ export default function Home() {
 
             {/* YouTube Auth Banner */}
             {showYoutubeAuthButton && (
-              <div className="border-border border-l-accent bg-background mb-6 overflow-hidden rounded-xl border border-l-4 px-5 py-4">
+              <div className="border-border border-l-accent bg-background mb-6 overflow-hidden rounded-xl border border-l-4 px-5 py-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="bg-accent text-background flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
+                    <div className="bg-accent text-text-inverted flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
                       <HiSparkles className="h-5 w-5" />
                     </div>
                     <div>
@@ -228,47 +225,11 @@ export default function Home() {
                   </div>
                   <button
                     onClick={handleChannelAuth}
-                    className="bg-error flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all hover:scale-105"
+                    className="bg-error hover:bg-error-hover flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors"
                   >
                     <FaYoutube className="h-4 w-4" />
                     Connect
                   </button>
-                </div>
-              </div>
-            )}
-
-            {/* Quick Access Section */}
-            {recentWorkspaces.length > 0 && (
-              <div className="mb-6">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <FaClock className="text-text-muted h-4 w-4" />
-                    <h2 className="text-text text-sm font-semibold">
-                      Quick Access
-                    </h2>
-                  </div>
-                </div>
-                <div className="flex gap-3 overflow-x-auto pb-2">
-                  {recentWorkspaces.map((workspace) => (
-                    <div
-                      key={workspace._id}
-                      onClick={() => navigate(`/workspace/${workspace._id}`)}
-                      className="border-border bg-background hover:border-primary group flex min-w-[280px] cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all"
-                    >
-                      <div className="bg-primary text-background flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-bold">
-                        {workspace.workspaceName.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="flex-1 overflow-hidden">
-                        <h3 className="text-text truncate text-sm font-semibold">
-                          {workspace.workspaceName}
-                        </h3>
-                        <p className="text-text-muted truncate text-xs">
-                          {workspace.workspaceDescription}
-                        </p>
-                      </div>
-                      <MdOpenInNew className="text-primary h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </div>
-                  ))}
                 </div>
               </div>
             )}
@@ -279,23 +240,23 @@ export default function Home() {
                 <h2 className="text-text text-lg font-bold">All Workspaces</h2>
                 <div className="flex items-center gap-2">
                   {/* View Toggle */}
-                  <div className="border-border flex rounded-lg border p-0.5">
+                  <div className="border-border flex rounded-md border p-0.5">
                     <button
                       onClick={() => setViewMode("grid")}
-                      className={`rounded p-1.5 transition-all ${
+                      className={`rounded p-1.5 transition-colors ${
                         viewMode === "grid"
-                          ? "bg-primary text-background"
-                          : "text-text-muted bg-transparent"
+                          ? "bg-primary text-text-inverted"
+                          : "text-text-muted hover:bg-background-hover bg-transparent"
                       }`}
                     >
                       <HiViewGrid className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => setViewMode("list")}
-                      className={`rounded p-1.5 transition-all ${
+                      className={`rounded p-1.5 transition-colors ${
                         viewMode === "list"
-                          ? "bg-primary text-background"
-                          : "text-text-muted bg-transparent"
+                          ? "bg-primary text-text-inverted"
+                          : "text-text-muted hover:bg-background-hover bg-transparent"
                       }`}
                     >
                       <HiViewList className="h-4 w-4" />
@@ -304,7 +265,7 @@ export default function Home() {
 
                   <button
                     onClick={toggleFormVisibility}
-                    className="bg-primary text-background flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all hover:scale-105"
+                    className="bg-primary text-text-inverted hover:bg-primary-hover flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors"
                   >
                     <FaPlus className="h-3.5 w-3.5" />
                     New
@@ -319,7 +280,7 @@ export default function Home() {
                     <div
                       key={workspace._id}
                       onClick={() => navigate(`/workspace/${workspace._id}`)}
-                      className={`border-border bg-background group cursor-pointer overflow-hidden rounded-xl border transition-all hover:-translate-y-1 hover:shadow-lg ${
+                      className={`border-border bg-background group cursor-pointer overflow-hidden rounded-xl border shadow-sm transition-all hover:-translate-y-1 hover:shadow-md ${
                         workspace.ownerID._id === user?._id
                           ? "hover:border-primary"
                           : "hover:border-accent"
@@ -330,14 +291,14 @@ export default function Home() {
                           <div
                             className={`flex h-11 w-11 items-center justify-center rounded-lg text-sm font-bold ${
                               workspace.ownerID._id === user?._id
-                                ? "bg-primary text-background"
-                                : "bg-background-muted text-accent"
+                                ? "bg-primary text-text-inverted"
+                                : "bg-background-raised text-accent"
                             }`}
                           >
                             {workspace.workspaceName.charAt(0).toUpperCase()}
                           </div>
                           <button
-                            className="text-text-muted rounded p-1 opacity-0 transition-all group-hover:opacity-100"
+                            className="text-text-muted hover:bg-background-hover rounded p-1 opacity-0 transition-all group-hover:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <FaEllipsisV className="h-3.5 w-3.5" />
@@ -379,7 +340,7 @@ export default function Home() {
 
               {/* List View */}
               {viewMode === "list" && workspaces.length > 0 && (
-                <div className="border-border bg-background overflow-hidden rounded-xl border">
+                <div className="border-border bg-background overflow-hidden rounded-xl border shadow-sm">
                   <table className="w-full">
                     <thead>
                       <tr className="border-border bg-background-muted text-text-muted border-b text-left text-xs font-semibold">
@@ -399,15 +360,15 @@ export default function Home() {
                           onClick={() =>
                             navigate(`/workspace/${workspace._id}`)
                           }
-                          className="border-border hover:bg-background-hover cursor-pointer border-b transition-colors last:border-0"
+                          className="border-border hover:bg-background-raised cursor-pointer border-b transition-colors last:border-0"
                         >
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
                               <div
                                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
                                   workspace.ownerID._id === user?._id
-                                    ? "bg-primary text-background"
-                                    : "bg-background-muted text-accent"
+                                    ? "bg-primary text-text-inverted"
+                                    : "bg-background-raised text-accent"
                                 }`}
                               >
                                 {workspace.workspaceName
@@ -428,7 +389,7 @@ export default function Home() {
                                 Connected
                               </span>
                             ) : (
-                              <span className="bg-background-muted text-text-muted inline-flex rounded px-2 py-1 text-xs font-medium">
+                              <span className="bg-background-raised text-text-muted inline-flex rounded px-2 py-1 text-xs font-medium">
                                 Not Connected
                               </span>
                             )}
@@ -448,7 +409,7 @@ export default function Home() {
                           </td>
                           <td className="px-4 py-3 text-right">
                             <button
-                              className="text-text-muted rounded p-1 transition-colors"
+                              className="text-text-muted hover:bg-background-hover rounded p-1 transition-colors"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <FaEllipsisV className="h-3.5 w-3.5" />
@@ -463,8 +424,8 @@ export default function Home() {
 
               {/* Empty State */}
               {workspaces.length === 0 && (
-                <div className="border-border bg-background flex flex-col items-center justify-center rounded-xl border py-16 text-center">
-                  <div className="bg-background-muted mb-4 rounded-full p-4">
+                <div className="border-border bg-background flex flex-col items-center justify-center rounded-xl border py-16 text-center shadow-sm">
+                  <div className="bg-background-raised mb-4 rounded-full p-4">
                     <FaVideo className="text-primary h-8 w-8" />
                   </div>
                   <h3 className="text-text text-base font-bold">
@@ -476,7 +437,7 @@ export default function Home() {
                   </p>
                   <button
                     onClick={toggleFormVisibility}
-                    className="bg-primary text-background rounded-lg px-4 py-2 text-sm font-semibold transition-all hover:scale-105"
+                    className="bg-primary text-text-inverted hover:bg-primary-hover rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors"
                   >
                     Create Workspace
                   </button>
@@ -490,10 +451,10 @@ export default function Home() {
       {/* Create Workspace Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <div className="border-border bg-background w-full max-w-lg overflow-hidden rounded-2xl border shadow-2xl">
-            <div className="bg-primary text-background border-b px-6 py-5">
+          <div className="border-border bg-background w-full max-w-lg overflow-hidden rounded-2xl border shadow-lg">
+            <div className="border-border bg-primary text-text-inverted border-b px-6 py-5">
               <h2 className="text-xl font-bold">Create New Workspace</h2>
-              <p className="mt-1 text-sm opacity-80">
+              <p className="mt-1 text-sm opacity-90">
                 Set up a new workspace for your YouTube content
               </p>
             </div>
@@ -513,7 +474,7 @@ export default function Home() {
                     })}
                     type="text"
                     disabled={isCreating}
-                    className={`bg-background text-text w-full rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+                    className={`bg-background text-text focus:ring-primary/20 w-full rounded-md border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                       errors.workspaceName
                         ? "border-error focus:border-error"
                         : "border-border focus:border-primary"
@@ -537,7 +498,7 @@ export default function Home() {
                     })}
                     disabled={isCreating}
                     rows={4}
-                    className={`bg-background text-text w-full resize-none rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+                    className={`bg-background text-text focus:ring-primary/20 w-full resize-none rounded-md border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
                       errors.workspaceDescription
                         ? "border-error focus:border-error"
                         : "border-border focus:border-primary"
@@ -555,7 +516,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={isCreating}
-                    className="bg-primary text-background flex-1 rounded-xl px-4 py-3 text-sm font-semibold shadow-sm transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="bg-primary text-text-inverted hover:bg-primary-hover flex-1 rounded-md px-4 py-3 text-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isCreating ? (
                       <span className="flex items-center justify-center gap-2">
@@ -571,7 +532,7 @@ export default function Home() {
                     type="button"
                     onClick={() => setShowForm(false)}
                     disabled={isCreating}
-                    className="border-border bg-background text-text flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="border-border bg-background text-text hover:bg-background-hover flex-1 rounded-md border px-4 py-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     Cancel
                   </button>

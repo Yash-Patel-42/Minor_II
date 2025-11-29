@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 
+import Chat from "@pages/general/Chat.tsx";
 import WorkspaceVideos from "@pages/general/WorkspaceVideos.tsx";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <WorkspaceVideos />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
             </ProtectedRoute>
           }
         />

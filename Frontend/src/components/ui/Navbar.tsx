@@ -39,11 +39,11 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-background border-border sticky top-0 z-50 w-full border-b transition-colors">
+    <nav className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-md transition-colors">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <button
-          className="flex cursor-pointer items-center gap-3 transition-transform hover:scale-105"
+          className="flex cursor-pointer items-center gap-2 transition-transform hover:scale-105 active:scale-95"
           onClick={() => navigate("/home")}
           title="Go to Dashboard"
         >
@@ -55,7 +55,7 @@ function Navbar() {
         </button>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* User Info - Hidden on Mobile */}
           <div className="hidden text-right sm:block">
             <p className="text-text text-sm font-semibold">{user?.name}</p>
@@ -65,7 +65,7 @@ function Navbar() {
           {/* Invites Button */}
           <button
             onClick={() => navigate("/invites")}
-            className="bg-primary text-background group relative flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
+            className="bg-primary text-text-inverted hover:bg-primary-hover active:bg-primary-active group relative flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-all"
             title="View Invites"
           >
             <MdNotificationsNone className="h-4 w-4" />
@@ -74,19 +74,19 @@ function Navbar() {
 
           {/* Theme Toggle */}
           <button
-            className="text-text-muted bg-background-hover cursor-pointer rounded-lg p-2.5 text-xl transition-all duration-200 hover:scale-105"
+            className="text-text-muted hover:bg-background-hover rounded-full p-2 transition-colors"
             onClick={toggleTheme}
             title={
               theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
             }
           >
-            {theme === "dark" ? <FaRegMoon /> : <GoSun />}
+            {theme === "dark" ? <FaRegMoon size={20} /> : <GoSun size={20} />}
           </button>
 
           {/* User Menu */}
           <div className="relative" ref={dropdownRef}>
             <button
-              className="border-border-hover group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 transition-all duration-200 hover:scale-105"
+              className="border-border-strong hover:border-border-hover group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 transition-all"
               onClick={handleToggleOptions}
               title="User Menu"
             >
@@ -97,7 +97,7 @@ function Navbar() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="bg-primary text-background flex h-full w-full items-center justify-center font-semibold">
+                <div className="bg-primary text-text-inverted flex h-full w-full items-center justify-center text-sm font-bold">
                   {user?.name?.charAt(0).toUpperCase() || (
                     <GiDeer className="h-6 w-6" />
                   )}
@@ -107,8 +107,7 @@ function Navbar() {
 
             {/* Dropdown Menu */}
             {showUserOptions && (
-              <div className="bg-background border-border absolute right-0 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border">
-                {/* User Info in Dropdown - Visible on Mobile */}
+              <div className="border-border bg-background absolute right-0 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border shadow-lg">
                 <div className="border-border border-b px-4 py-3 sm:hidden">
                   <p className="text-text text-sm font-semibold">
                     {user?.name}
