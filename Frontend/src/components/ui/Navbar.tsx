@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { FaRegMoon } from 'react-icons/fa';
-import { GiDeer } from 'react-icons/gi';
-import { GoSun } from 'react-icons/go';
-import { IoSettingsOutline } from 'react-icons/io5';
-import { MdNotificationsNone } from 'react-icons/md';
-import { TbLogout2 } from 'react-icons/tb';
-import { useNavigate } from 'react-router';
-import NavbarLogoLight from '../../assets/Tubix(SVG)/1.svg';
-import NavbarLogoDark from '../../assets/Tubix(SVG)/2.svg';
-import { useAuth } from '../../Context/AuthProvider';
-import useTheme from '../../hooks/useTheme';
+import NavbarLogoLight from "@assets/Tubix(SVG)/1.svg";
+import NavbarLogoDark from "@assets/Tubix(SVG)/2.svg";
+import { useAuth } from "@context/AuthProvider";
+import useTheme from "@hooks/useTheme";
+import { useEffect, useRef, useState } from "react";
+import { FaRegMoon } from "react-icons/fa";
+import { GiDeer } from "react-icons/gi";
+import { GoSun } from "react-icons/go";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdNotificationsNone } from "react-icons/md";
+import { TbLogout2 } from "react-icons/tb";
+import { useNavigate } from "react-router";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -23,35 +23,31 @@ function Navbar() {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setShowUserOptions(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
-    <nav
-      className="sticky top-0 z-50 w-full border-b backdrop-blur-md transition-colors"
-      style={{
-        backgroundColor: 'var(--glass-bg)',
-        borderColor: 'var(--color-border)',
-        backdropFilter: 'blur(12px)',
-      }}
-    >
+    <nav className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-md transition-colors">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <button
-          className="flex cursor-pointer items-center gap-3 transition-transform hover:scale-105"
-          onClick={() => navigate('/home')}
+          className="flex cursor-pointer items-center gap-2 transition-transform hover:scale-105 active:scale-95"
+          onClick={() => navigate("/home")}
           title="Go to Dashboard"
         >
-          {theme === 'dark' ? (
+          {theme === "dark" ? (
             <img src={NavbarLogoDark} alt="Tubix Logo" className="size-35" />
           ) : (
             <img src={NavbarLogoLight} alt="Tubix Logo" className="size-35" />
@@ -59,25 +55,17 @@ function Navbar() {
         </button>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* User Info - Hidden on Mobile */}
           <div className="hidden text-right sm:block">
-            <p className="text-sm font-semibold" style={{ color: 'var(--color-content)' }}>
-              {user?.name}
-            </p>
-            <p className="text-xs" style={{ color: 'var(--color-content-tertiary)' }}>
-              {user?.email}
-            </p>
+            <p className="text-text text-sm font-semibold">{user?.name}</p>
+            <p className="text-text-muted text-xs">{user?.email}</p>
           </div>
 
           {/* Invites Button */}
           <button
-            onClick={() => navigate('/invites')}
-            className="group relative flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:scale-105 active:scale-95"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)',
-            }}
+            onClick={() => navigate("/invites")}
+            className="bg-primary text-text-inverted hover:bg-primary-hover active:bg-primary-active group relative flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-all"
             title="View Invites"
           >
             <MdNotificationsNone className="h-4 w-4" />
@@ -86,80 +74,54 @@ function Navbar() {
 
           {/* Theme Toggle */}
           <button
-            className="cursor-pointer rounded-lg p-2.5 text-xl transition-all duration-200 hover:scale-105"
-            style={{
-              color: 'var(--color-content-tertiary)',
-              backgroundColor: 'var(--color-surface-hover)',
-            }}
+            className="text-text-muted hover:bg-background-hover rounded-full p-2 transition-colors"
             onClick={toggleTheme}
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            title={
+              theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+            }
           >
-            {theme === 'dark' ? <FaRegMoon /> : <GoSun />}
+            {theme === "dark" ? <FaRegMoon size={20} /> : <GoSun size={20} />}
           </button>
 
           {/* User Menu */}
           <div className="relative" ref={dropdownRef}>
             <button
-              className="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 transition-all duration-200 hover:scale-105"
-              style={{
-                borderColor: 'var(--color-border-hover)',
-              }}
+              className="border-border-strong hover:border-border-hover group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 transition-all"
               onClick={handleToggleOptions}
               title="User Menu"
             >
               {user?.avatar ? (
-                <img src={user?.avatar} alt="User Avatar" className="h-full w-full object-cover" />
+                <img
+                  src={user?.avatar}
+                  alt="User Avatar"
+                  className="h-full w-full object-cover"
+                />
               ) : (
-                <div
-                  className="flex h-full w-full items-center justify-center font-semibold"
-                  style={{
-                    background:
-                      'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
-                    color: 'white',
-                  }}
-                >
-                  {user?.name?.charAt(0).toUpperCase() || <GiDeer className="h-6 w-6" />}
+                <div className="bg-primary text-text-inverted flex h-full w-full items-center justify-center text-sm font-bold">
+                  {user?.name?.charAt(0).toUpperCase() || (
+                    <GiDeer className="h-6 w-6" />
+                  )}
                 </div>
               )}
             </button>
 
             {/* Dropdown Menu */}
             {showUserOptions && (
-              <div
-                className="absolute right-0 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border shadow-xl"
-                style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-border)',
-                  boxShadow: 'var(--shadow-xl)',
-                }}
-              >
-                {/* User Info in Dropdown - Visible on Mobile */}
-                <div
-                  className="border-b px-4 py-3 sm:hidden"
-                  style={{ borderColor: 'var(--color-border)' }}
-                >
-                  <p className="text-sm font-semibold" style={{ color: 'var(--color-content)' }}>
+              <div className="border-border bg-background absolute right-0 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border shadow-lg">
+                <div className="border-border border-b px-4 py-3 sm:hidden">
+                  <p className="text-text text-sm font-semibold">
                     {user?.name}
                   </p>
-                  <p className="text-xs" style={{ color: 'var(--color-content-tertiary)' }}>
-                    {user?.email}
-                  </p>
+                  <p className="text-text-muted text-xs">{user?.email}</p>
                 </div>
 
                 <div className="py-1" role="menu">
                   <button
                     onClick={() => {
-                      navigate('/settings');
+                      navigate("/settings");
                       setShowUserOptions(false);
                     }}
-                    className="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm transition-colors"
-                    style={{ color: 'var(--color-content)' }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--color-surface-hover)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                    className="text-text hover:bg-background-hover flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-sm transition-colors"
                     title="Account Settings"
                   >
                     <IoSettingsOutline className="h-4 w-4" />
@@ -168,16 +130,7 @@ function Navbar() {
 
                   <button
                     onClick={logout}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors"
-                    style={{ color: 'var(--color-content)' }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--color-surface-hover)';
-                      e.currentTarget.style.color = 'var(--color-error)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = 'var(--color-content)';
-                    }}
+                    className="text-text hover:bg-background-hover hover:text-error flex w-full items-center gap-3 px-4 py-2.5 text-sm transition-colors"
                     title="Sign Out"
                   >
                     <TbLogout2 className="h-4 w-4" />

@@ -11,7 +11,6 @@ import { AxiosResponse } from "../types/axios.types";
 const handleGeneratetitle = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const title = req.body.data as string;
-    
 
     if (!title) return next(createHttpError(400, "Title is required"));
 
@@ -148,11 +147,29 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
   }
 };
 
+const fetchAllVideosForUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const videos = await Video.find({ uploaderID: req.user._id });
+    res.status(200).json({ videos });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching videos: ${error}`));
+  }
+};
 
+const fetchAllVideosForWorkspace = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const videos = await Video.find({ workspaceID: req.workspace._id });
+    res.status(200).json({ videos });
+  } catch (error) {
+    next(createHttpError(500, `Error fetching videos: ${error}`));
+  }
+};
 
 export {
   handleVideoUploadToWorkspace,
   handleGeneratetitle,
   handleGenerateDescription,
   handleGenerateTags,
+  fetchAllVideosForUser,
+  fetchAllVideosForWorkspace,
 };

@@ -16,14 +16,23 @@ export interface IWorkspace {
   };
   members?: [
     {
-      invitedBy: { email: string };
+      invitedBy: {
+        email: string;
+      };
       role: string;
       status: string;
-      userID: { email: string; name: string; _id: string };
+      userID: {
+        email: string;
+        name: string;
+        _id: string;
+      };
     },
   ];
   permissionMatrix?: {
     key: string;
-    value: { key: string; value: boolean };
+    value: {
+      key: string;
+      value: boolean;
+    };
   };
 }

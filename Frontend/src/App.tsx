@@ -1,21 +1,23 @@
-import { Route, Routes } from 'react-router';
+import { Route, Routes } from "react-router";
 
-import { Toaster } from 'react-hot-toast';
-import ProtectedRoute from './components/ProtectedRoute.tsx';
-import LandingPage from './pages/LandingPage.tsx';
-import PageNotFound from './pages/PageNotFound.tsx';
-import Login from './pages/auth/Login.tsx';
-import Register from './pages/auth/Register.tsx';
-import Home from './pages/general/Home.tsx';
-import Inbox from './pages/general/Inbox.tsx';
-import Permissions from './pages/general/Permissions.tsx';
-import UploadRequests from './pages/general/UploadRequests.tsx';
-import UploadVideo from './pages/general/UploadVideo.tsx';
-import Workspace from './pages/general/Workspace.tsx';
-import PrivacyPolicy from './pages/policy/PrivacyPolicy.tsx';
-import TermsOfService from './pages/policy/TermsOfService.tsx';
-import ChannelInfo from './pages/youytube/channelInfo.tsx';
-import UserSetting from './pages/general/UserSetting.tsx';
+import Chat from "@pages/general/Chat.tsx";
+import WorkspaceVideos from "@pages/general/WorkspaceVideos.tsx";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import LandingPage from "./pages/LandingPage.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
+import Login from "./pages/auth/Login.tsx";
+import Register from "./pages/auth/Register.tsx";
+import Home from "./pages/general/Home.tsx";
+import Inbox from "./pages/general/Inbox.tsx";
+import Permissions from "./pages/general/Permissions.tsx";
+import UploadRequests from "./pages/general/UploadRequests.tsx";
+import UploadVideo from "./pages/general/UploadVideo.tsx";
+import UserSetting from "./pages/general/UserSetting.tsx";
+import Workspace from "./pages/general/Workspace.tsx";
+import PrivacyPolicy from "./pages/policy/PrivacyPolicy.tsx";
+import TermsOfService from "./pages/policy/TermsOfService.tsx";
+import ChannelInfo from "./pages/youtube/channelInfo.tsx";
 function App() {
   return (
     <>
@@ -71,6 +73,22 @@ function App() {
           element={
             <ProtectedRoute>
               <UploadRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/videos"
+          element={
+            <ProtectedRoute>
+              <WorkspaceVideos />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="workspace/:workspaceId/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
             </ProtectedRoute>
           }
         />

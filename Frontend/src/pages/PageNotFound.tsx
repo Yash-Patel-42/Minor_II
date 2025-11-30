@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router';
+import React from "react";
+import { useNavigate } from "react-router";
 
 const PageNotFound: React.FC = () => {
   const navigate = useNavigate();
@@ -24,20 +24,23 @@ const PageNotFound: React.FC = () => {
       </div>
       <h1 className="text-9xl font-extrabold text-indigo-500/70">404</h1>
       <div className="absolute mt-4">
-        <p className="text-2xl font-bold text-white md:text-3xl">Out of bounds!</p>
+        <p className="text-2xl font-bold text-white md:text-3xl">
+          Out of bounds!
+        </p>
         <p className="mx-auto mt-2 max-w-md text-gray-100">
-          Seems like you have wandered outside your empire. This territory does not exist.
+          Seems like you have wandered outside your empire. This territory does
+          not exist.
         </p>
       </div>
       <div className="mt-24 flex w-full max-w-xs flex-col justify-center gap-4 sm:max-w-md sm:flex-row">
         <button
-          onClick={() => navigate('/home')}
+          onClick={() => navigate("/home")}
           className="w-full rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
         >
           Return Home
         </button>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="w-full rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
         >
           Back to Landing

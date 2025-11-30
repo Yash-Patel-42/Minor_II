@@ -16,9 +16,21 @@ export interface IApprovalRequest {
   };
   workspace: string;
   requester: { _id: string; name: string; email: string };
-  approvers: [{ _id: string; name: string; email: string } ];
+  approvers: [
+    {
+      _id: string;
+      name: string;
+      email: string;
+    },
+  ];
   moderator: { _id: string; name: string; email: string };
-  status: 'pending' | 'approved' | 'rejected' | 'cancelled' | 'need_edits' | 'reuploaded';
+  status:
+    | "pending"
+    | "approved"
+    | "rejected"
+    | "cancelled"
+    | "need_edits"
+    | "reuploaded";
   response: string;
   summary: string;
   payload: object;
