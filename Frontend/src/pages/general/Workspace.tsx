@@ -179,8 +179,12 @@ function Workspace() {
               <h3 className="font-display mb-3 border-b border-white/10 pb-2 text-2xl font-semibold text-white">
                 Owner Details
               </h3>
-              <p className="text-lg text-gray-300">{workspace.ownerID.name}</p>
-              <p className="text-sm text-gray-500">{workspace.ownerID.email}</p>
+              <p className="text-lg text-gray-300">
+                {workspace?.ownerID?.name}
+              </p>
+              <p className="text-sm text-gray-500">
+                {workspace?.ownerID?.email}
+              </p>
             </div>
             {/* YouTube Channel Card */}
             <div className="rounded-2xl bg-neutral-800 p-6 shadow-xl ring-1 ring-white/10">
@@ -188,13 +192,13 @@ function Workspace() {
                 Channel Connected
               </h3>
               <p className="text-lg text-gray-300">
-                {workspace.youtubeChannelID.channelName}
+                {workspace?.youtubeChannelID?.channelName}
               </p>
               <p className="text-sm text-gray-500">
-                ID: {workspace.youtubeChannelID.channelID}
+                ID: {workspace?.youtubeChannelID?.channelID}
               </p>
               <p className="text-sm text-gray-500">
-                {workspace.youtubeChannelID.channelEmail}
+                {workspace?.youtubeChannelID?.channelEmail}
               </p>
             </div>
           </div>
