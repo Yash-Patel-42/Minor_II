@@ -6,7 +6,7 @@ const chatMessageSchema = new mongoose.Schema<IChatMessage>(
     channelId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Channel",
-      required: true,
+      // required: true,
       index: true,
     },
     senderId: {
