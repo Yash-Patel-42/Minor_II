@@ -5,25 +5,25 @@ import { createChannel, fetchAllChannelsForUser, fetchChannelMessages, sendMessa
 const chatRouter = express.Router();
 
 chatRouter.post(
-  "/workspaces/:workspaceId/chat-channel/create",
+  "/workspace/:workspaceId/chat-channel/create",
   authenticateUser,
   authenticateWorkspace,
   createChannel
 );
 chatRouter.get(
-  "/workspaces/:workspaceId/chat-channels",
+  "/workspace/:workspaceId/chat-channels",
   authenticateUser,
   authenticateWorkspace,
   fetchAllChannelsForUser
 );
 chatRouter.get(
-  "/workspaces/:workspaceId/chat-channel/:chatChannelId/messages",
+  "/workspace/:workspaceId/chat-channel/:chatChannelId/messages",
   authenticateUser,
   authenticateWorkspace,
   fetchChannelMessages
 );
 chatRouter.post(
-  "/workspaces/:workspaceId/chat-channel/:chatChannelId/send-message",
+  "/workspace/:workspaceId/chat-channel/:chatChannelId/send-message",
   authenticateUser,
   authenticateWorkspace,
   sendMessage
