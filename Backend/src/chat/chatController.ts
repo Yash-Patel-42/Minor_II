@@ -4,6 +4,7 @@ import { Member } from "../workspace/workspaceMemberModel";
 import { ChatChannel } from "./chatChannelModel";
 import { ChatMessage } from "./chatMessageModel";
 import { User } from "../user/userModel";
+import { emitNewMessage } from "../socket/socketServer";
 
 //Create Channel
 const createChannel = async (req: Request, res: Response, next: NextFunction) => {
@@ -140,10 +141,9 @@ const sendMessage = async (req: Request, res: Response, next: NextFunction) => {
   //Check Channel Membership
   const channel = await ChatChannel.findOne({
     _id: chatChannelId,
-    workspaceID: workspaceId,
+    workspaceId,
     members: userId,
   });
-
   if (!channel) {
     return next(createHttpError(403, "You are not a member of this channel"));
   }
@@ -160,6 +160,7 @@ const sendMessage = async (req: Request, res: Response, next: NextFunction) => {
     messageType,
     fileUrl,
   });
+  emitNewMessage(chatChannelId, message.toObject());
   res.status(201).json({ message });
 };
 

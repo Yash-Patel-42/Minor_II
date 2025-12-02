@@ -44,7 +44,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     const fetchChatChannels = async () => {
       try {
         const response = await api.get(
-          `chat/workspace/${workspaceId}/chat-channels`
+          `/chat/workspace/${workspaceId}/chat-channels`
         );
         setChatChannel(response.data.channels);
 
@@ -68,7 +68,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       try {
         const response = await api.get(
-          `chat/workspace/${workspaceId}/chat-channel/${activeChatChannel._id}/messages`
+          `/chat/workspace/${workspaceId}/chat-channel/${activeChatChannel._id}/messages`
         );
         setChatMessages(response.data.messages);
       } catch (error) {
@@ -89,7 +89,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (!socket) return;
 
     socket.on("new_message", (message: IChatMessage) => {
-      if (message.channelID === activeChatChannel?._id) {
+      if (message.channelId === activeChatChannel?._id) {
         setChatMessages((prev) => [...prev, message]);
       }
     });
@@ -113,8 +113,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (!activeChatChannel || !workspaceId) return;
     try {
       await api.post(
-        `chat/workspace/${workspaceId}/chat-channel/${activeChatChannel._id}/send-message`,
-        { messageContent: content }
+        `/chat/workspace/${workspaceId}/chat-channel/${activeChatChannel._id}/send-message`,
+        { messageContent: content, messageType: "text" }
       );
     } catch (error) {
       console.error("Error sending message:", error);
@@ -131,7 +131,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const res = await api.post(
-        `chat/workspace/${workspaceId}/chat-channel/create`,
+        `/chat/workspace/${workspaceId}/chat-channel/create`,
         {
           name,
           channelType: type,

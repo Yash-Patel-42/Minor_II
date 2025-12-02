@@ -5,8 +5,8 @@ const chatMessageSchema = new mongoose.Schema<IChatMessage>(
   {
     channelId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Channel",
-      // required: true,
+      ref: "ChatChannel",
+      required: true,
       index: true,
     },
     senderId: {

@@ -35,7 +35,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
           { withCredentials: true }
         );
         const token = response.data.accessToken;
-        const newSocket = io(import.meta.env.VITE_BACKEND_URI, {
+        const newSocket = io("http://localhost:3000", {
           auth: { token },
         });
 
@@ -53,7 +53,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       socket?.close();
     };
-  }, [user, socket]);
+  }, [user]);
 
   return (
     <SocketContext.Provider value={{ socket, connected }}>

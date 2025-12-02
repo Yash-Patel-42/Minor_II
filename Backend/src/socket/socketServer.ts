@@ -21,7 +21,7 @@ export const initializeSocketIO = (httpServer: HttpServer) => {
       return next(createHttpError(404, "Token not found"));
     }
     try {
-      const decoded = verify(token, envConfig.refreshTokenSecret as string);
+      const decoded = verify(token, envConfig.accessTokenSecret as string);
       socket.data.user = decoded;
       next();
     } catch (error) {
@@ -53,14 +53,9 @@ export const initializeSocketIO = (httpServer: HttpServer) => {
       socket.to(`channel:${channelId}`).emit("typing_stop", { userId });
     });
 
-    // socket.on("send_message", async (data) => {
-    //   const newMessage = new ChatMessage(data);
-    //   await newMessage.save();
-    //   io.emit("receive_message", data);
-    // });
-    // socket.on("disconnect", () => {
-    //   console.log("User disconnected:", socket.id);
-    // });
+    socket.on("disconnect", () => {
+      console.log("User disconnected:", socket.id);
+    });
   });
   return io;
 };
@@ -72,6 +67,7 @@ export const getIO = (): SocketIOServer => {
   return io;
 };
 
-export const emitNewMessage = (channelId: string, message: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const emitNewMessage = (channelId: string, message: any) => {
   io.to(`channel:${channelId}`).emit("new_message", message);
 };

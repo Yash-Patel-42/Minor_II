@@ -1,7 +1,7 @@
 export interface IChatMessage {
   _id: string;
-  channelID: string;
-  senderID: string;
+  channelId: string;
+  senderId: string;
   senderName: string;
   senderAvatar?: string;
   messageContent: string;
