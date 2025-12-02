@@ -29,7 +29,11 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
     const initSocket = async () => {
       try {
-        const response = await api.post("", {}, { withCredentials: true });
+        const response = await api.post(
+          "/users/refresh-token",
+          {},
+          { withCredentials: true }
+        );
         const token = response.data.accessToken;
         const newSocket = io(import.meta.env.VITE_BACKEND_URI, {
           auth: { token },
