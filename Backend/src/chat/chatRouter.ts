@@ -1,9 +1,32 @@
 import express from "express";
 import { authenticateUser } from "../middlewares/authMiddleware";
 import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
-import { fetchAllChannelsForUser } from "./chatController";
+import { createChannel, fetchAllChannelsForUser, fetchChannelMessages, sendMessage } from "./chatController";
 const chatRouter = express.Router();
 
-chatRouter.get("/channels", authenticateUser, authenticateWorkspace, fetchAllChannelsForUser)
+chatRouter.post(
+  "/workspaces/:workspaceId/chat-channel/create",
+  authenticateUser,
+  authenticateWorkspace,
+  createChannel
+);
+chatRouter.get(
+  "/workspaces/:workspaceId/chat-channels",
+  authenticateUser,
+  authenticateWorkspace,
+  fetchAllChannelsForUser
+);
+chatRouter.get(
+  "/workspaces/:workspaceId/chat-channel/:chatChannelId/messages",
+  authenticateUser,
+  authenticateWorkspace,
+  fetchChannelMessages
+);
+chatRouter.post(
+  "/workspaces/:workspaceId/chat-channel/:chatChannelId/send-message",
+  authenticateUser,
+  authenticateWorkspace,
+  sendMessage
+)
 
 export default chatRouter;
