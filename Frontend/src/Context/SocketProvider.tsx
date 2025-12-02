@@ -53,6 +53,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       socket?.close();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

@@ -33,6 +33,9 @@ const createChannel = async (req: Request, res: Response, next: NextFunction) =>
     if (channelType === "direct_message" && memberIds.length !== 1) {
       return next(createHttpError(400, "Direct message channel must have exactly one member"));
     }
+    if (channelType === "custom_group" && memberIds.length < 2) {
+      return next(createHttpError(400, "Custom groups require at least 3 members"));
+    }
 
     //Verify All Members Are Part Of Workspace
     const allMemberIds = [...memberIds, userId];
@@ -41,7 +44,8 @@ const createChannel = async (req: Request, res: Response, next: NextFunction) =>
       userID: { $in: allMemberIds },
       status: "active",
     });
-    if (memberIds.length !== members.length) {
+
+    if (allMemberIds.length !== members.length) {
       return next(
         createHttpError(400, "Some members you provided are not a part of this workspace.")
       );
@@ -57,6 +61,22 @@ const createChannel = async (req: Request, res: Response, next: NextFunction) =>
       if (existingDM) {
         return next(createHttpError(400, "Direct message channel already exists"));
       }
+
+      const recipientId = allMemberIds.find((id) => id.toString() !== userId.toString());
+      const recipient = await User.findById(recipientId).select("name email");
+
+      const channel = await ChatChannel.create({
+        workspaceId,
+        name: `${recipient?.name}:${recipient?.email}`,
+        description: channelDescription,
+        channelType: "direct_message",
+        members: allMemberIds,
+        createdBy: userId,
+        isAutoManages: false,
+      });
+      return res
+        .status(201)
+        .json({ message: "Direct message channel created successfully", channel });
     }
 
     //Create Channel

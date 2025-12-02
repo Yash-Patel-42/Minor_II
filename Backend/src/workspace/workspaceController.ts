@@ -252,6 +252,19 @@ const updateWorkspacePermission = async (req: Request, res: Response, next: Next
   }
 };
 
+//Fetch Workspace Members
+const fetchWorkspaceMembers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const workspaceId = req.params.workspaceId;
+    const members = await Member.find({ workspaceID: workspaceId, status: "active" })
+      .populate("userID", "name email avatar")
+      .lean();
+    return res.status(200).json({ members });
+  } catch (error) {
+    return next(createHttpError(500, `Error fetching workspace members: ${error}`));
+  }
+};
+
 export {
   createWorkspace,
   channelAuthInitiator,
@@ -259,4 +272,5 @@ export {
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
   updateWorkspacePermission,
+  fetchWorkspaceMembers,
 };

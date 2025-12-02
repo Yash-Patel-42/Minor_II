@@ -133,12 +133,15 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       const res = await api.post(
         `/chat/workspace/${workspaceId}/chat-channel/create`,
         {
-          name,
+          channelName: name,
+          channelDescription:
+            type === "direct_message" ? "Direct Message" : "Group Chat",
           channelType: type,
-          memberIDs,
+          memberIds: memberIDs,
         }
       );
       setChatChannel((prev) => [...prev, res.data.channel]);
+      setActiveChatChannel(res.data.channel);
     } catch (error) {
       console.error("Failed to create channel:", error);
     }
