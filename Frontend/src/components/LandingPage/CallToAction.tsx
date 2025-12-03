@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaShieldAlt } from 'react-icons/fa';
+import React from "react";
+import { FaShieldAlt } from "react-icons/fa";
 
 const CallToAction: React.FC = () => {
   return (
@@ -13,8 +13,8 @@ const CallToAction: React.FC = () => {
             Ready to Take Control of Your Channel?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-gray-200">
-            Join our private beta and be the first to experience secure, stress-free YouTube team
-            management.
+            Join our private beta and be the first to experience secure,
+            stress-free YouTube team management.
           </p>
           <a
             href="/register"

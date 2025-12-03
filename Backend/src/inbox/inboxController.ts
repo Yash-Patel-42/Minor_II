@@ -8,6 +8,7 @@ import { IWorkspace } from "../workspace/workspaceTypes";
 import { Member } from "../workspace/workspaceMemberModel";
 import { envConfig } from "../config/config";
 import { Inbox } from "./inboxModel";
+import { syncGeneralChatChannelMembers } from "../chat/chatHelper";
 
 //Handle Invite user to workspace, send invite to user inbox
 const handleUserInvite = async (req: Request, res: Response, next: NextFunction) => {
@@ -141,6 +142,14 @@ const handleAcceptInvite = async (req: Request, res: Response, next: NextFunctio
 
     //Update the reference in Inbox model for the accepted response
     await Inbox.findByIdAndUpdate({ _id: invite._id }, { response: "accepted", isRead: true });
+
+    //Add Member to General Chat Channel
+    const activeMembers = await Member.find({
+      workspaceID: invite.payload.workspaceId,
+      status: "active",
+    }).select("userID");
+    const memberIds = activeMembers.map((member) => member.userID);
+    await syncGeneralChatChannelMembers(invite.payload.workspaceId, memberIds);
 
     // //Send Response
     res.status(201).json({ message: "Done Member Added." });

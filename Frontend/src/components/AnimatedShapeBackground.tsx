@@ -1,19 +1,29 @@
-import { createTimer, random } from 'animejs';
-import { useEffect, useMemo, useRef, type PropsWithChildren } from 'react';
-import type { IShapeState } from '../types/RandomShapeType';
+import { createTimer, random } from "animejs";
+import { useEffect, useMemo, useRef, type PropsWithChildren } from "react";
+import type { IShapeState } from "../types/RandomShapeType";
 
-const shapeColors = ['bg-blue-600', 'bg-purple-600', 'bg-green-500', 'bg-indigo-500', 'bg-red-500'];
-const clipPaths = [
-  'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)', // Hexagon
-  'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', // Star-like
-  'polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%)', // Spiky Star
-  'polygon(0% 0%, 100% 0%, 100% 100%)', // Triangle
-  'circle(50% at 50% 50%)', // Circle
-  'ellipse(50% 40% at 50% 50%)', // Ellipse
-  'polygon(0 0, 100% 0, 75% 100%, 25% 100%)', // Trapezoid
+const shapeColors = [
+  "bg-blue-600",
+  "bg-purple-600",
+  "bg-green-500",
+  "bg-indigo-500",
+  "bg-red-500",
 ];
-const generateRandomShape = (index: number) => {
-  const size = Math.random() * (200 - 80) + 80;
+const clipPaths = [
+  "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", // Hexagon
+  "polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)", // Star-like
+  "polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%)", // Spiky Star
+  "polygon(0% 0%, 100% 0%, 100% 100%)", // Triangle
+  "circle(50% at 50% 50%)", // Circle
+  "ellipse(50% 40% at 50% 50%)", // Ellipse
+  "polygon(0 0, 100% 0, 75% 100%, 25% 100%)", // Trapezoid
+];
+const generateRandomShape = (
+  index: number,
+  minSize: number,
+  maxSize: number
+) => {
+  const size = Math.random() * (maxSize - minSize) + minSize;
   const top = Math.random() * 100;
   const left = Math.random() * 100;
   const opacity = Math.random() * (0.4 - 0.1) + 0.1;
@@ -22,7 +32,9 @@ const generateRandomShape = (index: number) => {
 
   const isPolygon = Math.random() > 0.5;
   const shapeStyle = isPolygon
-    ? { clipPath: clipPaths[Math.floor(Math.random() * clipPaths.length)] }
+    ? {
+        clipPath: clipPaths[Math.floor(Math.random() * clipPaths.length)],
+      }
     : {
         borderRadius: `${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}% / ${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}% ${Math.random() * 50 + 20}%`,
       };
@@ -45,21 +57,40 @@ const generateRandomShape = (index: number) => {
     />
   );
 };
-type Props = PropsWithChildren<{ className?: string }>;
-export const AnimatedShapeBackground: React.FC<Props> = ({ children, className }) => {
+type Props = PropsWithChildren<{
+  className?: string;
+  minSize?: number;
+  maxSize?: number;
+  minCount?: number;
+  maxCount?: number;
+}>;
+export const AnimatedShapeBackground: React.FC<Props> = ({
+  children,
+  className,
+  minSize = 80,
+  maxSize = 200,
+  minCount = 20,
+  maxCount = 30,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const shapes = useMemo(() => {
-    const numShapes = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
-    return Array.from({ length: numShapes }).map((_, i) => generateRandomShape(i));
-  }, []);
+    const numShapes =
+      Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+    return Array.from({
+      length: numShapes,
+    }).map((_, i) => generateRandomShape(i, minSize, maxSize));
+  }, [minSize, maxSize, minCount, maxCount]);
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const $shapes = container.querySelectorAll('.hero-shape');
+    const $shapes = container.querySelectorAll(".hero-shape");
     const shapesState: IShapeState[] = [];
-    let timer: { revert: () => void };
+    let timer: {
+      revert: () => void;
+    };
     const animationFrameId = requestAnimationFrame(() => {
-      const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
+      const { width: containerWidth, height: containerHeight } =
+        container.getBoundingClientRect();
       $shapes.forEach((shapeEl) => {
         if (shapeEl instanceof HTMLElement) {
           const initialX = shapeEl.offsetLeft;
@@ -69,8 +100,8 @@ export const AnimatedShapeBackground: React.FC<Props> = ({ children, className }
           const vx = random(0.2, 0.5) * (random(0, 1) > 0.5 ? 1 : -1);
           const vy = random(0.2, 0.5) * (random(0, 1) > 0.5 ? 1 : -1);
 
-          shapeEl.style.top = '0px';
-          shapeEl.style.left = '0px';
+          shapeEl.style.top = "0px";
+          shapeEl.style.left = "0px";
           shapeEl.style.transform = `translateX(${initialX}px) translateY(${initialY}px)`;
 
           shapesState.push({
@@ -112,7 +143,10 @@ export const AnimatedShapeBackground: React.FC<Props> = ({ children, className }
   }, []);
 
   return (
-    <div ref={containerRef} className={`relative w-full overflow-hidden ${className || ''}`}>
+    <div
+      ref={containerRef}
+      className={`relative w-full overflow-hidden ${className || ""}`}
+    >
       {shapes}
       {children}
     </div>
