@@ -8,6 +8,7 @@ import { google } from "googleapis";
 import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
 import { Member } from "./workspaceMemberModel";
 import getPermissionMatrixChanges from "../helper/getPermissionMatrixChanges";
+import { createGeneralChatChannel } from "../chat/chatHelper";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -34,6 +35,7 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
       { _id: newWorkspace._id },
       { $addToSet: { members: member._id } }
     );
+    await createGeneralChatChannel(newWorkspace._id, ownerID, [ownerID]);
     res.status(201).json({ workspace: newWorkspace });
   } catch (error) {
     return next(createHttpError(500, `Error creation workspace: ${error}`));
@@ -194,6 +196,7 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
   }
 };
 
+// Update Workspace Permissions
 const updateWorkspacePermission = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const newPermissionMatrix = req.body.permissionMatrix;
@@ -249,6 +252,19 @@ const updateWorkspacePermission = async (req: Request, res: Response, next: Next
   }
 };
 
+//Fetch Workspace Members
+const fetchWorkspaceMembers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const workspaceId = req.params.workspaceId;
+    const members = await Member.find({ workspaceID: workspaceId, status: "active" })
+      .populate("userID", "name email avatar")
+      .lean();
+    return res.status(200).json({ members });
+  } catch (error) {
+    return next(createHttpError(500, `Error fetching workspace members: ${error}`));
+  }
+};
+
 export {
   createWorkspace,
   channelAuthInitiator,
@@ -256,4 +272,5 @@ export {
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
   updateWorkspacePermission,
+  fetchWorkspaceMembers,
 };

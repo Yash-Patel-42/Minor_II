@@ -6,6 +6,7 @@ import {
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
   updateWorkspacePermission,
+  fetchWorkspaceMembers
 } from "./workspaceController";
 import { authenticateUser } from "../middlewares/authMiddleware";
 import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
@@ -19,5 +20,6 @@ workspaceRouter.get("/workspace/auth/google/callback", authenticateUser, channel
 workspaceRouter.get("/workspaces", authenticateUser, fetchAllWorkSpacesDetailForUser);
 workspaceRouter.get("/workspace/:workspaceId", authenticateUser, fetchSpecificWorkspaceBasedOnId);
 workspaceRouter.put("/workspace/:workspaceId/update-permissions", authenticateUser, authenticateWorkspace, requirePermission("change_permission"), updateWorkspacePermission);
+workspaceRouter.get("/workspace/:workspaceId/members", authenticateUser, authenticateWorkspace, fetchWorkspaceMembers);
 
 export default workspaceRouter;

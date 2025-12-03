@@ -1,7 +1,8 @@
 import React from "react";
+import ChatLayout from "../../layout/ChatLayout";
 
 const Chat: React.FC = () => {
-  return <div>Chat Coming Soon...</div>;
+  return <ChatLayout />;
 };
 
 export default Chat;
