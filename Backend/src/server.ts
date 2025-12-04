@@ -1,8 +1,9 @@
-import app from "./app";
+import http from "http";
+
 import { envConfig } from "./config/config";
 import connectDB from "./config/db";
-import http from "http";
 import { initializeSocketIO } from "./socket/socketServer";
+import app from "./app";
 
 const startServer = async () => {
   //Database Connection

@@ -1,12 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import createHttpError from "http-errors";
-import cloudinary from "../config/cloudinary";
+import type { NextFunction, Request, Response } from "express";
 import fs from "fs";
-import { Video } from "./videoModel";
-import { Member } from "../workspace/workspaceMemberModel";
+import createHttpError from "http-errors";
+
 import { ApprovalRequest } from "../approval/approvalRequestModel";
+import cloudinary from "../config/cloudinary";
+import type { AxiosResponse } from "../types/axios.types";
 import { api } from "../utils/axiosInstance.utils";
-import { AxiosResponse } from "../types/axios.types";
+import { Member } from "../workspace/workspaceMemberModel";
+
+import { Video } from "./videoModel";
 
 const handleGeneratetitle = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -137,7 +139,7 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
 
     res.status(201).json({
       message: "Video uploaded successfully & pending for review",
-      video: video,
+      video,
       inbox: approvalRequest,
     });
   } catch (error) {
@@ -166,10 +168,10 @@ const fetchAllVideosForWorkspace = async (req: Request, res: Response, next: Nex
 };
 
 export {
-  handleVideoUploadToWorkspace,
-  handleGeneratetitle,
-  handleGenerateDescription,
-  handleGenerateTags,
   fetchAllVideosForUser,
   fetchAllVideosForWorkspace,
+  handleGenerateDescription,
+  handleGenerateTags,
+  handleGeneratetitle,
+  handleVideoUploadToWorkspace,
 };

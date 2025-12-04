@@ -1,4 +1,5 @@
-import { ObjectId } from "mongoose";
+import type { ObjectId } from "mongoose";
+
 import { ChatChannel } from "./chatChannelModel";
 import { ChatMessage } from "./chatMessageModel";
 

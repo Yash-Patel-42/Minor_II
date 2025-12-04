@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { error } from "console";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { verify } from "jsonwebtoken";
+
 import { envConfig } from "../config/config";
 import { User } from "../user/userModel";
-import { error } from "console";
-import { IDecodedUser, IUser } from "../user/userTypes";
+import type { IDecodedUser, IUser } from "../user/userTypes";
 
 //Auth Middleware to authenticate user for protected routes.
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {

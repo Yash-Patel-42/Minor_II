@@ -1,5 +1,5 @@
-import { JwtPayload } from "jsonwebtoken";
-import { Document } from "mongoose";
+import type { JwtPayload } from "jsonwebtoken";
+import type { Document } from "mongoose";
 
 export interface IUser extends Document {
   _id: string;

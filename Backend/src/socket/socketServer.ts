@@ -1,8 +1,9 @@
-import { Server as HttpServer } from "http";
-import { Server as SocketIOServer } from "socket.io";
-import { envConfig } from "../config/config";
+import type { Server as HttpServer } from "http";
 import createHttpError from "http-errors";
 import { verify } from "jsonwebtoken";
+import { Server as SocketIOServer } from "socket.io";
+
+import { envConfig } from "../config/config";
 
 let io: SocketIOServer;
 

@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IMember } from "./workspaceTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IMember } from "./workspaceTypes";
 const memberSchema = new mongoose.Schema<IMember>(
   {
     userID: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

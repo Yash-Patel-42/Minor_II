@@ -1,14 +1,16 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import { User } from "../user/userModel";
-import { Workspace } from "../workspace/workspaceModel";
-import { IWorkspace } from "../workspace/workspaceTypes";
-import { Member } from "../workspace/workspaceMemberModel";
-import { envConfig } from "../config/config";
-import { Inbox } from "./inboxModel";
+import mongoose from "mongoose";
+
 import { syncGeneralChatChannelMembers } from "../chat/chatHelper";
+import { envConfig } from "../config/config";
+import { User } from "../user/userModel";
+import { Member } from "../workspace/workspaceMemberModel";
+import { Workspace } from "../workspace/workspaceModel";
+import type { IWorkspace } from "../workspace/workspaceTypes";
+
+import { Inbox } from "./inboxModel";
 
 //Handle Invite user to workspace, send invite to user inbox
 const handleUserInvite = async (req: Request, res: Response, next: NextFunction) => {
@@ -78,7 +80,7 @@ const handleUserInvite = async (req: Request, res: Response, next: NextFunction)
           receivers: [newMember._id],
           payload: {
             role: newMemberRole,
-            workspaceId: workspaceId,
+            workspaceId,
             workspaceName: workspace.workspaceName,
             workspaceDescription: workspace.workspaceDescription,
             receiverEmail: newMember.email,
@@ -109,7 +111,7 @@ const fetchInbox = async (req: Request, res: Response, next: NextFunction) => {
       .sort({ createdAt: -1 });
 
     if (!inbox) return next(createHttpError(404, "Inbox is empty!"));
-    res.status(200).json({ inbox: inbox });
+    res.status(200).json({ inbox });
   } catch (error) {
     next(createHttpError(500, `Error fetching inbox: ${error}`));
   }
@@ -169,4 +171,4 @@ const handleDeclineInvite = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-export { handleUserInvite, fetchInbox, handleAcceptInvite, handleDeclineInvite };
+export { fetchInbox, handleAcceptInvite, handleDeclineInvite, handleUserInvite };

@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IApprovalRequest } from "./approvalRequestTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IApprovalRequest } from "./approvalRequestTypes";
 
 const approvalRequestSchema = new mongoose.Schema<IApprovalRequest>(
   {

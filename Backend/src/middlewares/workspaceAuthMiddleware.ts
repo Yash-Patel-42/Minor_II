@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+
 import { Member } from "../workspace/workspaceMemberModel";
 import { Workspace } from "../workspace/workspaceModel";
 

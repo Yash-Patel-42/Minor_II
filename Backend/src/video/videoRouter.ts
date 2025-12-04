@@ -1,16 +1,18 @@
 import express from "express";
+
 import { authenticateUser } from "../middlewares/authMiddleware";
-import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
 import requirePermission from "../middlewares/requirePermissionMiddleware";
+import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
+import { uploadVideo } from "../utils/multer";
+
 import {
+  fetchAllVideosForUser,
+  fetchAllVideosForWorkspace,
   handleGenerateDescription,
   handleGenerateTags,
   handleGeneratetitle,
   handleVideoUploadToWorkspace,
-  fetchAllVideosForUser,
-  fetchAllVideosForWorkspace,
 } from "./videoController";
-import { uploadVideo } from "../utils/multer";
 
 const videoRouter = express.Router();
 videoRouter.post("/videos/title/generate", handleGeneratetitle);

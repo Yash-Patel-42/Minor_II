@@ -1,12 +1,14 @@
 import express from "express";
+
 import { authenticateUser } from "../middlewares/authMiddleware";
+import requirePermission from "../middlewares/requirePermissionMiddleware";
 import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
+
 import {
   fetchApprovalRequests,
   handleApproveVideoUploadToYoutubeRequest,
   handleRejectVideoUploadToYoutubeRequest,
 } from "./approvalRequestController";
-import requirePermission from "../middlewares/requirePermissionMiddleware";
 
 const approvalRequestRouter = express.Router();
 

@@ -1,14 +1,16 @@
-import { DEFAULT_PERMISSION_MATRIX } from "../constant/permissionMatrix";
-import { NextFunction, Request, Response } from "express";
-import createHttpError from "http-errors";
-import { Workspace } from "./workspaceModel";
-import { envConfig } from "../config/config";
+import type { NextFunction, Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
-import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
-import { Member } from "./workspaceMemberModel";
-import getPermissionMatrixChanges from "../helper/getPermissionMatrixChanges";
+import createHttpError from "http-errors";
+
 import { createGeneralChatChannel } from "../chat/chatHelper";
+import { envConfig } from "../config/config";
+import { DEFAULT_PERMISSION_MATRIX } from "../constant/permissionMatrix";
+import getPermissionMatrixChanges from "../helper/getPermissionMatrixChanges";
+import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
+
+import { Member } from "./workspaceMemberModel";
+import { Workspace } from "./workspaceModel";
 
 //Create Workspace
 const createWorkspace = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,9 +20,9 @@ const createWorkspace = async (req: Request, res: Response, next: NextFunction) 
   }
   try {
     const newWorkspace = await Workspace.create({
-      workspaceName: workspaceName,
-      workspaceDescription: workspaceDescription,
-      ownerID: ownerID,
+      workspaceName,
+      workspaceDescription,
+      ownerID,
       permissionMatrix: DEFAULT_PERMISSION_MATRIX,
     });
     const member = await Member.create({
@@ -120,10 +122,10 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     { workspaceID: workspaceId },
     {
       workspaceID: workspaceId,
-      googleChannelAccountID: googleChannelAccountID,
-      channelID: channelID,
-      channelName: channelName,
-      channelEmail: channelEmail,
+      googleChannelAccountID,
+      channelID,
+      channelName,
+      channelEmail,
       channelToken: tokens,
       channelRefreshToken: tokens.refresh_token as string,
     },
@@ -168,7 +170,7 @@ const fetchAllWorkSpacesDetailForUser = async (req: Request, res: Response, next
       })
       .lean()
       .exec();
-    res.status(200).json({ workspaces: workspaces });
+    res.status(200).json({ workspaces });
   } catch (error) {
     next(createHttpError(500, `Error fetching workspaces: ${error}`));
   }
@@ -190,7 +192,7 @@ const fetchSpecificWorkspaceBasedOnId = async (req: Request, res: Response, next
       .lean()
       .exec();
     if (!workspace) return next(createHttpError(404, "Workspace not found"));
-    res.status(200).json({ workspace: workspace });
+    res.status(200).json({ workspace });
   } catch (error) {
     next(createHttpError(500, `Error fetching workspace invalid ID ${error}`));
   }
@@ -266,11 +268,11 @@ const fetchWorkspaceMembers = async (req: Request, res: Response, next: NextFunc
 };
 
 export {
-  createWorkspace,
-  channelAuthInitiator,
   channelAuthCallback,
+  channelAuthInitiator,
+  createWorkspace,
   fetchAllWorkSpacesDetailForUser,
   fetchSpecificWorkspaceBasedOnId,
-  updateWorkspacePermission,
   fetchWorkspaceMembers,
+  updateWorkspacePermission,
 };

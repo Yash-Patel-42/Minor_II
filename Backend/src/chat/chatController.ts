@@ -1,10 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+
+import { emitNewMessage } from "../socket/socketServer";
+import { User } from "../user/userModel";
 import { Member } from "../workspace/workspaceMemberModel";
+
 import { ChatChannel } from "./chatChannelModel";
 import { ChatMessage } from "./chatMessageModel";
-import { User } from "../user/userModel";
-import { emitNewMessage } from "../socket/socketServer";
 
 //Create Channel
 const createChannel = async (req: Request, res: Response, next: NextFunction) => {
@@ -184,4 +186,4 @@ const sendMessage = async (req: Request, res: Response, next: NextFunction) => {
   res.status(201).json({ message });
 };
 
-export { fetchAllChannelsForUser, createChannel, fetchChannelMessages, sendMessage };
+export { createChannel, fetchAllChannelsForUser, fetchChannelMessages, sendMessage };

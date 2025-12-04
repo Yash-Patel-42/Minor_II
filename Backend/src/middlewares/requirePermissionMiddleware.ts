@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { IRoleType } from "../workspace/workspaceTypes";
+
+import type { IRoleType } from "../workspace/workspaceTypes";
 
 const requirePermission =
   (permission: string) => (req: Request, res: Response, next: NextFunction) => {

@@ -1,13 +1,15 @@
-import { authenticateUser } from "./../middlewares/authMiddleware";
 import express from "express";
+
+import requirePermission from "../middlewares/requirePermissionMiddleware";
+import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
+
+import { authenticateUser } from "./../middlewares/authMiddleware";
 import {
-  handleUserInvite,
   fetchInbox,
   handleAcceptInvite,
   handleDeclineInvite,
+  handleUserInvite,
 } from "./inboxController";
-import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
-import requirePermission from "../middlewares/requirePermissionMiddleware";
 
 const inboxRouter = express.Router();
 
