@@ -4,7 +4,12 @@ export interface IVideo {
   description: string;
   url: string;
   thumbnail: string;
-  uploaderID: string;
+  uploaderID: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string;
+  };
   workspaceID: string;
   status: string;
   uploadedAt: string;
