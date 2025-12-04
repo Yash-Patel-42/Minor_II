@@ -18,8 +18,6 @@ const handleGeneratetitle = async (req: Request, res: Response, next: NextFuncti
       prompt: title,
     });
 
-    // console.log("res ==>", response.data.data)
-
     res.status(200).json({ title: response.data.data });
   } catch (error) {
     return next(createHttpError(500, `Error generating title: ${error}`));
@@ -158,7 +156,9 @@ const fetchAllVideosForUser = async (req: Request, res: Response, next: NextFunc
 
 const fetchAllVideosForWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const videos = await Video.find({ workspaceID: req.workspace._id });
+    const videos = await Video.find({ workspaceID: req.workspace._id })
+      .populate("uploaderID", "_id name email avatar")
+      .lean();
     res.status(200).json({ videos });
   } catch (error) {
     next(createHttpError(500, `Error fetching videos: ${error}`));
