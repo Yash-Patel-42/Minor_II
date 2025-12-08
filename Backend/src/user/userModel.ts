@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { IUser } from "./userTypes";
+
+import type { IUser } from "./userTypes";
 const userSchema = new mongoose.Schema<IUser>(
   {
     name: {
@@ -13,7 +14,7 @@ const userSchema = new mongoose.Schema<IUser>(
       unique: true,
       trim: true,
       validate: {
-        validator: function (value) {
+        validator(value) {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         },
         message: "Invalid email address format",

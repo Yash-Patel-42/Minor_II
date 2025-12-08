@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { IYoutubeChannel } from "./youtubeChannelTypes";
+
+import type { IYoutubeChannel } from "./youtubeChannelTypes";
 const youtubeChannelSchema = new mongoose.Schema<IYoutubeChannel>(
   {
     workspaceID: {

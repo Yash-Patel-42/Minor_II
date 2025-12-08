@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { getChannelInfoHandler } from "./youtubeChannelController";
+
 import { authenticateUser } from "../middlewares/authMiddleware";
 import { authenticateWorkspace } from "../middlewares/workspaceAuthMiddleware";
+
+import { getChannelInfoHandler } from "./youtubeChannelController";
 
 const youtubeChannelRouter = Router();
 

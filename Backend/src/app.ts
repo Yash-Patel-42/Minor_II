@@ -1,15 +1,17 @@
-import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import type { Request, Response } from "express";
+import express from "express";
+
+import approvalRequestRouter from "./approval/approvalRequestRouter";
+import chatRouter from "./chat/chatRouter";
+import { envConfig } from "./config/config";
+import inboxRouter from "./inbox/inboxRouter";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
-import cors from "cors";
-import { envConfig } from "./config/config";
-import workspaceRouter from "./workspace/workspaceRouter";
-import inboxRouter from "./inbox/inboxRouter";
 import videoRouter from "./video/videoRouter";
-import approvalRequestRouter from "./approval/approvalRequestRouter";
+import workspaceRouter from "./workspace/workspaceRouter";
 import youtubeChannelRouter from "./youtubeChannel/youtubeChannelRouter";
-import chatRouter from "./chat/chatRouter";
 
 const app = express();
 
@@ -36,8 +38,8 @@ app.use("/api", workspaceRouter);
 app.use("/api", inboxRouter);
 app.use("/api", videoRouter);
 app.use("/api", approvalRequestRouter);
-app.use("/api/channel", youtubeChannelRouter)
-app.use("/api/chat", chatRouter)
+app.use("/api/channel", youtubeChannelRouter);
+app.use("/api/chat", chatRouter);
 
 // Global error handler
 app.use(globalErrorHandler);

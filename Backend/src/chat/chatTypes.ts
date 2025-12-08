@@ -1,4 +1,4 @@
-import { Document, ObjectId } from "mongoose";
+import type { Document, ObjectId } from "mongoose";
 
 export interface IChatChannel extends Document {
   _id: ObjectId;

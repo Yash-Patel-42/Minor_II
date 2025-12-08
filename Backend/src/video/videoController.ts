@@ -1,12 +1,14 @@
-import { NextFunction, Request, Response } from "express";
-import createHttpError from "http-errors";
-import cloudinary from "../config/cloudinary";
+import type { NextFunction, Request, Response } from "express";
 import fs from "fs";
-import { Video } from "./videoModel";
-import { Member } from "../workspace/workspaceMemberModel";
+import createHttpError from "http-errors";
+
 import { ApprovalRequest } from "../approval/approvalRequestModel";
+import cloudinary from "../config/cloudinary";
+import type { AxiosResponse } from "../types/axios.types";
 import { api } from "../utils/axiosInstance.utils";
-import { AxiosResponse } from "../types/axios.types";
+import { Member } from "../workspace/workspaceMemberModel";
+
+import { Video } from "./videoModel";
 
 const handleGeneratetitle = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,8 +19,6 @@ const handleGeneratetitle = async (req: Request, res: Response, next: NextFuncti
     const response = await api.post<AxiosResponse>("/api/v1/agent/generatetitle", {
       prompt: title,
     });
-
-    // console.log("res ==>", response.data.data)
 
     res.status(200).json({ title: response.data.data });
   } catch (error) {
@@ -139,7 +139,7 @@ const handleVideoUploadToWorkspace = async (req: Request, res: Response, next: N
 
     res.status(201).json({
       message: "Video uploaded successfully & pending for review",
-      video: video,
+      video,
       inbox: approvalRequest,
     });
   } catch (error) {
@@ -158,7 +158,9 @@ const fetchAllVideosForUser = async (req: Request, res: Response, next: NextFunc
 
 const fetchAllVideosForWorkspace = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const videos = await Video.find({ workspaceID: req.workspace._id });
+    const videos = await Video.find({ workspaceID: req.workspace._id })
+      .populate("uploaderID", "_id name email avatar")
+      .lean();
     res.status(200).json({ videos });
   } catch (error) {
     next(createHttpError(500, `Error fetching videos: ${error}`));
@@ -166,10 +168,10 @@ const fetchAllVideosForWorkspace = async (req: Request, res: Response, next: Nex
 };
 
 export {
-  handleVideoUploadToWorkspace,
-  handleGeneratetitle,
-  handleGenerateDescription,
-  handleGenerateTags,
   fetchAllVideosForUser,
   fetchAllVideosForWorkspace,
+  handleGenerateDescription,
+  handleGenerateTags,
+  handleGeneratetitle,
+  handleVideoUploadToWorkspace,
 };

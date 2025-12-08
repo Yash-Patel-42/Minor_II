@@ -1,4 +1,4 @@
-import { Date, Document, ObjectId } from "mongoose";
+import type { Date, Document, ObjectId } from "mongoose";
 
 export interface IYoutubeChannel extends Document {
   _id: ObjectId;

@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+
 import { getAuthorizedYouTubeClient } from "../utils/youtubeClient";
 
 export const getChannelInfoHandler = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IChatChannel } from "./chatTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IChatChannel } from "./chatTypes";
 
 const chatChannelSchema = new mongoose.Schema<IChatChannel>(
   {

@@ -1,13 +1,14 @@
-import { authenticateUser } from "./../middlewares/authMiddleware";
 import express from "express";
+
+import { authenticateUser } from "./../middlewares/authMiddleware";
 import {
-  registerUser,
+  googleLoginCallback,
+  googleLoginInitiator,
   loginUser,
   logoutUser,
   refreshAccessToken,
+  registerUser,
   userHome,
-  googleLoginInitiator,
-  googleLoginCallback,
 } from "./userController";
 
 const userRouter = express.Router();

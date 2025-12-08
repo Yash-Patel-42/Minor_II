@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IVideo } from "./videoTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IVideo } from "./videoTypes";
 
 const videoSchema = new mongoose.Schema<IVideo>(
   {

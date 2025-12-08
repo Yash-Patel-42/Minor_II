@@ -1,5 +1,5 @@
-import { IUser } from "../user/userTypes";
-import { IMember, IWorkspace } from "../workspace/workspaceTypes";
+import type { IUser } from "../user/userTypes";
+import type { IMember, IWorkspace } from "../workspace/workspaceTypes";
 
 declare global {
   namespace Express {

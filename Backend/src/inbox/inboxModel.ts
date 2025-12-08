@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IInbox } from "./inboxTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IInbox } from "./inboxTypes";
 
 const inboxSchema = new mongoose.Schema<IInbox>(
   {

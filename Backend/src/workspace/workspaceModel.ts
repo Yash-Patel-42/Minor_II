@@ -1,5 +1,7 @@
-import mongoose, { Model } from "mongoose";
-import { IWorkspace } from "./workspaceTypes";
+import type { Model } from "mongoose";
+import mongoose from "mongoose";
+
+import type { IWorkspace } from "./workspaceTypes";
 const workspaceSchema = new mongoose.Schema<IWorkspace>(
   {
     workspaceName: {

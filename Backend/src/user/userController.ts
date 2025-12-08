@@ -1,11 +1,13 @@
-import { CookieOptions, NextFunction, Request, Response } from "express";
-import { sign, verify } from "jsonwebtoken";
-import { envConfig } from "../config/config";
-import { IDecodedUser, IUser } from "./userTypes";
-import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+import type { CookieOptions, NextFunction, Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
+import createHttpError from "http-errors";
+import { sign, verify } from "jsonwebtoken";
+
+import { envConfig } from "../config/config";
+
 import { User } from "./userModel";
+import type { IDecodedUser, IUser } from "./userTypes";
 
 // options for cookies
 const options: CookieOptions = {
@@ -25,7 +27,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
     }
     // Database Checking Calls
     try {
-      const user = await User.findOne({ email: email });
+      const user = await User.findOne({ email });
       if (user) {
         return next(createHttpError(409, "User already exist with this email."));
       }
@@ -234,8 +236,8 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", refreshToken, options)
       .json({
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        accessToken,
+        refreshToken,
         user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar },
       });
   } catch (error) {
@@ -354,14 +356,14 @@ const userHome = async (req: Request, res: Response, next: NextFunction) => {
   if (!name && !email) {
     return next(createHttpError(404, "No such user exist try login again."));
   }
-  res.status(200).json({ name: name, email: email });
+  res.status(200).json({ name, email });
 };
 export {
-  registerUser,
+  googleLoginCallback,
+  googleLoginInitiator,
   loginUser,
   logoutUser,
   refreshAccessToken,
+  registerUser,
   userHome,
-  googleLoginInitiator,
-  googleLoginCallback,
 };

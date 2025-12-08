@@ -1,13 +1,15 @@
-import { NextFunction, Request, Response } from "express";
-import { ApprovalRequest } from "./approvalRequestModel";
-import createHttpError from "http-errors";
-import { google } from "googleapis";
-import { envConfig } from "../config/config";
-import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
-import { PassThrough } from "stream";
 import axios from "axios";
+import type { NextFunction, Request, Response } from "express";
+import { google } from "googleapis";
+import createHttpError from "http-errors";
+import { PassThrough } from "stream";
+
+import { envConfig } from "../config/config";
 import { Video } from "../video/videoModel";
 import { Workspace } from "../workspace/workspaceModel";
+import { YoutubeChannel } from "../youtubeChannel/youtubeChannelModel";
+
+import { ApprovalRequest } from "./approvalRequestModel";
 
 const oauth2Client = new google.auth.OAuth2(
   envConfig.googleClientId,
@@ -41,7 +43,7 @@ const fetchApprovalRequests = async (req: Request, res: Response, next: NextFunc
   if (!workspace) {
     return next(new Error("Workspace not found"));
   }
-  res.status(200).json({ approvalRequests: approvalRequests, workspace: workspace });
+  res.status(200).json({ approvalRequests, workspace });
 };
 
 //Handle Approve Request
@@ -76,8 +78,8 @@ const handleApproveVideoUploadToYoutubeRequest = async (
       // prettier-ignore
       requestBody: {
         snippet: {
-          "title": title,
-          "description": description,
+          title,
+          description,
           "categoryId": category,
           "tags": [tags],
         },
