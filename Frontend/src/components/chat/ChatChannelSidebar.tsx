@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaHashtag, FaUser } from "react-icons/fa";
 import { useParams } from "react-router";
-import { useChat } from "../../context/ChatProvider";
+import { useChat } from "../../Context/ChatProvider";
 import AddChannelButton from "./AddChannelButton";
 import ChannelTypeModal from "./ChannelTypeModal";
 import MemberSelector from "./MemberSelector";

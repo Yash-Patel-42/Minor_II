@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useAuth } from "../../context/AuthProvider";
+import { useAuth } from "../../Context/AuthProvider";
 
 export default function ChannelInfo() {
   const { user, channelInfo, fetchYouTubeChannelInfo } = useAuth();

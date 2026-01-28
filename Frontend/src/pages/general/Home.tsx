@@ -1,5 +1,4 @@
 import Navbar from "@components/ui/Navbar";
-import { useAuth } from "@context/AuthProvider";
 import api from "@utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -14,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { HiSparkles, HiViewGrid, HiViewList } from "react-icons/hi";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../Context/AuthProvider";
 import type { CreateWorkspaceFormFields } from "../../types/FormType";
 import type { IVideo } from "../../types/VideoType";
 import type { IWorkspace } from "../../types/WorkspaceType";

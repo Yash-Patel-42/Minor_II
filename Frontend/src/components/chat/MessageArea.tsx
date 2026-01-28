@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useChat } from "../../context/ChatProvider";
+import { useChat } from "../../Context/ChatProvider";
 
 const MessageArea = () => {
   const { activeChatChannel, chatMessages, sendMessage, loading } = useChat();

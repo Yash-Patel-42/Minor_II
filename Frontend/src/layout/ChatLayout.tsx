@@ -1,6 +1,6 @@
 import ChatChannelSidebar from "@components/chat/ChatChannelSidebar";
 import MessageArea from "@components/chat/MessageArea";
-import { ChatProvider } from "@context/ChatProvider";
+import { ChatProvider } from "../Context/ChatProvider";
 
 const ChatLayout = () => {
   return (
