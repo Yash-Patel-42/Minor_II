@@ -1,6 +1,5 @@
 import NavbarLogoLight from "@assets/Tubix(SVG)/1.svg";
 import NavbarLogoDark from "@assets/Tubix(SVG)/2.svg";
-import { useAuth } from "@context/AuthProvider";
 import useTheme from "@hooks/useTheme";
 import { useEffect, useRef, useState } from "react";
 import { FaRegMoon } from "react-icons/fa";
@@ -10,6 +9,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdNotificationsNone } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../Context/AuthProvider";
 
 function Navbar() {
   const navigate = useNavigate();

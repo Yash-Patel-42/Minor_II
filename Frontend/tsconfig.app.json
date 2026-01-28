@@ -29,7 +29,7 @@
       "@components/*": ["./src/components/*"],
       "@config/*": ["./src/config/*"],
       "@constants/*": ["./src/constants/*"],
-      "@context/*": ["./src/context/*"],
+      "@context/*": ["./src/Context/*"],
       "@features/*": ["./src/features/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@layouts/*": ["./src/layouts/*"],

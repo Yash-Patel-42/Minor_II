@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router";
 import AnimatedShapeBackground from "../../components/AnimatedShapeBackground";
-import { useAuth } from "../../context/AuthProvider";
+import { useAuth } from "../../Context/AuthProvider";
 import type { RegisterFormFields } from "../../types/FormType";
 import api from "../../utils/axiosInstance";
 export default function Register() {
