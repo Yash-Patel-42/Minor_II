@@ -13,7 +13,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useParams } from "react-router";
-import { useAuth } from "../../context/AuthProvider";
+import { useAuth } from "../../Context/AuthProvider";
 import type { IApprovalRequest } from "../../types/ApprovalRequest";
 import api from "../../utils/axiosInstance";
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
