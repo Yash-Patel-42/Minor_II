@@ -140,7 +140,7 @@ const channelAuthCallback = async (req: Request, res: Response, next: NextFuncti
     );
   }
 
-  res.status(201).redirect("http://localhost:5173/home");
+  res.status(201).redirect(`${envConfig.frontendUrl}/home`);
 };
 
 //Fetch workspaces from DB
