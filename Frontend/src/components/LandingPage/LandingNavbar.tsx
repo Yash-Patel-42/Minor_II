@@ -6,7 +6,11 @@ const LandingNavbar: React.FC = () => {
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <img src={TubixLogo} alt="" className="size-15 sm:size-25" />
+          <img
+            src={TubixLogo}
+            alt="Tubix Logo"
+            className="size-15 sm:size-25"
+          />
           <span className="text-xl font-bold sm:text-2xl">Tubix</span>
         </div>
 

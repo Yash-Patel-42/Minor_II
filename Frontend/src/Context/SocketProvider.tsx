@@ -35,7 +35,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
           { withCredentials: true }
         );
         const token = response.data.accessToken;
-        const newSocket = io("http://localhost:3000", {
+        const newSocket = io(import.meta.env.VITE_BASE_BACKEND_URI, {
           auth: { token },
         });
 
@@ -53,7 +53,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       socket?.close();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

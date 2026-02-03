@@ -78,7 +78,7 @@ export default function Home() {
 
   const handleChannelAuth = () => {
     if (newWorkspaceId) {
-      window.location.href = `http://localhost:3000/api/workspace/auth/google?workspaceId=${newWorkspaceId}`;
+      window.location.href = `${import.meta.env.VITE_BACKEND_URI}/workspace/auth/google?workspaceId=${newWorkspaceId}`;
     } else {
       toast.error("Workspace ID missing. Please try again.");
     }

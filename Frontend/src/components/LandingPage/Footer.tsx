@@ -9,7 +9,11 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2">
-              <img src={TubixLogo} alt="" className="size-15 sm:size-25" />
+              <img
+                src={TubixLogo}
+                alt="Tubix - YouTube Team Collaboration Platform"
+                className="size-15 sm:size-25"
+              />
               <span className="text-xl font-semibold">Tubix</span>
             </div>
             <p className="mt-4 max-w-xs text-gray-400">
@@ -115,15 +119,19 @@ const Footer: React.FC = () => {
           <div className="flex items-center space-x-6">
             <a
               href="https://www.instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 transition-colors hover:text-white"
-              aria-label="Instagram"
+              aria-label="Follow Tubix on Instagram"
             >
               <FaInstagram className="h-6 w-6" />
             </a>
             <a
               href="https://github.com/Yash-Patel-42/Minor_II"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 transition-colors hover:text-white"
-              aria-label="GitHub"
+              aria-label="Visit Tubix on GitHub"
             >
               <FaGithub className="h-6 w-6" />
             </a>
