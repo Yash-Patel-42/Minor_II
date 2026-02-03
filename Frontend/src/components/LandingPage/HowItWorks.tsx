@@ -5,10 +5,17 @@ import { FaCheck, FaSearch, FaUpload, FaUserPlus } from "react-icons/fa";
 
 const HowItWorks: React.FC = () => {
   return (
-    <div id="how-it-works" className="overflow-hidden bg-gray-800/40 py-24">
+    <section
+      id="how-it-works"
+      aria-labelledby="how-it-works-heading"
+      className="overflow-hidden bg-gray-800/40 py-24"
+    >
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-20 text-center text-3xl font-bold md:text-4xl">
-          How It Works
+        <h2
+          id="how-it-works-heading"
+          className="mb-20 text-center text-3xl font-bold md:text-4xl"
+        >
+          How YouTube Video Approval Works
         </h2>
         <div className="relative grid grid-cols-1 gap-16 md:grid-cols-2 lg:gap-24">
           <div className="relative">
@@ -77,7 +84,7 @@ const HowItWorks: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
