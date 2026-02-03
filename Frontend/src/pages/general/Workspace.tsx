@@ -27,7 +27,7 @@ function Workspace() {
   }, [workspaceId]);
 
   const handleChannelAuth = () => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URI}/api/workspace/auth/google?workspaceId=${workspace?._id}`;
+    window.location.href = `${import.meta.env.VITE_BACKEND_URI}/workspace/auth/google?workspaceId=${workspace?._id}`;
   };
 
   const addUserToWorkspace = async (

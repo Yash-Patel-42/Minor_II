@@ -3,18 +3,22 @@ import { FaChartLine, FaFire, FaLightbulb, FaUsers } from "react-icons/fa";
 
 const AiFeatures: React.FC = () => {
   return (
-    <div id="ai" className="py-24">
+    <section id="ai" aria-labelledby="ai-features-heading" className="py-24">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <span className="text-sm font-semibold uppercase text-blue-400">
-            Coming Soon
+            AI-Powered YouTube Tools
           </span>
-          <h2 className="mt-2 text-3xl font-bold md:text-4xl">
-            Your AI-Powered Command Center
+          <h2
+            id="ai-features-heading"
+            className="mt-2 text-3xl font-bold md:text-4xl"
+          >
+            AI YouTube Title & Description Generator
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-300">
-            Stop guessing. We're integrating cutting-edge AI and deep analytics
-            to optimize your entire workflow, from idea to upload.
+            Stop guessing. Our AI tools help you create SEO-optimized titles,
+            descriptions, and discover trending tags for maximum YouTube
+            visibility.
           </p>
         </div>
 
@@ -63,7 +67,7 @@ const AiFeatures: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

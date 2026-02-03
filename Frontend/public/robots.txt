@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Disallow authenticated/private routes
+Disallow: /home
+Disallow: /workspace/
+Disallow: /settings
+Disallow: /invites
+Disallow: /channel/
+
+# Sitemap location
+Sitemap: https://tubix.vercel.app/sitemap.xml
