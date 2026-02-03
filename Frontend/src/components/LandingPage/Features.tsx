@@ -3,17 +3,24 @@ import { FaBriefcase, FaClipboardCheck, FaShieldAlt } from "react-icons/fa";
 
 const Features: React.FC = () => {
   return (
-    <div id="features" className="bg-gray-900 py-20 sm:py-28">
+    <section
+      id="features"
+      aria-labelledby="features-heading"
+      className="bg-gray-900 py-20 sm:py-28"
+    >
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <span className="text-sm font-semibold uppercase text-blue-400">
-            Our Features
+            YouTube Team Collaboration Features
           </span>
-          <h2 className="mt-2 text-3xl font-bold md:text-4xl">
-            A Workflow Built for Creators,
+          <h2
+            id="features-heading"
+            className="mt-2 text-3xl font-bold md:text-4xl"
+          >
+            Secure YouTube Channel Management
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Not for Passwords.
+              Without Sharing Passwords
             </span>
           </h2>
         </div>
@@ -99,7 +106,7 @@ const Features: React.FC = () => {
           </div>{" "}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
