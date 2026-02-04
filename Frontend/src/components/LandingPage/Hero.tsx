@@ -6,7 +6,7 @@ const Hero: React.FC = () => {
     <AnimatedShapeBackground className="flex min-h-[91vh] w-full items-center justify-center overflow-hidden bg-gray-900 py-5">
       <header className="container relative z-30 mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
         <span className="font-mono text-sm uppercase tracking-widest text-cyan-400 shadow-cyan-400/50 [text-shadow:_0_0_8px_var(--tw-shadow-color)]">
-          // AI-POWERED UPLOAD PROTOCOL: ENGAGED //
+          // TUBIX: AI-POWERED UPLOAD PROTOCOL //
         </span>
         <h1 className="mt-6 text-5xl font-extrabold text-white sm:text-7xl lg:text-8xl">
           Empower Your
@@ -17,8 +17,8 @@ const Hero: React.FC = () => {
           <span className="ml-4 font-serif italic text-cyan-400">Empire</span>.
         </h1>
         <p className="mx-auto mt-8 max-w-2xl text-xl text-gray-200">
-          The AI-powered approval gate that lets your video editors upload to
-          YouTube
+          <strong className="text-purple-300">Tubix</strong> is the AI-powered
+          approval gate that lets your video editors upload to YouTube
           <strong> without sharing your password</strong>.
           <br />
           <span className="font-bold text-white">

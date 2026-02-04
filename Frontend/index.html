@@ -58,6 +58,12 @@
       content="https://tubix.vercel.app/og-image.png"
     />
 
+    <!-- Google Verification -->
+    <meta
+      name="google-site-verification"
+      content="COqIjRzXfCRq_GIZ2FAJ_Yx3m_fbzIh5SlU11gBr8No"
+    />
+
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
       {
@@ -126,7 +132,67 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Visually hidden content for crawlers - React will replace this div entirely -->
+      <div
+        style="
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        "
+      >
+        <h1>Tubix - AI-Powered YouTube Team Collaboration Platform</h1>
+        <h2>What is Tubix?</h2>
+        <p>
+          Tubix is an AI-powered YouTube content management platform that
+          enables teams to collaborate on video uploads with secure approval
+          workflows.
+        </p>
+        <h2>Why Use Tubix?</h2>
+        <p>
+          Stop sharing your YouTube password with editors. Tubix lets your video
+          editing team upload content for your review and approval before it
+          goes live on your channel.
+        </p>
+        <h2>Key Features of Tubix</h2>
+        <ul>
+          <li>
+            Secure Role-Based Access - Assign granular permissions to editors,
+            managers, and viewers
+          </li>
+          <li>
+            Video Approval Workflow - Review and approve videos before they
+            publish to YouTube
+          </li>
+          <li>
+            Multiple Channel Management - Manage multiple YouTube channels from
+            one dashboard
+          </li>
+          <li>
+            AI-Powered Tools - Generate optimized titles, descriptions, and tags
+            with AI
+          </li>
+          <li>
+            Team Collaboration - Real-time communication with your video editing
+            team
+          </li>
+        </ul>
+        <h2>How Tubix Works</h2>
+        <ol>
+          <li>Create a workspace and invite your team</li>
+          <li>Your editor uploads videos to Tubix (not directly to YouTube)</li>
+          <li>You receive a notification to review the submission</li>
+          <li>Approve and Tubix publishes it to your YouTube channel</li>
+        </ol>
+        <p>Get Started with Tubix today - Join our free beta!</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
