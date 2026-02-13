@@ -1,3 +1,4 @@
+import AboutTubix from "@components/LandingPage/AboutTubix";
 import AiFeatures from "@components/LandingPage/AiFeatures";
 import CallToAction from "@components/LandingPage/CallToAction";
 import Features from "@components/LandingPage/Features";
@@ -11,6 +12,7 @@ const LandingPage = () => {
     <div className="overflow-x-hidden bg-gray-900 text-white">
       <LandingNavbar />
       <Hero />
+      <AboutTubix />
       <Features />
       <HowItWorks />
       <AiFeatures />
